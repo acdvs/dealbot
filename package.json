@@ -1,0 +1,12 @@
+{
+  "name": "isthereanydeal-lookup",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "discord.js": "^12.2.0",
+    "dotenv": "^8.2.0",
+    "eslint": "^7.2.0"
+  }
+}
