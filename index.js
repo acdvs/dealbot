@@ -51,50 +51,24 @@ async function priceLookup(msg, game) {
   console.log(game);
 
   try {
-    //Get ITAD game ID
-    const plainRes = await axios.get('https://api.isthereanydeal.com/v02/game/plain/', {
-      params: {
-        key: ITAD_KEY,
-        title: game
-      }
-    });
-    
-    const plainData = plainRes.data.data;
-    const gameId = plainData && plainData.plain;
+    const gameId = await getGameId(game);
 
     if (!gameId) {
       msg.channel.send(`Could not look up ${game}. Did you spell it correctly?`);
       return;
-    };
+    }
 
-    // Get proper game name
-    const infoRes = await axios.get('https://api.isthereanydeal.com/v01/game/info/', {
-      params: {
-        key: ITAD_KEY,
-        plains: gameId
-      }
-    });
-
-    const infoData = infoRes.data.data && infoRes.data.data[gameId];
-    const gameName = infoData.title;
-
-    // Get price data
-    const gameRes = await axios.get('https://api.isthereanydeal.com/v01/game/prices/', {
-      params: {
-        key: ITAD_KEY,
-        plains: gameId,
-        region: 'us',
-        country: 'US'
-      }
-    });
-
-    const gameData = gameRes.data.data && gameRes.data.data[gameId];
+    // Can't rely on user input for the formal game name.
+    // Formal name also isn't returned with game data
+    // in the next step.
+    const gameName = await getGameName(gameId);
+    const gameData = await getGameData(gameId);
     const list = gameData.list.filter(x => x.price_new < x.price_old);
 
     if (!gameData || list.length === 0) {
       msg.channel.send(`There are currently no deals on ${game}.`);
       return;
-    };
+    }
 
     const sellers = list.map(x => x.shop.name);
     const newPrices = list.map(x => `${toCurrency(x.price_new)} (-${x.price_cut}%)`);
@@ -136,6 +110,64 @@ async function priceLookup(msg, game) {
 // =========================
 // Helpers
 // =========================
+
+/**
+ * Get ITAD game ID
+ * @param {string} game
+ * @returns {string}
+ */
+async function getGameId(game) {
+  const plainRes = await axios.get('https://api.isthereanydeal.com/v02/game/plain/', {
+    params: {
+      key: ITAD_KEY,
+      title: game
+    }
+  });
+
+  const plainData = plainRes.data.data;
+  const gameId = plainData && plainData.plain;
+
+  return gameId;
+}
+
+/**
+ * Get formal game name from ID
+ * @param {string} gameId ITAD internal game ID
+ * @returns {string}
+ */
+async function getGameName(gameId) {
+  const infoRes = await axios.get('https://api.isthereanydeal.com/v01/game/info/', {
+    params: {
+      key: ITAD_KEY,
+      plains: gameId
+    }
+  });
+
+  const infoData = infoRes.data.data && infoRes.data.data[gameId];
+  const gameName = infoData.title;
+
+  return gameName;
+}
+
+/**
+ * Get game prices and links
+ * @param {string} gameId ITAD internal game ID
+ * @returns {Object}
+ */
+async function getGameData(gameId) {
+  const gameRes = await axios.get('https://api.isthereanydeal.com/v01/game/prices/', {
+    params: {
+      key: ITAD_KEY,
+      plains: gameId,
+      region: 'us',
+      country: 'US'
+    }
+  });
+
+  const gameData = gameRes.data.data && gameRes.data.data[gameId];
+
+  return gameData;
+}
 
 /**
  * Convert number to currency format
