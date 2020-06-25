@@ -1,10 +1,13 @@
 {
   "name": "isthereanydeal-lookup",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Discord bot for getting game discount info from isthereanydeal.com",
   "author": "Adam Davies <adam@adam-davies.me> (https://adam-davies.me)",
-  "main": "index.js",
+  "main": "lib/index.js",
   "license": "MIT",
+  "scripts": {
+    "test": "eslint lib/** --fix"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/adamdavies001/isthereanydeal-lookup.git"
