@@ -1,12 +1,12 @@
 # IsThereAnyDeal Lookup
 
-A simple Discord bot for getting game discount info from isthereanydeal.com.
+A simple Discord bot for getting game discount info from [isthereanydeal.com](https://isthereanydeal.com).
 
 ## Requirements
 
 - Node.js v12
-- A Discord bot token
-- An isthereanydeal.com API key
+- A [Discord bot token](https://discord.com/developers/applications)
+- An [isthereanydeal.com API key](https://isthereanydeal.com/dev/app)
 
 ## Setup
 
@@ -27,6 +27,12 @@ Finally, run the following commands:
 $ npm install
 $ node index.js
 ```
+
+## Features
+
+- `!deals [game]`  
+Gets a list of current deals for the specified game including an ITAD link, store names, discount percentage, and current and original prices.  
+Replace `[game]` with a full game name. Lookup relies on spelling, so misspellings may return nothing.
 
 ## License
 
