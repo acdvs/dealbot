@@ -30,7 +30,7 @@ $ node lib/index.js
 
 ## Features
 
-- `!help` 
+- `!help`   
 Help me help you!
 - `!deals [game]`  
 Gets a list of current deals for the specified game including an ITAD link, store names, discount percentage, and current and original prices.  
