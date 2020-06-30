@@ -25,14 +25,22 @@ Finally, run the following commands:
 
 ```sh
 $ npm install
-$ node index.js
+$ node lib/index.js
 ```
 
 ## Features
 
+- `!help`   
+Help me help you!
 - `!deals [game]`  
-Gets a list of current deals for the specified game including an ITAD link, store names, discount percentage, and current and original prices.  
+Gets a list of current deals for the specified game including an ITAD link, store names, discount percentage, and current and original prices, and metacritic user score.  
 Replace `[game]` with a full game name. Lookup relies on spelling, so misspellings may return nothing.
+- `!wishlist [game list]`  
+Gets a list of current deals for the multiple specified games including an ITAD link, store names, discount percentage, and current and original prices, and metacritic user score.  
+If a game title has more than one word, seperate the words with hyphens `-`
+
+## Features-in-Progress
+Server wishlist
 
 ## License
 
