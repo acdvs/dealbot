@@ -42,11 +42,6 @@ Adds or removes an ignored seller
 
 ![Look at these deals](resources/readme/deals-example.gif)
 
-## Features-in-Progress
-- `!wishlist [game list]`  
-Gets a list of current deals for the multiple specified games including an ITAD link, store names, discount percentage, and current and original prices, and metacritic user score.  
-For multiple games, use a comma-sperated list
-
 ## License
 
 IsThereAnyDeal Lookup is licensed under the [MIT License](http://www.opensource.org/licenses/mit-license.php).
