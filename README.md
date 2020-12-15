@@ -33,12 +33,13 @@ $ node lib/index.js
 - `$help`  
 Help me help you!
 - `$deals [game]`  
-Gets a list of current deals for the specified game including an ITAD link, store names, discount percentage, and current and original prices, and metacritic user score.  
-Replace `[game]` with a full game name. Lookup relies on spelling, so misspellings may return nothing.
+Gets a list of current deals for the specified game. Lookup relies on spelling, so misspellings may return nothing. If an exact match is not found, the bot will attempt to suggest something similar.
+- `$sellers`  
+Lists all sellers.
 - `$ignoredsellers`  
-Lists all ignored sellers
+Lists all ignored sellers. Ignored sellers do not appear in `$deals` lists.
 - `$ignoredsellers [add|remove] [seller]`  
-Adds or removes an ignored seller
+Adds or removes an ignored seller. Seller must be spelled exactly as it appears in the `$sellers` command.
 
 ![Look at these deals](resources/readme/deals-example.gif)
 
