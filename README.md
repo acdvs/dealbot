@@ -40,6 +40,8 @@ Lists all sellers.
 Lists all ignored sellers. Ignored sellers do not appear in `$deals` lists.
 - `$ignoredsellers [add|remove] [seller]`  
 Adds or removes an ignored seller. Seller must be spelled exactly as it appears in the `$sellers` command.
+- `$top [waitlisted|collected|popular]`  
+Gets the top waitlisted, collected, or popular games.
 
 ![Look at these deals](resources/readme/deals-example.gif)
 
