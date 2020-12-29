@@ -25,7 +25,12 @@ module.exports = {
     'no-empty-character-class': 'error',
     'no-ex-assign': 'error',
     'no-extra-boolean-cast': 'error',
-    'no-extra-parens': ['error', 'all', { returnAssign: false, nestedBinaryExpressions: false, ignoreJSX: 'multi-line' }],
+    'no-extra-parens': ['error', 'all', {
+      returnAssign: false,
+      nestedBinaryExpressions: false,
+      ignoreJSX: 'multi-line',
+      enforceForArrowConditionals: false
+    }],
     'no-extra-semi': 'error',
     'no-func-assign': 'error',
     'no-inner-declarations': 'error',
