@@ -6,7 +6,9 @@
   "main": "lib/index.js",
   "license": "MIT",
   "scripts": {
-    "test": "eslint lib/** --fix"
+    "db:create": "node lib/util/db/setup.js",
+    "start": "npm run db:create && node lib/index.js NODE_ENV=dev",
+    "test": "eslint lib/**.js --fix"
   },
   "repository": {
     "type": "git",
@@ -14,9 +16,10 @@
   },
   "homepage": "https://github.com/acdvs/isthereanydeal-lookup#readme",
   "dependencies": {
-    "axios": "^0.19.2",
-    "discord.js": "^12.2.0",
+    "axios": "^0.21.1",
+    "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
-    "eslint": "^7.2.0"
+    "eslint": "^7.17.0",
+    "sqlite-async": "^1.1.1"
   }
 }
