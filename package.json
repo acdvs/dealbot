@@ -1,22 +1,25 @@
 {
   "name": "isthereanydeal-lookup",
-  "version": "1.0.1",
+  "version": "1.3.1",
   "description": "Discord bot for getting game discount info from isthereanydeal.com",
   "author": "Adam Davies <adam@adam-davies.me> (https://adam-davies.me)",
   "main": "lib/index.js",
   "license": "MIT",
   "scripts": {
-    "test": "eslint lib/** --fix"
+    "db:create": "node lib/util/db/setup.js",
+    "start": "npm run db:create && node lib/index.js NODE_ENV=dev",
+    "test": "eslint lib/**.js --fix"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/adamdavies001/isthereanydeal-lookup.git"
+    "url": "https://github.com/acdvs/isthereanydeal-lookup.git"
   },
-  "homepage": "https://github.com/adamdavies001/isthereanydeal-lookup#readme",
+  "homepage": "https://github.com/acdvs/isthereanydeal-lookup#readme",
   "dependencies": {
-    "axios": "^0.19.2",
-    "discord.js": "^12.2.0",
+    "axios": "^0.21.1",
+    "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
-    "eslint": "^7.2.0"
+    "eslint": "^7.17.0",
+    "sqlite-async": "^1.1.1"
   }
 }
