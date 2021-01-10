@@ -17,14 +17,16 @@ If you like what you see, consider helping with monthly server costs by clicking
 Forgot the commands again?
 - `$deals [game]`  
 Gets a list of current deals for the specified game. Lookup relies on spelling, so misspellings may return nothing. If an exact match is not found, the bot will attempt to suggest something similar.
-- `$sellers`  
-Lists all sellers.
-- `$ignoredsellers`  
-Lists all ignored sellers. Ignored sellers do not appear in `$deals` lists.
-- `$ignoredsellers [add|remove|clear] [seller]`  
-Adds or removes an ignored seller. Seller must be spelled exactly as it appears in the `$sellers` command.
 - `$top [waitlisted|collected|popular]`  
-Gets the top waitlisted, collected, or popular games.
+Gets the top most waitlisted, collected, or popular games.
+- `$sellers` <span style="color:red;font-size:75%">admin only</span>  
+Lists all sellers.
+- `$ignoredsellers` <span style="color:red;font-size:75%">admin only</span>  
+Lists all ignored sellers. Ignored sellers do not appear in `$deals` lists.
+- `$ignoredsellers [add|remove] [seller]` <span style="color:red;font-size:75%">admin only</span>  
+Adds or removes an ignored seller. Seller must be spelled exactly as it appears in the `$sellers` command.
+- `$ignoredsellers clear` <span style="color:red;font-size:75%">admin only</span>  
+Clears all previously added ignored sellers.
 
 ![Look at these deals](resources/readme/deals-example.gif)
 
