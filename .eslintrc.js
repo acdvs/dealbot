@@ -148,7 +148,7 @@ module.exports = {
     'object-curly-newline': ['error', { consistent: true }],
     'object-curly-spacing': ['error', 'always', { objectsInObjects: false }],
     'operator-assignment': ['error', 'always'],
-    'operator-linebreak': ['error', 'before', { overrides: { '||': 'after', '&&': 'after' }}],
+    'operator-linebreak': ['error', 'after', { overrides: { '?': 'before', ':': 'before' }}],
     'padded-blocks': ['error', 'never'],
     'quote-props': ['error', 'as-needed'],
     quotes: ['error', 'single', { allowTemplateLiterals: true }],
