@@ -19,16 +19,16 @@ Forgot the commands again?
 Gets a list of current deals for the specified game. Lookup relies on spelling, so misspellings may return nothing. If an exact match is not found, the bot will attempt to suggest something similar.
 - `$top [waitlisted|collected|popular]`  
 Gets the top most waitlisted, collected, or popular games.
-- `$sellers` <span style="color:red;font-size:75%">admin only</span>  
+- `$sellers` ![admin only][admin-only]  
 Lists all sellers.
-- `$ignoredsellers` <span style="color:red;font-size:75%">admin only</span>  
+- `$ignoredsellers` ![admin only][admin-only]  
 Lists all ignored sellers. Ignored sellers do not appear in `$deals` lists.
-- `$ignoredsellers [add|remove] [seller]` <span style="color:red;font-size:75%">admin only</span>  
+- `$ignoredsellers [add|remove] [seller]` ![admin only][admin-only]  
 Adds or removes an ignored seller. Seller must be spelled exactly as it appears in the `$sellers` command.
-- `$ignoredsellers clear` <span style="color:red;font-size:75%">admin only</span>  
+- `$ignoredsellers clear` ![admin only][admin-only]  
 Clears all previously added ignored sellers.
 
-![Look at these deals](resources/readme/deals-example.gif)
+![Example usage][example]
 
 ## License
 
@@ -36,3 +36,6 @@ IsThereAnyDeal Lookup is licensed under the [MIT License](http://www.opensource.
 
 [invite-link]: https://discord.com/api/oauth2/authorize?client_id=722942824999288924&permissions=93248&redirect_uri=https%3A%2F%2Fgithub.com%2Facdvs%2Fisthereanydeal-lookup&scope=bot
 [donate-link]: https://www.patreon.com/acdvs
+
+[admin-only]: resources/readme/admin-only.png
+[example]: resources/readme/deals-example.gif
