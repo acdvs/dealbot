@@ -1,9 +1,9 @@
 module.exports = {
   env: {
-    node: true
+    node: true,
+    es2020: true
   },
   parserOptions: {
-    ecmaVersion: 2019,
     sourceType: 'module'
   },
   globals: {
