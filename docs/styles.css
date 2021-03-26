@@ -228,10 +228,7 @@ code {
 
   #content {
     padding-top: 25px;
-  }
-
-  .section {
-    margin-bottom: 40px;
+    width: 430px;
   }
 
   .avatar {
@@ -248,15 +245,6 @@ code {
     width: 50px;
   }
 
-  .status {
-    line-height: 20pt;
-  }
-
-  .tag {
-    padding: 3px 7px 1px;
-    border-radius: 3px;
-  }
-
   .button {
     padding: 10px 20px;
     margin-right: 0px;
@@ -266,9 +254,38 @@ code {
     border-radius: 8px;
   }
 
+  .commands {
+    text-align: left;
+  }
+
+  .section {
+    margin-bottom: 40px;
+    text-align: center;
+  }
+
   .section.row > * {
     display: block;
     width: unset;
-    margin-bottom: 40px;
+    margin: 0px auto 40px;
+  }
+
+  .section.row > :not(:last-child) {
+    margin-right: auto;
+  }
+
+  .status {
+    line-height: 20pt;
+    text-align: left;
+  }
+
+  .tag {
+    padding: 3px 7px 1px;
+    border-radius: 3px;
+  }
+}
+
+@media screen and (max-width: 470px) {
+  .section.row > * {
+    width: 100%;
   }
 }
