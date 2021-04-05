@@ -10,6 +10,9 @@
     "start": "npm run db:create && node lib/index.js",
     "test": "eslint lib/**.js --fix"
   },
+  "engines": {
+    "node": "~14.15.4"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/acdvs/isthereanydeal-lookup.git"
