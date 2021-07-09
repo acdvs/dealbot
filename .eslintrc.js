@@ -13,7 +13,6 @@ module.exports = {
     'for-direction': 'error',
     'getter-return': 'error',
     'no-async-promise-executor': 'error',
-    'no-await-in-loop': 'warn',
     'no-compare-neg-zero': 'error',
     'no-cond-assign': 'error',
     'no-constant-condition': 'error',
@@ -93,7 +92,6 @@ module.exports = {
     'no-void': 'error',
     'no-with': 'error',
     radix: 'error',
-    'require-await': 'warn',
     'wrap-iife': ['error', 'inside'],
     yoda: ['error', 'never', { exceptRange: true }],
 
