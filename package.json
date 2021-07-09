@@ -7,6 +7,7 @@
   "license": "MIT",
   "scripts": {
     "db:init": "node lib/util/db/init.js",
+    "db:start": "wsl sudo service postgresql start",
     "start": "node lib/index.js",
     "test": "eslint lib/**.js"
   },
