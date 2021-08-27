@@ -34,7 +34,7 @@ Clears all previously added ignored sellers.
 
 IsThereAnyDeal Lookup is licensed under the [MIT License](http://www.opensource.org/licenses/mit-license.php).
 
-[invite-link]: https://discord.com/api/oauth2/authorize?client_id=722942824999288924&permissions=93248&redirect_uri=https%3A%2F%2Fgithub.com%2Facdvs%2Fisthereanydeal-lookup&scope=bot
+[invite-link]: https://discord.com/api/oauth2/authorize?client_id=722942824999288924&permissions=93248&redirect_uri=https%3A%2F%2Fdealbot.gg&scope=bot
 [donate-link]: https://www.patreon.com/acdvs
 
 [admin-only]: resources/readme/admin-only.png
