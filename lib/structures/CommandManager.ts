@@ -87,7 +87,7 @@ export default class CommandManager extends Collection<string, Command> {
     } catch (err: any) {
       ix.editReply(createBasicEmbed(err.embedMessage || err));
       this._bot.db.insertAPIError(err);
-      log.error(err);
+      log.error('Command run error: ' + JSON.stringify(err));
     }
   }
 }

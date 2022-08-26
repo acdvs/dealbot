@@ -24,7 +24,7 @@ class Database {
     const storedGuildCount = await this.getGuildCount();
 
     if (storedGuildCount !== guilds.size) {
-      log.msg('\nGuild count mismatch. Updating...');
+      log.msg('Guild count mismatch. Updating...');
 
       const cachedGuildIds = guilds.map((guild: DGuild) => ({
         id: BigInt(guild.id),
@@ -36,7 +36,7 @@ class Database {
           skipDuplicates: true,
         });
 
-        log.msg(`Total guilds created: ${count}!\n`);
+        log.msg(`Total guilds created: ${count}`);
       } catch (e) {
         log.error('Unable to update guilds: ' + JSON.stringify(e));
       }
