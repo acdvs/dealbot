@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ES2019",
+    "module": "commonjs",
+    "strict": true,
+    "outDir": "dist",
+    "inlineSourceMap": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "noEmitHelpers": true,
+    "noEmitOnError": true,
+    "importHelpers": true,
+    "resolveJsonModule": true
+  },
+  "include": [
+    "**/*.ts",
+    "node_modules/.prisma/client"
+  ],
+  "exclude": [
+    "node_modules",
+    "docs",
+    "prisma",
+    "resources"
+  ]
+}

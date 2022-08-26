@@ -3,29 +3,39 @@
   "version": "2.0.1",
   "description": "Discord bot for getting game discount info from IsThereAnyDeal",
   "author": "Adam Davies <adam@adam-davies.me> (https://adam-davies.me)",
-  "main": "lib/index.js",
+  "main": "lib/index.ts",
   "license": "MIT",
   "scripts": {
-    "db:init": "node lib/util/db/init.js",
-    "db:start": "wsl sudo service postgresql start",
-    "start": "node lib/index.js",
-    "test": "eslint lib/**.js"
+    "db:init": "npx prisma migrate dev",
+    "dev": "ts-node lib/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "eslint lib/**.ts"
   },
   "engines": {
-    "node": "~14.15.4"
+    "node": ">=16.9.0"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/acdvs/isthereanydeal-lookup.git"
   },
-  "homepage": "https://github.com/acdvs/isthereanydeal-lookup#readme",
+  "homepage": "https://dealbot.gg",
   "dependencies": {
-    "axios": "^0.21.1",
-    "discord.js": "^12.5.1",
-    "dotenv": "^8.2.0",
-    "eslint": "^7.22.0",
-    "pg": "^8.5.1",
-    "pg-hstore": "^2.3.3",
-    "sequelize": "^6.6.2"
+    "@discordjs/rest": "^0.4.1",
+    "@prisma/client": "^3.14.0",
+    "axios": "^0.27.2",
+    "discord.js": "^14.3.0",
+    "prisma": "^3.14.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.23.0",
+    "@typescript-eslint/parser": "^5.23.0",
+    "colors": "^1.4.0",
+    "discord-api-types": "^0.37.4",
+    "dotenv": "^16.0.1",
+    "eslint": "^8.15.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.6.2"
   }
 }

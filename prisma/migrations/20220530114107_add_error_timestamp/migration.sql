@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "api_errors" ADD COLUMN     "timestamp" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;

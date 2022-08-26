@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Guild {
+  id             BigInt          @id
+  ignoredSellers IgnoredSeller[]
+
+  @@map("guilds")
+}
+
+model IgnoredSeller {
+  guildId  BigInt
+  sellerId String @db.VarChar(255)
+  guild    Guild  @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  seller   Seller @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+
+  @@id([guildId, sellerId])
+  @@map("ignored_sellers")
+}
+
+model Seller {
+  id             String          @id @db.VarChar(255)
+  title          String          @db.VarChar(255)
+  ignoredSellers IgnoredSeller[]
+
+  @@map("sellers")
+}
+
+model APIError {
+  id        Int      @id @default(autoincrement())
+  code      Int
+  message   String   @db.VarChar(255)
+  path      String   @db.VarChar(255)
+  timestamp DateTime @default(now())
+
+  @@map("api_errors")
+}
