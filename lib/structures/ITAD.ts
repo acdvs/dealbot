@@ -179,7 +179,9 @@ export class ITAD {
   }
 
   private async _getData<T>(endpoint: string, payload: T): Promise<any> {
-    const res = await axios.get(`${ITAD.BASE_URL}${endpoint}`, payload);
+    const res = await axios.get(`${ITAD.BASE_URL}${endpoint}`, {
+      params: payload,
+    });
     return res;
   }
 
