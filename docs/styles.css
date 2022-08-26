@@ -40,7 +40,7 @@ a {
 }
 
 a:hover {
-  color: #7289DA;
+  color: #5865F2;
   transition: color 0.3s ease;
 }
 
@@ -108,8 +108,8 @@ code {
 
 .button:hover,
 .button:active {
-  color: #7289DA;
-  border-color: #7289DA;
+  color: #5865F2;
+  border-color: #5865F2;
   transition: color 0.3s ease, border-color 0.3s ease;
 }
 
@@ -141,8 +141,12 @@ code {
 }
 
 .name {
-  display: inline-block;
-  margin-right: 10px;
+  margin-right: 14px;
+}
+
+.name-line {
+  display: flex;
+  align-items: center;
 }
 
 .scroll-bar {
@@ -184,13 +188,18 @@ code {
 }
 
 .tag {
-  display: inline-block;
+  display: flex;
   position: relative;
   color: white;
-  background-color: #7289DA;
-  border-radius: 10px;
-  padding: 3px 12px 1px;
+  background-color: #5865F2;
+  border-radius: 6px;
+  padding: 3px 12px 3px;
   top: -3px;
+}
+
+.tag-icon {
+  width: 25px;
+  margin-right: 10px;
 }
 
 .text-bar {
@@ -213,7 +222,7 @@ code {
   }
 }
 
-@media screen and (max-width: 815px) {
+@media screen and (max-width: 835px) {
   h1 {
     font-size: 1.6em;
   }
@@ -281,6 +290,11 @@ code {
   .tag {
     padding: 3px 7px 1px;
     border-radius: 3px;
+  }
+
+  .tag-icon {
+    width: 15px;
+    margin-right: 8px;
   }
 }
 

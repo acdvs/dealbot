@@ -7,14 +7,19 @@
     <meta name="keywords" content="IsThereAnyDeal deals lookup Discord bot">
     <meta name="description" content="A simple, powerful Discord bot for looking up game discount info from IsThereAnyDeal.">
     <meta name="author" content="Adam Davies">
-    <link rel="canonical" href="https://acdvs.github.io/isthereanydeal-lookup">
-    <link rel="icon" type="image/png" href="">
+    <link rel="canonical" href="https://dealbot.gg">
+    <link rel="apple-touch-icon" sizes="180x180" href="public/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="public/favicon/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="public/favicon/favicon-32x32.png">
+    <link rel="mask-icon" href="public/favicon/safari-pinned-tab.svg" color="#ff9100">
+    <meta name="msapplication-TileColor" content="#ff9100">
+    <meta name="theme-color" content="#414141">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="IsThereAnyDeal Lookup">
     <meta property="og:title" content="IsThereAnyDeal Lookup">
-    <meta property="og:url" content="https://acdvs.github.io/isthereanydeal-lookup">
+    <meta property="og:url" content="https://dealbot.gg">
     <meta property="og:description" content="A simple but powerful Discord bot for looking up game discount info from IsThereAnyDeal.">
-    <meta property="og:image" content="images/card.jpg">
+    <meta property="og:image" content="public/images/card.jpg">
     <meta property="twitter:card" content="summary_large_image">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400&display=swap" rel="stylesheet">
@@ -30,14 +35,19 @@
     <div id="content">
       <div class="section">
         <div class="avatar">
-          <img src="images/gaben.png" title="Gabe Newell, master of deals" alt="Gabe Newell, master of deals">
+          <img src="public/images/avatar.png" alt="IsThereAnyDeal Lookup avatar">
         </div>
         <div class="card-info">
           <div class="name-line">
             <h1 class="name">IsThereAnyDeal Lookup</h1>
-            <h2 class="tag">BOT</h2>
+            <h2 class="tag">
+              <svg class="tag-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.5l6.75 6.75L21 4.5" />
+              </svg>
+              <span>BOT</span>
+            </h2>
           </div>
-          <h2 class="status">Watching <strong>for $deals</strong></h2>
+          <h2 class="status">Watching <strong>for /deals</strong></h2>
         </div>
       </div>
       <div class="section">
@@ -67,30 +77,30 @@
         <h3>A simple Discord bot for getting game discount info from <a href="https://isthereanydeal.com" rel="noopener" target="_blank">IsThereAnyDeal</a>.</h3>
       </div>
       <div class="section row">
-        <img class="example" src="images/example.png" alt="Example result">
+        <img class="example" src="public/images/example.png" alt="Example result">
         <div class="commands">
           <div class="command">
-            <div class="command__title"><code>$deals [game]</code></div>
+            <div class="command__title"><code>/deals [game]</code></div>
             <p class="command__detail">Gets a list of current deals for the specified game. Lookup relies on spelling, so misspellings may return nothing. If an exact match is not found, the bot will attempt to suggest something similar.</p>
           </div>
           <div class="command">
-            <div class="command__title"><code>$top [waitlisted|collected|popular]</code></div>
+            <div class="command__title"><code>/top [waitlisted|collected|popular]</code></div>
             <p class="command__detail">Gets the top most waitlisted, collected, or popular games.</p>
           </div>
           <div class="command">
-            <div class="command__title"><code>$sellers</code></div>
+            <div class="command__title"><code>/sellers</code></div>
             <p class="command__detail">Lists all sellers.</p>
           </div>
           <div class="command">
-            <div class="command__title"><code>$ignoredsellers</code></div>
+            <div class="command__title"><code>/ignoredsellers list</code></div>
             <p class="command__detail">Lists all ignored sellers. Ignored sellers do not appear in <code>$deals</code> lists.</p>
           </div>
           <div class="command">
-            <div class="command__title"><code>$ignoredsellers [add|remove] [seller]</code></div>
+            <div class="command__title"><code>/ignoredsellers [add|remove] [seller]</code></div>
             <p class="command__detail">Adds or removes an ignored seller. Seller must be spelled exactly as it appears in the <code>$sellers</code> command.</p>
           </div>
           <div class="command">
-            <div class="command__title"><code>$ignoredsellers clear</code></div>
+            <div class="command__title"><code>/ignoredsellers clear</code></div>
             <p class="command__detail">Clears all previously added ignored sellers.</p>
           </div>
         </div>
