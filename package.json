@@ -1,6 +1,6 @@
 {
   "name": "isthereanydeal-lookup",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "description": "Discord bot for getting game discount info from IsThereAnyDeal",
   "author": "Adam Davies <adam@adam-davies.me> (https://adam-davies.me)",
   "main": "lib/index.ts",
