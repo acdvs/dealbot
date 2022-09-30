@@ -165,9 +165,9 @@ export default class DealsEmbed {
       );
 
       this._embed.setFooter({
-        text: `Ignored sellers: ${shortenedList
-          .sort()
-          .join(DealsEmbed.INLINE_JOIN_CHARS)}`,
+        text: `Ignored sellers: ${shortenedList.join(
+          DealsEmbed.INLINE_JOIN_CHARS
+        )}`,
       });
     }
   }
