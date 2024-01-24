@@ -27,17 +27,17 @@ async function run(ix: ChatInputCommandInteraction, bot: Bot) {
   const embed = new BasicEmbed();
 
   if (chart === TopChartOption.WAITLISTED) {
-    const list = await bot.api.getWaitlistChart(20);
+    const list = await bot.api.getWaitlistChart();
 
     embed.setTitle('Top Waitlisted Games');
     embed.addFields(getGameCountFields(list));
   } else if (chart === TopChartOption.COLLECTED) {
-    const list = await bot.api.getCollectionChart(20);
+    const list = await bot.api.getCollectionChart();
 
     embed.setTitle('Top Collected Games');
     embed.addFields(getGameCountFields(list));
   } else if (chart === TopChartOption.POPULAR) {
-    const popularities = await bot.api.getPopularityChart(20);
+    const popularities = await bot.api.getPopularityChart();
 
     embed.setTitle('Top Games By Popularity');
     embed.setDescription(

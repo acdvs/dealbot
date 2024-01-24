@@ -4,6 +4,7 @@ import {
   SlashCommandBuilder,
 } from 'discord.js';
 import Bot from '../structures/Bot';
+import { AxiosResponse } from 'axios';
 
 export interface Command {
   options: SlashCommandBuilder;
@@ -58,7 +59,7 @@ export class APIErrorData {
   }
 }
 
-export type GenericFunction = (...params: any) => any;
+export type APICall = (...params: any) => Promise<AxiosResponse>;
 
 export type OAuthScope =
   | 'user_info'
@@ -95,7 +96,7 @@ export interface RefreshTokenPayload extends BaseTokenPayload {
   refresh_token: string;
 }
 
-interface ProtectedKeyPayload {
+export interface ProtectedKeyPayload {
   key: string;
 }
 
@@ -112,9 +113,7 @@ export interface RegionsPayload {
 }
 
 export interface RegionStoresPayload {
-  region: string;
   country?: string;
-  optional?: string;
 }
 
 export interface SinglePlainPayload extends ProtectedKeyPayload {
@@ -140,23 +139,15 @@ export interface PlainIDMapPayload extends ProtectedKeyPayload {
 }
 
 export interface PricesPayload extends ProtectedKeyPayload {
-  plains: string;
-  region?: string;
   country?: string;
-  shops?: string;
-  exclude?: string;
-  added?: string;
+  nondeals?: boolean;
+  vouchers?: boolean;
+  capacity?: number;
+  shops?: number[];
 }
 
 export interface HistoricalLowPayload extends ProtectedKeyPayload {
-  plains: string;
-  region?: string;
   country?: string;
-  shops?: string;
-  exclude?: string;
-  since?: number;
-  until?: number;
-  new?: '0' | '1';
 }
 
 export interface StoreLowPayload extends ProtectedKeyPayload {
@@ -175,11 +166,6 @@ export interface GameBundlesPayload extends ProtectedKeyPayload {
   region?: string;
 }
 
-export interface GameInfoPayload extends ProtectedKeyPayload {
-  plains: string;
-  optional?: 'metacritic';
-}
-
 export interface GamePricesPayload extends ProtectedKeyPayload {
   region?: string;
   country?: string;
@@ -190,10 +176,18 @@ export interface GamePricesPayload extends ProtectedKeyPayload {
   optional?: string;
 }
 
-export interface SearchPayload extends ProtectedKeyPayload {
-  q: string;
-  limit?: string;
-  strict?: '0' | '1';
+export interface GameLookupPayload extends ProtectedKeyPayload {
+  title?: string;
+  appid?: number;
+}
+
+export interface GameSearchPayload extends ProtectedKeyPayload {
+  title: string;
+  results?: number;
+}
+
+export interface GameInfoPayload extends ProtectedKeyPayload {
+  id: string;
 }
 
 export interface DealsPayload extends ProtectedKeyPayload {

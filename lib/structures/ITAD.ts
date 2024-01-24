@@ -1,18 +1,19 @@
-import axios from 'axios';
+import axios, { type AxiosResponse } from 'axios';
 import { Seller } from '@prisma/client';
 import { sleep } from '../util/helpers';
 import log from '../util/logger';
 import {
+  APICall,
   APIErrorData,
   CollectionChartPayload,
   GameInfoPayload,
-  GenericFunction,
+  GameLookupPayload,
+  GameSearchPayload,
   HistoricalLowPayload,
   PopularityChartPayload,
   PricesPayload,
+  ProtectedKeyPayload,
   RegionStoresPayload,
-  SearchPayload,
-  SinglePlainPayload,
   WaitlistChartPayload,
 } from '../util/types';
 
@@ -26,170 +27,169 @@ export class ITAD {
   }
 
   /**
-   * Search for game by name
+   * Search for games by title
+   * https://docs.isthereanydeal.com/#tag/games/operation/games-search-v1
    */
-  async search(game: string, limit: number): Promise<Record<string, any>[]> {
-    return this._retry(async () => {
-      const res = await this._getData<SearchPayload>('/v02/search/search/', {
-        key: this._key,
-        q: game,
-        limit: limit.toString(),
-        strict: '1',
-      });
+  async search(game: string, limit = 20): Promise<Record<string, any>[]> {
+    const res = await this._getDataProtected<GameSearchPayload>(
+      '/games/search/v1',
+      {
+        title: game,
+        results: limit,
+      }
+    );
 
-      const searchData = res.data?.data;
-      const list = searchData?.results
-        .filter((v, i, a) => i === a.findIndex((x) => x.title === v.title))
-        .sort((a, b) => (a.title > b.title ? 1 : -1));
-
-      return list;
-    });
+    return res.data.sort((a, b) => (a.title > b.title ? 1 : -1));
   }
 
   /**
-   * Get ITAD game ID
+   * Lookup game based on title or Steam appid
+   * https://docs.isthereanydeal.com/#tag/games/operation/games-lookup-v1
    */
   async getGameId(game: string): Promise<string> {
-    return this._retry(async () => {
-      const res = await this._getData<SinglePlainPayload>('/v02/game/plain/', {
-        key: this._key,
+    const res = await this._getDataProtected<GameLookupPayload>(
+      '/games/lookup/v1',
+      {
         title: game,
-      });
+      }
+    );
 
-      return res.data?.data?.plain;
-    });
+    return res.data.game.id;
   }
 
   /**
-   * Get game info from ID
+   * Get basic game information
+   * https://docs.isthereanydeal.com/#tag/games/operation/games-info-v2
    */
   async getGameInfo(gameId: string): Promise<Record<string, any>> {
-    return this._retry(async () => {
-      const res = await this._getData<GameInfoPayload>('/v01/game/info/', {
-        key: this._key,
-        plains: gameId,
-      });
+    const res = await this._getDataProtected<GameInfoPayload>(
+      '/games/info/v2',
+      {
+        id: gameId,
+      }
+    );
 
-      return res.data?.data?.[gameId];
-    });
+    return res.data.game;
   }
 
   /**
-   * Get game prices and links
+   * Get games' prices
+   * https://docs.isthereanydeal.com/#tag/games/operation/games-prices-v2
    */
-  async getGameDeals(
-    gameId: string,
-    ignoredSellers: Seller[]
-  ): Promise<Record<string, any>> {
-    return this._retry(async () => {
-      const res = await this._getData<PricesPayload>('/v01/game/prices/', {
-        key: this._key,
-        plains: gameId,
-        region: 'us',
+  async getGameDeals(gameId: string): Promise<Record<string, any>> {
+    const res = await this._getDataProtected<PricesPayload>(
+      '/games/prices/v2',
+      {
         country: 'US',
-        exclude: ignoredSellers.map((x) => x.id).join(','),
-      });
+        capacity: 5,
+        nondeals: false,
+        vouchers: false,
+      }
+    );
 
-      return res.data?.data?.[gameId];
-    });
+    return res.data[0].deals;
   }
 
   /**
-   * Get historical low for game
+   * Get historically lowest prices
+   * https://docs.isthereanydeal.com/#tag/games/operation/games-historylow-v1
    */
   async getHistoricalLow(gameId: string): Promise<Record<string, any>> {
-    return this._retry(async () => {
-      const res = await this._getData<HistoricalLowPayload>(
-        '/v01/game/lowest/',
-        {
-          key: this._key,
-          plains: gameId,
-          region: 'us',
-          country: 'US',
-        }
-      );
+    const res = await this._getDataProtected<HistoricalLowPayload>(
+      '/games/historylow/v1',
+      {
+        country: 'US',
+      }
+    );
 
-      return res.data?.data?.[gameId];
-    });
+    return res.data[0].low;
   }
 
   /**
    * Get all sellers
+   * https://docs.isthereanydeal.com/#tag/service/operation/service-shops-v1
    */
   async getSellers(): Promise<Record<string, any>> {
-    return this._retry(async () => {
-      const res = await this._getData<RegionStoresPayload>('/v02/web/stores/', {
-        region: 'us',
-        country: 'US',
-      });
-
-      return res.data?.data;
+    const res = await this._getData<RegionStoresPayload>('/service/shops/v1', {
+      country: 'US',
     });
+
+    return res.data;
   }
 
   /**
    * Get top waitlisted games
+   * https://docs.isthereanydeal.com/#tag/stats/operation/stats-most-waitlisted-v1
    */
-  async getWaitlistChart(limit: number): Promise<Record<string, any>[]> {
-    return this._retry(async () => {
-      const res = await this._getData<WaitlistChartPayload>(
-        '/v01/stats/waitlist/chart/',
-        {
-          key: this._key,
-          limit: limit,
-        }
-      );
+  async getWaitlistChart(limit = 20): Promise<Record<string, any>[]> {
+    const res = await this._getDataProtected<WaitlistChartPayload>(
+      '/stats/most-waitlisted/v1',
+      {
+        limit,
+      }
+    );
 
-      return res.data?.data;
-    });
+    return res.data;
   }
 
   /**
    * Get top collected games
+   * https://docs.isthereanydeal.com/#tag/stats/operation/stats-most-collected-v1
    */
-  async getCollectionChart(limit: number): Promise<Record<string, any>[]> {
-    return this._retry(async () => {
-      const res = await this._getData<CollectionChartPayload>(
-        '/v01/stats/collection/chart/',
-        {
-          key: this._key,
-          limit: limit,
-        }
-      );
+  async getCollectionChart(limit = 20): Promise<Record<string, any>[]> {
+    const res = await this._getDataProtected<CollectionChartPayload>(
+      '/stats/most-collected/v1',
+      {
+        limit,
+      }
+    );
 
-      return res.data?.data;
-    });
+    return res.data;
   }
 
   /**
    * Get most popular games
+   * https://docs.isthereanydeal.com/#tag/stats/operation/stats-most-popular-v1
    */
-  async getPopularityChart(limit: number): Promise<Record<string, any>[]> {
-    return this._retry(async () => {
-      const res = await this._getData<PopularityChartPayload>(
-        '/v01/stats/popularity/chart/',
-        {
-          key: this._key,
-          limit: limit,
-        }
-      );
+  async getPopularityChart(limit = 20): Promise<Record<string, any>[]> {
+    const res = await this._getDataProtected<PopularityChartPayload>(
+      '/stats/most-popular/v1',
+      {
+        limit,
+      }
+    );
 
-      return res.data?.data;
+    return res.data;
+  }
+
+  private async _getData<T>(
+    endpoint: string,
+    payload: T
+  ): Promise<AxiosResponse> {
+    return this._retry(async () => {
+      const res = await axios.get(`${ITAD.BASE_URL}${endpoint}`, {
+        params: payload,
+      });
+
+      return res.data;
     });
   }
 
-  private async _getData<T>(endpoint: string, payload: T): Promise<any> {
-    const res = await axios.get(`${ITAD.BASE_URL}${endpoint}`, {
-      params: payload,
+  private async _getDataProtected<T extends ProtectedKeyPayload>(
+    endpoint: string,
+    payload: Omit<T, 'key'>
+  ): Promise<AxiosResponse> {
+    return this._getData<T | ProtectedKeyPayload>(endpoint, {
+      key: this._key,
+      ...payload,
     });
-    return res;
   }
 
   private async _retry(
-    fn: GenericFunction,
+    fn: APICall,
     retries = 3,
     interval = 1
-  ): Promise<any> {
+  ): ReturnType<APICall> {
     let retried = false;
     let error;
 

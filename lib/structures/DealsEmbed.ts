@@ -51,7 +51,7 @@ export default class DealsEmbed {
     );
 
     const [gameDeals, gameDetails, historicalLow] = await Promise.all([
-      this._bot.api.getGameDeals(this._gameId, ignoredSellers),
+      this._bot.api.getGameDeals(this._gameId),
       this._bot.api.getGameInfo(this._gameId),
       this._bot.api.getHistoricalLow(this._gameId),
     ]);
