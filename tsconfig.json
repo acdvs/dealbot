@@ -14,10 +14,14 @@
     "noEmitHelpers": true,
     "noEmitOnError": true,
     "importHelpers": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "paths": {
+      "@/*": ["./lib/*"]
+    }
   },
   "include": [
     "**/*.ts",
+    "**/*.d.ts",
     "node_modules/.prisma/client"
   ],
   "exclude": [
