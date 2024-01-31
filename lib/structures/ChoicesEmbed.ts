@@ -1,22 +1,22 @@
 import {
   ActionRowBuilder,
+  BaseMessageOptions,
   ChatInputCommandInteraction,
   ComponentType,
-  EmbedBuilder,
-  SelectMenuBuilder,
-  SelectMenuInteraction,
-  SelectMenuOptionBuilder,
-  WebhookEditMessageOptions,
+  StringSelectMenuInteraction,
 } from 'discord.js';
-import DealsEmbed from './DealsEmbed';
-import { createBasicEmbed, getSearchUrl } from '../util/helpers';
-import { BasicEmbed } from '../util/types';
-import Bot from './Bot';
+import {
+  StringSelectMenuBuilder,
+  StringSelectMenuOptionBuilder,
+} from '@discordjs/builders';
 
-export default class ChoicesEmbed extends EmbedBuilder {
+import { Bot, DealsEmbed } from './';
+import { createBasicEmbed, getSearchUrl } from '@/util/helpers';
+import { BasicEmbed } from '@/util/types';
+
+export default class ChoicesEmbed extends BasicEmbed {
   private _ix: ChatInputCommandInteraction;
   private _bot: Bot;
-  private _embed = new BasicEmbed();
   private _games: Record<string, any>[];
 
   constructor(
@@ -25,6 +25,7 @@ export default class ChoicesEmbed extends EmbedBuilder {
     games: Record<string, any>[]
   ) {
     super();
+
     this._ix = ix;
     this._bot = bot;
     this._games = games;
@@ -38,37 +39,33 @@ export default class ChoicesEmbed extends EmbedBuilder {
       return;
     }
 
-    this._embed = new BasicEmbed({
-      title: 'Similar Results',
-      description: [
+    this.setTitle('Similar Results');
+    this.setDescription(
+      [
         `An exact match was not found for "${game}".`,
         `[Click here](${getSearchUrl(game)}) to search directly on ITAD`,
         'or select a similar result below.',
-      ].join('\n'),
-    });
+      ].join('\n')
+    );
 
     this._createCollector();
   }
 
-  create(): EmbedBuilder {
-    return this._embed;
-  }
-
-  createAsMessageOpts(): WebhookEditMessageOptions {
+  getAsMessageOpts(): BaseMessageOptions {
     return {
-      embeds: [this._embed],
+      embeds: [this],
       components: [this._getSelectMenu()],
     };
   }
 
   private _getSelectMenu() {
-    return new ActionRowBuilder<SelectMenuBuilder>().addComponents(
-      new SelectMenuBuilder()
+    return new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+      new StringSelectMenuBuilder()
         .setCustomId(`deal_opts_select_${new Date().getTime()}`)
         .setPlaceholder('Nothing selected')
         .addOptions(
           ...this._games.map((v, i) =>
-            new SelectMenuOptionBuilder()
+            new StringSelectMenuOptionBuilder()
               .setLabel(v.title)
               .setValue(i.toString())
           )
@@ -78,12 +75,12 @@ export default class ChoicesEmbed extends EmbedBuilder {
 
   private _createCollector() {
     const collector = this._ix.channel!.createMessageComponentCollector({
-      componentType: ComponentType.SelectMenu,
+      componentType: ComponentType.StringSelect,
       filter: (menuIx) => menuIx.user.id === this._ix.user.id,
       max: 1,
     });
 
-    collector.on('collect', async (menuIx: SelectMenuInteraction) => {
+    collector.on('collect', async (menuIx: StringSelectMenuInteraction) => {
       if (menuIx.member !== this._ix.member) {
         return;
       }
@@ -95,13 +92,9 @@ export default class ChoicesEmbed extends EmbedBuilder {
       collector.stop();
 
       const { title: game, plain: gameId } = this._games[menuIx.values[0]];
-      const dealEmbed = new DealsEmbed({
-        ix: this._ix,
-        bot: this._bot,
-        game,
-        gameId,
-      });
-      this._ix.editReply(await dealEmbed.createAsMessageOpts());
+      const dealEmbed = new DealsEmbed(this._ix, this._bot, game, gameId);
+
+      this._ix.editReply(await dealEmbed.getAsMessageOpts());
     });
   }
 }

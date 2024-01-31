@@ -33,7 +33,7 @@ async function run(ix: ChatInputCommandInteraction, bot: Bot): Promise<void> {
 
     if (similarGames && similarGames.length > 0) {
       const choicesEmbed = new ChoicesEmbed(ix, bot, similarGames);
-      ix.editReply(await choicesEmbed.createAsMessageOpts());
+      ix.editReply(await choicesEmbed.getAsMessageOpts());
     } else {
       ix.editReply(
         createBasicEmbed(
