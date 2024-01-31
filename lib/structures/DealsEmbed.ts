@@ -1,13 +1,12 @@
-import {
-  ChatInputCommandInteraction,
-  EmbedBuilder,
-  WebhookEditMessageOptions,
-} from 'discord.js';
-import { toCurrency, toTitleCase } from '../util/helpers';
-import { BasicEmbed, DealsEmbedOptions } from '../util/types';
-import Bot from './Bot';
+import { BaseMessageOptions, ChatInputCommandInteraction } from 'discord.js';
+import { EmbedBuilder } from '@discordjs/builders';
 
-export default class DealsEmbed {
+import Bot from './Bot';
+import api from '@/util/api';
+import { toCurrency, toTitleCase } from '@/util/helpers';
+import { BasicEmbed } from '@/util/types';
+
+export default class DealsEmbed extends BasicEmbed {
   private static readonly FIELD_CHAR_LIMIT = 1024;
   private static readonly ROW_JOIN_CHARS = '\n';
   private static readonly INLINE_JOIN_CHARS = ', ';
@@ -15,7 +14,6 @@ export default class DealsEmbed {
   private _ix: ChatInputCommandInteraction;
   private _bot: Bot;
 
-  private _embed: EmbedBuilder;
   private _game: string;
   private _gameId: string;
   private _listings: Record<string, any>[] = [];
@@ -34,15 +32,15 @@ export default class DealsEmbed {
     this._gameId = gameId;
   }
 
-  async create(): Promise<EmbedBuilder> {
+  async get(): Promise<EmbedBuilder> {
     await this._populate();
-    return this._embed;
+    return this;
   }
 
-  async createAsMessageOpts(): Promise<WebhookEditMessageOptions> {
-    const embed = await this.create();
+  async getAsMessageOpts(): Promise<BaseMessageOptions> {
+    await this._populate();
     return {
-      embeds: [embed],
+      embeds: [this],
       components: [],
     };
   }
@@ -57,13 +55,13 @@ export default class DealsEmbed {
     );
 
     const [gameDeals, gameDetails, historicalLow] = await Promise.all([
-      this._bot.api.getGameDeals(this._gameId),
-      this._bot.api.getGameInfo(this._gameId),
-      this._bot.api.getHistoricalLow(this._gameId),
+      api.getGameDeals(this._gameId),
+      api.getGameInfo(this._gameId),
+      api.getHistoricalLow(this._gameId),
     ]);
 
     if (!gameDeals || !gameDetails) {
-      this._embed.setDescription(
+      this.setDescription(
         `Unable to get info from IsThereAnyDeal for ${toTitleCase(
           this._game
         )}. Please try again later.`
@@ -71,18 +69,18 @@ export default class DealsEmbed {
       return;
     }
 
-    this._embed.setTitle(gameDetails.title);
-    this._embed.setURL(gameDetails.urls.game);
+    this.setTitle(gameDetails.title);
+    this.setURL(gameDetails.urls.game);
 
     this._listings = gameDeals.list.filter((x) => x.price_new < x.price_old);
 
     if (this._listings.length === 0) {
-      this._embed.setDescription('No deals found.');
-      this._embed.setThumbnail(gameDetails.image);
+      this.setDescription('No deals found.');
+      this.setThumbnail(gameDetails.image);
       return;
     }
 
-    this._embed.setImage(gameDetails.image);
+    this.setImage(gameDetails.image);
 
     this._setListings(gameDeals);
     this._setHistoricalLow(historicalLow);
@@ -104,7 +102,7 @@ export default class DealsEmbed {
   }
 
   private _setSellerField(list: string[]): void {
-    this._embed.addFields({
+    this.addFields({
       name: 'Seller',
       value: list.join(DealsEmbed.ROW_JOIN_CHARS),
       inline: true,
@@ -117,7 +115,7 @@ export default class DealsEmbed {
     );
     const oldPrices = this._listings.map((x) => toCurrency(x.price_old));
 
-    this._embed.addFields([
+    this.addFields([
       {
         name: 'New Price',
         value: newPrices.slice(0, listLength).join(DealsEmbed.ROW_JOIN_CHARS),
@@ -140,7 +138,7 @@ export default class DealsEmbed {
         historicalLow.cut
       }%) from ${historicalLow.shop.name}`;
 
-      this._embed.addFields({
+      this.addFields({
         name: 'Historical Low',
         value: historicalLow.price === 0 ? free : priceCut,
       });
@@ -151,7 +149,7 @@ export default class DealsEmbed {
     const steamReview = gameDetails.reviews?.steam;
 
     if (steamReview) {
-      this._embed.addFields({
+      this.addFields({
         name: 'Steam User Review',
         value: `${steamReview.text} (${steamReview.perc_positive}% from ${steamReview.total} users)`,
       });
@@ -170,7 +168,7 @@ export default class DealsEmbed {
         overflowText
       );
 
-      this._embed.setFooter({
+      this.setFooter({
         text: `Ignored sellers: ${shortenedList.join(
           DealsEmbed.INLINE_JOIN_CHARS
         )}`,
