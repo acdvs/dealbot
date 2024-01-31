@@ -1,7 +1,8 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
 import { ChatInputCommandInteraction } from 'discord.js';
-import Bot from '../structures/Bot';
-import { Command, BasicEmbed } from '../util/types';
+import { SlashCommandBuilder } from '@discordjs/builders';
+
+import Bot from '@/structures/Bot';
+import { Command, BasicEmbed } from '@/util/types';
 
 export default <Command>{
   options: new SlashCommandBuilder()

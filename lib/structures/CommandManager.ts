@@ -5,8 +5,8 @@ import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v10';
 
 import Bot from './Bot';
-import { createBasicEmbed } from '../util/helpers';
-import log from '../util/logger';
+import { createBasicEmbed } from '@/util/helpers';
+import log from '@/util/logger';
 import { Command } from '@/util/types';
 
 const API_VERSION = '10';

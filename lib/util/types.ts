@@ -1,10 +1,8 @@
-import {
-  ChatInputCommandInteraction,
-  EmbedBuilder,
-  SlashCommandBuilder,
-} from 'discord.js';
-import Bot from '../structures/Bot';
 import { AxiosResponse } from 'axios';
+import { APIEmbed, ChatInputCommandInteraction } from 'discord.js';
+import { EmbedBuilder, SlashCommandBuilder } from '@discordjs/builders';
+
+import Bot from '@/structures/Bot';
 
 export interface Command {
   options: SlashCommandBuilder;
@@ -14,7 +12,7 @@ export interface Command {
 export class BasicEmbed extends EmbedBuilder {
   color = 0xfbab0e;
 
-  constructor(options?: EmbedBuilder['data']) {
+  constructor(options?: APIEmbed) {
     super(options);
     this.setColor(this.color);
   }

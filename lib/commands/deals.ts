@@ -1,10 +1,10 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
 import { ChatInputCommandInteraction } from 'discord.js';
-import { createBasicEmbed } from '../util/helpers';
-import { Command } from '../util/types';
-import DealsEmbed from '../structures/DealsEmbed';
-import ChoicesEmbed from '../structures/ChoicesEmbed';
-import Bot from '../structures/Bot';
+import { SlashCommandBuilder } from '@discordjs/builders';
+
+import { Bot, ChoicesEmbed, DealsEmbed } from '@/structures';
+import api from '@/util/api';
+import { createBasicEmbed } from '@/util/helpers';
+import { Command } from '@/util/types';
 
 export default <Command>{
   options: new SlashCommandBuilder()
@@ -13,7 +13,7 @@ export default <Command>{
     .addStringOption((option) =>
       option
         .setName('game')
-        .setDescription('Misspellings may return nothing.')
+        .setDescription('Game name. Misspellings may return nothing.')
         .setRequired(true)
     ),
   run,

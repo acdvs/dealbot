@@ -1,7 +1,9 @@
 import { APIEmbedField, ChatInputCommandInteraction } from 'discord.js';
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { formatNumberCommas } from '../util/helpers';
-import { Command, BasicEmbed, TopChartOption } from '../util/types';
+
+import api from '@/util/api';
+import { formatNumberCommas } from '@/util/helpers';
+import { Command, BasicEmbed } from '@/util/types';
 
 enum TopChartOption {
   WAITLISTED,

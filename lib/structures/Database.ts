@@ -1,8 +1,10 @@
 import { Guild as DGuild, Snowflake } from 'discord.js';
 import { APIError, Guild, PrismaClient, Seller } from '@prisma/client';
-import log from '../util/logger';
-import { APIErrorData } from '../util/types';
+
 import Bot from './Bot';
+import api from '@/util/api';
+import log from '@/util/logger';
+import { APIErrorData } from '@/util/types';
 
 class Database {
   private _bot: Bot;

@@ -5,9 +5,9 @@ import {
   GuildMember,
   Interaction,
 } from 'discord.js';
-import CommandManager from './CommandManager';
-import Database from './Database';
-import log from '../util/logger';
+
+import { CommandManager, Database } from './';
+import log from '@/util/logger';
 
 export default class Bot extends Client {
   public db = new Database(this);

@@ -1,7 +1,8 @@
 import 'dotenv/config';
 import { ClientOptions } from 'discord.js';
-import Bot from './structures/Bot';
 import { ActivityType, GatewayIntentBits } from 'discord-api-types/v10';
+
+import Bot from './structures/Bot';
 
 const DealBot = new Bot(<ClientOptions>{
   presence: {
