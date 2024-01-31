@@ -5,14 +5,12 @@ import {
   GuildMember,
   Interaction,
 } from 'discord.js';
-import { ITAD } from './ITAD';
 import CommandManager from './CommandManager';
 import Database from './Database';
 import log from '../util/logger';
 
 export default class Bot extends Client {
   public db = new Database(this);
-  public api = new ITAD(process.env.ITAD_KEY!);
   private _commands = new CommandManager(this);
 
   async start(token: string): Promise<void> {

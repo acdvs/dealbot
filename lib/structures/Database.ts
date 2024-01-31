@@ -94,7 +94,7 @@ class Database {
 
   async insertSellers(): Promise<number | null> {
     try {
-      const sellersRes = await this._bot.api.getSellers();
+      const sellersRes = await api.getSellers();
       const { count } = await this._instance.seller.createMany({
         data: sellersRes.map((x) => ({
           id: x.id,

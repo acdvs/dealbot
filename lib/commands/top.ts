@@ -1,6 +1,5 @@
 import { APIEmbedField, ChatInputCommandInteraction } from 'discord.js';
 import { SlashCommandBuilder } from '@discordjs/builders';
-import Bot from '../structures/Bot';
 import { formatNumberCommas } from '../util/helpers';
 import { Command, BasicEmbed, TopChartOption } from '../util/types';
 
@@ -28,22 +27,22 @@ export default <Command>{
   run,
 };
 
-async function run(ix: ChatInputCommandInteraction, bot: Bot) {
+async function run(ix: ChatInputCommandInteraction) {
   const chart = ix.options.getInteger('chart', true);
   const embed = new BasicEmbed();
 
   if (chart === TopChartOption.WAITLISTED) {
-    const list = await bot.api.getWaitlistChart();
+    const list = await api.getWaitlistChart();
 
     embed.setTitle('Top Waitlisted Games');
     embed.addFields(getGameCountFields(list));
   } else if (chart === TopChartOption.COLLECTED) {
-    const list = await bot.api.getCollectionChart();
+    const list = await api.getCollectionChart();
 
     embed.setTitle('Top Collected Games');
     embed.addFields(getGameCountFields(list));
   } else if (chart === TopChartOption.POPULAR) {
-    const popularities = await bot.api.getPopularityChart();
+    const popularities = await api.getPopularityChart();
 
     embed.setTitle('Top Games By Popularity');
     embed.setDescription(

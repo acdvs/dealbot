@@ -23,13 +23,13 @@ async function run(ix: ChatInputCommandInteraction, bot: Bot): Promise<void> {
   await ix.deferReply();
 
   const game = ix.options.getString('game', true);
-  const gameId = await bot.api.getGameId(game);
+  const gameId = await api.getGameId(game);
 
   if (gameId) {
     ix.editReply(await dealEmbed.createAsMessageOpts());
     const dealsEmbed = new DealsEmbed(ix, bot, game, gameId);
   } else {
-    const similarGames = await bot.api.search(game, 5);
+    const similarGames = await api.search(game, 5);
 
     if (similarGames && similarGames.length > 0) {
       const choicesEmbed = new ChoicesEmbed(ix, bot, similarGames);
