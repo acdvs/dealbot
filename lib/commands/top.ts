@@ -4,6 +4,12 @@ import Bot from '../structures/Bot';
 import { formatNumberCommas } from '../util/helpers';
 import { Command, BasicEmbed, TopChartOption } from '../util/types';
 
+enum TopChartOption {
+  WAITLISTED,
+  COLLECTED,
+  POPULAR,
+}
+
 export default <Command>{
   options: new SlashCommandBuilder()
     .setName('top')

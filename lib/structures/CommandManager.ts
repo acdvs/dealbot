@@ -3,13 +3,18 @@ import { resolve, join } from 'path';
 import { Collection, ChatInputCommandInteraction } from 'discord.js';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v10';
+
 import Bot from './Bot';
 import { createBasicEmbed } from '../util/helpers';
 import log from '../util/logger';
-import { Command, CommandImport } from '../util/types';
+import { Command } from '@/util/types';
 
 const API_VERSION = '10';
 const COMMANDS_PATH = resolve(__dirname, '..', 'commands');
+
+interface CommandImport {
+  default: Command;
+}
 
 export default class CommandManager extends Collection<string, Command> {
   private _bot: Bot;

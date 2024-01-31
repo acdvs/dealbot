@@ -11,10 +11,6 @@ export interface Command {
   run: (interaction: ChatInputCommandInteraction, bot?: Bot) => Promise<void>;
 }
 
-export type CommandImport = {
-  default: Command;
-};
-
 export class BasicEmbed extends EmbedBuilder {
   color = 0xfbab0e;
 
@@ -22,12 +18,6 @@ export class BasicEmbed extends EmbedBuilder {
     super(options);
     this.setColor(this.color);
   }
-}
-
-export enum TopChartOption {
-  WAITLISTED,
-  COLLECTED,
-  POPULAR,
 }
 
 export class APIErrorData {
