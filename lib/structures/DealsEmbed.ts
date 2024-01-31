@@ -20,12 +20,18 @@ export default class DealsEmbed {
   private _gameId: string;
   private _listings: Record<string, any>[] = [];
 
-  constructor(options: DealsEmbedOptions) {
-    this._ix = options.ix;
-    this._bot = options.bot;
-    this._embed = new BasicEmbed();
-    this._game = options.game;
-    this._gameId = options.gameId;
+  constructor(
+    ix: ChatInputCommandInteraction,
+    bot: Bot,
+    game: string,
+    gameId: string
+  ) {
+    super();
+
+    this._ix = ix;
+    this._bot = bot;
+    this._game = game;
+    this._gameId = gameId;
   }
 
   async create(): Promise<EmbedBuilder> {

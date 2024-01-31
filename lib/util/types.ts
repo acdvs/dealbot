@@ -24,13 +24,6 @@ export class BasicEmbed extends EmbedBuilder {
   }
 }
 
-export interface DealsEmbedOptions {
-  game: string;
-  gameId: string;
-  ix: ChatInputCommandInteraction;
-  bot: Bot;
-}
-
 export enum TopChartOption {
   WAITLISTED,
   COLLECTED,
