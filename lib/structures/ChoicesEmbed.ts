@@ -10,7 +10,7 @@ import {
   StringSelectMenuOptionBuilder,
 } from '@discordjs/builders';
 
-import { BasicEmbed, DealsEmbed } from '.';
+import { BasicEmbed, Bot, DealsEmbed } from '.';
 import { getSearchUrl } from '@/util/helpers';
 import log from '@/util/logger';
 import api, { APIError } from '@/util/api';
@@ -19,16 +19,22 @@ type SimilarGames = Awaited<ReturnType<(typeof api)['search']>>;
 
 export default class ChoicesEmbed extends BasicEmbed {
   #ix: ChatInputCommandInteraction;
+  #bot: Bot;
   #games: NonNullable<SimilarGames>;
+  #includeAll: boolean;
 
   constructor(
     ix: ChatInputCommandInteraction,
-    games: NonNullable<SimilarGames>
+    bot: Bot,
+    games: NonNullable<SimilarGames>,
+    includeAll = false
   ) {
     super();
 
     this.#ix = ix;
+    this.#bot = bot;
     this.#games = games;
+    this.#includeAll = includeAll;
 
     const game = this.#ix.options.getString('game', true);
 
@@ -91,8 +97,13 @@ export default class ChoicesEmbed extends BasicEmbed {
 
       collector.stop();
 
-      const { title: game, id: gameId } = this.#games[menuIx.values[0]];
-      const dealEmbed = new DealsEmbed(this.#ix, game, gameId);
+      const { id: gameId } = this.#games[menuIx.values[0]];
+      const dealEmbed = new DealsEmbed(
+        this.#ix,
+        this.#bot,
+        gameId,
+        this.#includeAll
+      );
 
       try {
         this.#ix.editReply(await dealEmbed.getAsMessageOpts());
