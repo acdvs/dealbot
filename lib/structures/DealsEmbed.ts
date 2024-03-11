@@ -23,12 +23,14 @@ export default class DealsEmbed extends BasicEmbed {
   private _game: string;
   private _gameId: string;
   private _itadLink: string;
+  private _includeAll: boolean;
 
   constructor(
     ix: ChatInputCommandInteraction,
     bot: Bot,
     game: string,
     gameId: string
+    includeAll = false
   ) {
     super();
 
@@ -37,6 +39,7 @@ export default class DealsEmbed extends BasicEmbed {
     this._game = game;
     this._gameId = gameId;
     this._itadLink = '';
+    this._includeAll = includeAll;
   }
 
   async get(): Promise<EmbedBuilder> {
@@ -62,7 +65,7 @@ export default class DealsEmbed extends BasicEmbed {
     );
 
     const [gameDeals, gameDetails, historicalLow] = await Promise.all([
-      api.getGameDeals(this._gameId),
+      api.getGamePrices(this._gameId, this._includeAll),
       api.getGameInfo(this._gameId),
       api.getHistoricalLow(this._gameId),
     ]);

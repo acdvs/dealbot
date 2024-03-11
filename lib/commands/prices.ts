@@ -28,7 +28,7 @@ async function run(ix: ChatInputCommandInteraction, bot: Bot): Promise<void> {
   const gameId = await api.getGameId(game);
 
   if (gameId) {
-    const dealEmbed = new DealsEmbed(ix, bot, game, gameId);
+    const dealEmbed = new DealsEmbed(ix, bot, game, gameId, true);
     ix.editReply(await dealEmbed.getAsMessageOpts());
   } else {
     const similarGames = await api.search(game, 5);
