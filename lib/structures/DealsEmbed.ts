@@ -4,11 +4,11 @@ import { EmbedBuilder } from '@discordjs/builders';
 import Bot from './Bot';
 import Database from './Database';
 import api from '@/util/api';
-import { getSteamReviewText, toCurrency, toTitleCase } from '@/util/helpers';
+import { getSteamReviewText, toCurrency } from '@/util/helpers';
 import { BasicEmbed, CommandError, CommandErrorCode } from '@/util/types';
 
-type GameDeals = Awaited<ReturnType<(typeof api)['getGameDeals']>>;
-type GameDetails = Awaited<ReturnType<(typeof api)['getGameInfo']>>;
+type Prices = Awaited<ReturnType<(typeof api)['getGamePrices']>>;
+type Details = Awaited<ReturnType<(typeof api)['getGameInfo']>>;
 type HistoricalLow = Awaited<ReturnType<(typeof api)['getHistoricalLow']>>;
 type IgnoredSellers = Awaited<ReturnType<Database['getIgnoredSellers']>>;
 
@@ -61,7 +61,7 @@ export default class DealsEmbed extends BasicEmbed {
       this._ix.guildId
     );
 
-    const [gameDeals, gameDetails, historicalLow] = await Promise.all([
+    const [prices, details, historicalLow] = await Promise.all([
       api.getGamePrices(this._gameId, this._includeAll),
       api.getGameInfo(this._gameId),
       api.getHistoricalLow(this._gameId),
@@ -71,26 +71,26 @@ export default class DealsEmbed extends BasicEmbed {
       throw new CommandError(CommandErrorCode.NO_DATA);
     }
 
-    this.setTitle(gameDetails.title);
-    this.setURL(gameDetails.urls.game);
+    this.setTitle(details.title);
+    this.setURL(details.urls.game);
 
     if (!prices || prices.length === 0) {
       this.setDescription('No deals found.');
-      this.setThumbnail(gameDetails.assets.banner145 || null);
+      this.setThumbnail(details.assets.banner145 || null);
       return;
     }
 
-    this._itadLink = gameDetails.urls.game;
+    this._itadLink = details.urls.game;
 
-    this.setImage(gameDetails.assets.banner300 || null);
-    this._setListings(gameDeals);
+    this.setImage(details.assets.banner300 || null);
+    this._setListings(prices);
     this._setHistoricalLow(historicalLow);
-    this._setSteamReview(gameDetails);
+    this._setSteamReview(details);
     this._setIgnoredList(ignoredSellers);
   }
 
-  private _setListings(gameDeals: NonNullable<GameDeals>) {
-    const sellers = gameDeals.map((x) => `[${x.shop.name}](${x.url})`);
+  private _setListings(prices: NonNullable<Prices>) {
+    const sellers = prices.map((x) => `[${x.shop.name}](${x.url})`);
     const truncatedSellers = this._truncateSellers(sellers);
 
     const listLength =
@@ -99,7 +99,7 @@ export default class DealsEmbed extends BasicEmbed {
         : sellers.length;
 
     this._setSellerField(truncatedSellers);
-    this._setPriceFields(gameDeals, listLength);
+    this._setPriceFields(prices, listLength);
   }
 
   private _setSellerField(list: string[]) {
@@ -110,14 +110,11 @@ export default class DealsEmbed extends BasicEmbed {
     });
   }
 
-  private _setPriceFields(
-    gameDeals: NonNullable<GameDeals>,
-    listLength: number
-  ) {
     const newPrices = gameDeals.map(
       (x) => `${toCurrency(x.price.amount)} (-${x.cut}%)`
+  private _setPriceFields(prices: NonNullable<Prices>, listLength: number) {
     );
-    const oldPrices = gameDeals.map((x) => toCurrency(x.regular.amount));
+    const oldPrices = prices.map((x) => toCurrency(x.regular.amount));
 
     this.addFields([
       {
@@ -154,8 +151,8 @@ export default class DealsEmbed extends BasicEmbed {
     });
   }
 
-  private _setSteamReview(gameDetails: NonNullable<GameDetails>) {
-    const steamReview = gameDetails.reviews?.find((x) => x.source === 'Steam');
+  private _setSteamReview(details: NonNullable<Details>) {
+    const steamReview = details.reviews?.find((x) => x.source === 'Steam');
 
     if (steamReview?.score && steamReview?.count) {
       const text = getSteamReviewText(steamReview.score, steamReview.count);
