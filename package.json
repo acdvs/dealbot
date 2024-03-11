@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/acdvs/isthereanydeal-lookup.git"
+    "url": "https://github.com/acdvs/dealbot.git"
   },
   "homepage": "https://dealbot.gg",
   "dependencies": {
