@@ -10,25 +10,25 @@ import {
   StringSelectMenuOptionBuilder,
 } from '@discordjs/builders';
 
-import { Bot, DealsEmbed } from './';
+import { DealsEmbed } from './';
 import { createBasicEmbed, getSearchUrl } from '@/util/helpers';
 import { BasicEmbed } from '@/util/types';
 import log from '@/util/logger';
+import api, { APIError } from '@/util/api';
+
+type SimilarGames = Awaited<ReturnType<(typeof api)['search']>>;
 
 export default class ChoicesEmbed extends BasicEmbed {
   private _ix: ChatInputCommandInteraction;
-  private _bot: Bot;
-  private _games: Record<string, any>[];
+  private _games: NonNullable<SimilarGames>;
 
   constructor(
     ix: ChatInputCommandInteraction,
-    bot: Bot,
-    games: Record<string, any>[]
+    games: NonNullable<SimilarGames>
   ) {
     super();
 
     this._ix = ix;
-    this._bot = bot;
     this._games = games;
 
     const game = this._ix.options.getString('game', true);
@@ -93,12 +93,12 @@ export default class ChoicesEmbed extends BasicEmbed {
       collector.stop();
 
       const { title: game, id: gameId } = this._games[menuIx.values[0]];
-      const dealEmbed = new DealsEmbed(this._ix, this._bot, game, gameId);
+      const dealEmbed = new DealsEmbed(this._ix, game, gameId);
 
       try {
         this._ix.editReply(await dealEmbed.getAsMessageOpts());
       } catch (err) {
-        log.error('[ChoicesEmbed]', err);
+        log.error('[ChoicesEmbed]', err instanceof APIError ? err.raw : err);
       }
     });
   }

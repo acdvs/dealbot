@@ -32,7 +32,7 @@ async function run(ix: ChatInputCommandInteraction, bot: Bot): Promise<void> {
     const similarGames = await api.search(game, 5);
 
     if (similarGames && similarGames.length > 0) {
-      const choicesEmbed = new ChoicesEmbed(ix, bot, similarGames);
+      const choicesEmbed = new ChoicesEmbed(ix, similarGames);
       ix.editReply(await choicesEmbed.getAsMessageOpts());
     } else {
       ix.editReply(
