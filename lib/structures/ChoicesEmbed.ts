@@ -91,7 +91,7 @@ export default class ChoicesEmbed extends BasicEmbed {
 
       collector.stop();
 
-      const { title: game, plain: gameId } = this._games[menuIx.values[0]];
+      const { title: game, id: gameId } = this._games[menuIx.values[0]];
       const dealEmbed = new DealsEmbed(this._ix, this._bot, game, gameId);
 
       this._ix.editReply(await dealEmbed.getAsMessageOpts());

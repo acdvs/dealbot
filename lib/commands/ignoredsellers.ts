@@ -69,9 +69,9 @@ async function run(ix: ChatInputCommandInteraction, bot: Bot) {
       case 'clear':
         clearIgnoredSellers(ix, bot.db);
     }
-  } catch (e: any) {
-    ix.editReply(createBasicEmbed(e));
-    log.error(e);
+  } catch (err: any) {
+    ix.editReply(createBasicEmbed(err, true));
+    log.error('[ignoredsellers]', err);
   }
 }
 
@@ -79,45 +79,49 @@ async function listIgnoredSellers(
   ix: ChatInputCommandInteraction,
   db: Database
 ) {
-  const ignoredSellers = await db.getIgnoredSellers(ix.guildId!);
+  const ignoredSellers = await db.getIgnoredSellers(ix.guildId as string);
 
-  if (ignoredSellers.length > 0) {
-    ix.editReply({
-      embeds: [
-        new BasicEmbed({
-          title: `Ignored sellers (${ignoredSellers.length})`,
-          description: ignoredSellers
-            .map((x) => x.title)
-            .sort()
-            .join('\n'),
-        }),
-      ],
-    });
-  } else {
+  if (!ignoredSellers || ignoredSellers.length === 0) {
     ix.editReply(createBasicEmbed('No ignored sellers have been added yet.'));
+    return;
   }
+
+  ix.editReply({
+    embeds: [
+      new BasicEmbed({
+        title: `Ignored sellers (${ignoredSellers.length})`,
+        description: ignoredSellers
+          .map((x) => x.title)
+          .sort()
+          .join('\n'),
+      }),
+    ],
+  });
 }
 
 async function addIgnoredSeller(ix: ChatInputCommandInteraction, db: Database) {
   const seller = ix.options.getString('seller', true);
-  const hasIgnoredSeller = await db.hasIgnoredSeller(ix.guildId!, seller);
+  const hasIgnoredSeller = await db.hasIgnoredSeller(
+    ix.guildId as string,
+    seller
+  );
 
-  if (!hasIgnoredSeller) {
-    const ignoredSeller = await db.insertIgnoredSeller(ix.guildId!, seller);
-
-    if (!ignoredSeller) {
-      ix.editReply(
-        createBasicEmbed(
-          'Unable to add ignored seller. Please try again later.'
-        )
-      );
-    } else {
-      ix.editReply(
-        createBasicEmbed(`Now ignoring **${ignoredSeller.title}**.`)
-      );
-    }
-  } else {
+  if (hasIgnoredSeller) {
     ix.editReply(createBasicEmbed(`**${seller}** is already ignored.`));
+    return;
+  }
+
+  const ignoredSeller = await db.insertIgnoredSeller(
+    ix.guildId as string,
+    seller
+  );
+
+  if (ignoredSeller) {
+    ix.editReply(createBasicEmbed(`Now ignoring **${ignoredSeller.title}**.`));
+  } else {
+    ix.editReply(
+      createBasicEmbed('Unable to add ignored seller. Please try again later.')
+    );
   }
 }
 
@@ -126,22 +130,26 @@ async function removeIgnoredSeller(
   db: Database
 ) {
   const seller = ix.options.getString('seller', true);
-  const hasIgnoredSeller = await db.hasIgnoredSeller(ix.guildId!, seller);
+  const hasIgnoredSeller = await db.hasIgnoredSeller(
+    ix.guildId as string,
+    seller
+  );
 
-  if (hasIgnoredSeller) {
-    const count = await db.deleteIgnoredSeller(ix.guildId!, seller);
-
-    if (count === 0) {
-      ix.editReply(
-        createBasicEmbed(
-          'Unable to remove ignored seller. Please try again later.'
-        )
-      );
-    } else {
-      ix.editReply(createBasicEmbed(`No longer ignoring **${seller}**.`));
-    }
-  } else {
+  if (!hasIgnoredSeller) {
     ix.editReply(createBasicEmbed(`**${seller}** is not an ignored seller.`));
+    return;
+  }
+
+  const count = await db.deleteIgnoredSeller(ix.guildId as string, seller);
+
+  if (count === 0) {
+    ix.editReply(
+      createBasicEmbed(
+        'Unable to remove ignored seller. Please try again later.'
+      )
+    );
+  } else {
+    ix.editReply(createBasicEmbed(`No longer ignoring **${seller}**.`));
   }
 }
 
@@ -149,22 +157,23 @@ async function clearIgnoredSellers(
   ix: ChatInputCommandInteraction,
   db: Database
 ) {
-  const ignoredSellers = await db.getIgnoredSellers(ix.guildId!);
+  const ignoredSellers = await db.getIgnoredSellers(ix.guildId as string);
 
-  if (ignoredSellers.length > 0) {
-    const count = await db.clearIgnoredSellers(ix.guildId!);
-    const s = count !== 1 ? 's' : '';
-
-    if (count === 0) {
-      ix.editReply(
-        createBasicEmbed(
-          'Unable to clear ignored sellers. Please try again later.'
-        )
-      );
-    } else {
-      ix.editReply(createBasicEmbed(`Cleared ${count} ignored seller${s}.`));
-    }
-  } else {
+  if (!ignoredSellers || ignoredSellers.length === 0) {
     ix.editReply(createBasicEmbed('No sellers are ignored.'));
+    return;
+  }
+
+  const count = await db.clearIgnoredSellers(ix.guildId as string);
+  const s = count !== 1 ? 's' : '';
+
+  if (count === 0) {
+    ix.editReply(
+      createBasicEmbed(
+        'Unable to clear ignored sellers. Please try again later.'
+      )
+    );
+  } else {
+    ix.editReply(createBasicEmbed(`Cleared ${count} ignored seller${s}.`));
   }
 }

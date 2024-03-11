@@ -1,10 +1,10 @@
 import { Guild as DGuild, Snowflake } from 'discord.js';
-import { APIError, Guild, PrismaClient, Seller } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 
 import Bot from './Bot';
 import api from '@/util/api';
 import log from '@/util/logger';
-import { APIErrorData } from '@/util/types';
+import { APIError } from '@/util/api';
 
 class Database {
   private _bot: Bot;
@@ -45,38 +45,31 @@ class Database {
     }
   }
 
-  async getGuildCount(): Promise<number | null> {
+  async getGuildCount() {
     try {
-      const count = await this._instance.guild.count();
-      return count;
-    } catch (e) {
-      log.error('Unable to get guild count: ' + JSON.stringify(e));
-      return null;
+      return await this._instance.guild.count();
+    } catch (err) {
+      log.error('Unable to get guild count', err);
     }
   }
 
-  async insertGuild(guildId: Snowflake): Promise<Guild | null> {
+  async insertGuild(guildId: Snowflake) {
     try {
-      const guild = await this._instance.guild.create({
+      return await this._instance.guild.create({
         data: { id: BigInt(guildId) },
       });
-
-      return guild;
     } catch (e) {
       log.error('Unable to insert guild: ' + JSON.stringify(e));
-      return null;
     }
   }
 
-  async deleteGuild(guildId: Snowflake): Promise<Guild | null> {
+  async deleteGuild(guildId: Snowflake) {
     try {
-      const guild = await this._instance.guild.delete({
+      return await this._instance.guild.delete({
         where: { id: BigInt(guildId) },
       });
-      return guild;
     } catch (e) {
       log.error('Unable to remove guild: ' + JSON.stringify(e));
-      return null;
     }
   }
 
@@ -84,22 +77,25 @@ class Database {
    * Seller methods
    */
 
-  async getSellers(): Promise<Seller[]> {
+  async getSellers() {
     try {
-      const sellers = await this._instance.seller.findMany();
-      return sellers;
     } catch (e) {
       log.error('Unable to get sellers: ' + JSON.stringify(e));
-      return [];
+      return await this._instance.seller.findMany();
     }
   }
 
-  async insertSellers(): Promise<number | null> {
+  async insertSellers() {
     try {
-      const sellersRes = await api.getSellers();
+      const sellers = await api.getSellers();
+
+      if (!sellers || sellers.length === 0) {
+        return;
+      }
+
       const { count } = await this._instance.seller.createMany({
-        data: sellersRes.map((x) => ({
-          id: x.id,
+        data: sellers.map((x) => ({
+          id: x.id.toString(),
           title: x.title,
         })),
         skipDuplicates: true,
@@ -108,7 +104,6 @@ class Database {
       return count;
     } catch (e) {
       log.error('Unable to insert sellers: ' + JSON.stringify(e));
-      return null;
     }
   }
 
@@ -116,102 +111,108 @@ class Database {
    * Ignored seller methods
    */
 
-  async getIgnoredSellers(guildId: Snowflake): Promise<Seller[]> {
-    const ignoredSellers = await this._instance.ignoredSeller.findMany({
-      where: {
-        guild: { id: BigInt(guildId) },
-      },
-      select: {
-        seller: true,
-      },
-    });
+  async getIgnoredSellers(guildId: Snowflake) {
+    try {
+      const ignoredSellers = await this._instance.ignoredSeller.findMany({
+        where: {
+          guild: { id: BigInt(guildId) },
+        },
+        select: {
+          seller: true,
+        },
+      });
 
-    return ignoredSellers.map((x) => x.seller);
+      return ignoredSellers.map((x) => x.seller);
+    } catch (err) {
+    }
   }
 
-  async hasIgnoredSeller(
-    guildId: Snowflake,
-    sellerTitle: string
-  ): Promise<boolean> {
-    const ignoredSeller = await this._instance.ignoredSeller.findFirst({
-      where: {
-        AND: [
-          { guild: { id: BigInt(guildId) } },
-          {
-            seller: {
-              title: {
-                equals: sellerTitle,
-                mode: 'insensitive',
+  async hasIgnoredSeller(guildId: Snowflake, sellerTitle: string) {
+    try {
+      const ignoredSeller = await this._instance.ignoredSeller.findFirst({
+        where: {
+          AND: [
+            { guild: { id: BigInt(guildId) } },
+            {
+              seller: {
+                title: {
+                  equals: sellerTitle,
+                  mode: 'insensitive',
+                },
               },
             },
-          },
-        ],
-      },
-    });
-
-    return !!ignoredSeller;
-  }
-
-  async insertIgnoredSeller(
-    guildId: Snowflake,
-    sellerTitle: string
-  ): Promise<Seller | null> {
-    const seller = await this._instance.seller.findFirst({
-      where: {
-        title: {
-          equals: sellerTitle,
-          mode: 'insensitive',
+          ],
         },
-      },
-      select: { id: true },
-    });
+      });
 
-    if (!seller) {
-      return null;
+      return !!ignoredSeller;
+    } catch (err) {
     }
-
-    const ignoredSeller = await this._instance.ignoredSeller.create({
-      data: {
-        guild: { connect: { id: BigInt(guildId) } },
-        seller: { connect: { id: seller.id } },
-      },
-      select: {
-        seller: true,
-      },
-    });
-
-    return ignoredSeller.seller;
   }
 
-  async deleteIgnoredSeller(
-    guildId: Snowflake,
-    sellerTitle: string
-  ): Promise<number> {
-    const { count } = await this._instance.ignoredSeller.deleteMany({
-      where: {
-        guildId: BigInt(guildId),
-        seller: { title: sellerTitle },
-      },
-    });
+  async insertIgnoredSeller(guildId: Snowflake, sellerTitle: string) {
+    try {
+      const seller = await this._instance.seller.findFirst({
+        where: {
+          title: {
+            equals: sellerTitle,
+            mode: 'insensitive',
+          },
+        },
+        select: { id: true },
+      });
 
-    return count;
+      if (!seller) {
+        return null;
+      }
+
+      const ignoredSeller = await this._instance.ignoredSeller.create({
+        data: {
+          guild: { connect: { id: BigInt(guildId) } },
+          seller: { connect: { id: seller.id } },
+        },
+        select: {
+          seller: true,
+        },
+      });
+
+      return ignoredSeller.seller;
+    } catch (err) {
+    }
   }
 
-  async clearIgnoredSellers(guildId: Snowflake): Promise<number> {
-    const { count } = await this._instance.ignoredSeller.deleteMany({
-      where: { guildId: BigInt(guildId) },
-    });
+  async deleteIgnoredSeller(guildId: Snowflake, sellerTitle: string) {
+    try {
+      const { count } = await this._instance.ignoredSeller.deleteMany({
+        where: {
+          guildId: BigInt(guildId),
+          seller: { title: sellerTitle },
+        },
+      });
 
-    return count;
+      return count;
+    } catch (err) {
+    }
   }
 
-  async insertAPIError(error: APIErrorData): Promise<APIError> {
+  async clearIgnoredSellers(guildId: Snowflake) {
+    try {
+      const { count } = await this._instance.ignoredSeller.deleteMany({
+        where: { guildId: BigInt(guildId) },
+      });
+
+      return count;
+    } catch (err) {
+    }
+  }
+
+  async insertAPIError(error: APIError) {
     return await this._instance.aPIError.create({
-      data: error.toJSON(),
+      data: error.json(),
     });
   }
 
-  async hasRecentAPIError(): Promise<boolean> {
+  async hasRecentAPIError() {
     const mostRecentError = await this._instance.aPIError.findFirst({
       orderBy: {
         timestamp: 'desc',

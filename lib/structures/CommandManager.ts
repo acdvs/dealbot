@@ -5,9 +5,9 @@ import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v10';
 
 import Bot from './Bot';
-import { createBasicEmbed } from '@/util/helpers';
 import log from '@/util/logger';
 import { Command } from '@/util/types';
+import { APIError } from '@/util/api';
 
 const API_VERSION = '10';
 const COMMANDS_PATH = resolve(__dirname, '..', 'commands');
@@ -89,10 +89,15 @@ export default class CommandManager extends Collection<string, Command> {
 
     try {
       await command?.run(ix, this._bot);
-    } catch (err: any) {
-      ix.editReply(createBasicEmbed(err.embedMessage || err));
-      this._bot.db.insertAPIError(err);
-      log.error('Command run error: ' + JSON.stringify(err));
+    } catch (err) {
+      if (err instanceof APIError) {
+        ix.editReply(err.asEmbed());
+        log.error('Command run error', err.raw);
+
+        if (err.hasAllData) {
+          this._bot.db.insertAPIError(err);
+        }
+      }
     }
   }
 }

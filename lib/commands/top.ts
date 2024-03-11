@@ -2,8 +2,13 @@ import { APIEmbedField, ChatInputCommandInteraction } from 'discord.js';
 import { SlashCommandBuilder } from '@discordjs/builders';
 
 import api from '@/util/api';
-import { formatNumberCommas } from '@/util/helpers';
+import { createBasicEmbed, formatNumberCommas } from '@/util/helpers';
 import { Command, BasicEmbed } from '@/util/types';
+
+type WaitlistChart = Awaited<ReturnType<(typeof api)['getWaitlistChart']>>;
+type CollectionChart = Awaited<ReturnType<(typeof api)['getCollectionChart']>>;
+type PopularityChart = Awaited<ReturnType<(typeof api)['getPopularityChart']>>;
+type TopChart = WaitlistChart | CollectionChart | PopularityChart;
 
 enum TopChartOption {
   WAITLISTED,
@@ -36,22 +41,37 @@ async function run(ix: ChatInputCommandInteraction) {
   if (chart === TopChartOption.WAITLISTED) {
     const list = await api.getWaitlistChart();
 
+    if (!list || list.length === 0) {
+      ix.reply(createBasicEmbed('Top waitlisted games unavailable.'));
+      return;
+    }
+
     embed.setTitle('Top Waitlisted Games');
-    embed.addFields(getGameCountFields(list));
+    embed.addFields(getGameCountFields<WaitlistChart>(list));
   } else if (chart === TopChartOption.COLLECTED) {
     const list = await api.getCollectionChart();
 
+    if (!list || list.length === 0) {
+      ix.reply(createBasicEmbed('Top collected games unavailable.'));
+      return;
+    }
+
     embed.setTitle('Top Collected Games');
-    embed.addFields(getGameCountFields(list));
+    embed.addFields(getGameCountFields<CollectionChart>(list));
   } else if (chart === TopChartOption.POPULAR) {
-    const popularities = await api.getPopularityChart();
+    const list = await api.getPopularityChart();
+
+    if (!list || list.length === 0) {
+      ix.reply(createBasicEmbed('Top popular games unavailable.'));
+      return;
+    }
 
     embed.setTitle('Top Games By Popularity');
     embed.setDescription(
       [
         'Popularity is computed as normalized count in waitlists',
         'plus normalized count in collections.\n',
-        popularities.map((x) => `${x.position}. ${x.title}`).join('\n'),
+        list.map((x) => `${x.position}. ${x.title}`).join('\n'),
       ].join('\n')
     );
   }
@@ -62,7 +82,9 @@ async function run(ix: ChatInputCommandInteraction) {
 /**
  * Generate list of fields for game counts
  */
-function getGameCountFields(list: Record<string, any>[]): APIEmbedField[] {
+function getGameCountFields<C extends TopChart>(
+  list: NonNullable<C>
+): APIEmbedField[] {
   return [
     {
       name: 'Game',

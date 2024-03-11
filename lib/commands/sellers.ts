@@ -3,6 +3,7 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 
 import Bot from '@/structures/Bot';
 import { Command, BasicEmbed } from '@/util/types';
+import { createBasicEmbed } from '@/util/helpers';
 
 export default <Command>{
   options: new SlashCommandBuilder()
@@ -14,6 +15,11 @@ export default <Command>{
 
 async function run(ix: ChatInputCommandInteraction, bot: Bot) {
   const sellers = await bot.db.getSellers();
+
+  if (!sellers || sellers.length === 0) {
+    ix.reply(createBasicEmbed('No sellers found.'));
+    return;
+  }
 
   ix.reply({
     embeds: [

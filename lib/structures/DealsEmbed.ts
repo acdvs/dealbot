@@ -2,9 +2,15 @@ import { BaseMessageOptions, ChatInputCommandInteraction } from 'discord.js';
 import { EmbedBuilder } from '@discordjs/builders';
 
 import Bot from './Bot';
+import Database from './Database';
 import api from '@/util/api';
-import { toCurrency, toTitleCase } from '@/util/helpers';
+import { getSteamReviewText, toCurrency, toTitleCase } from '@/util/helpers';
 import { BasicEmbed } from '@/util/types';
+
+type GameDeals = Awaited<ReturnType<(typeof api)['getGameDeals']>>;
+type GameDetails = Awaited<ReturnType<(typeof api)['getGameInfo']>>;
+type HistoricalLow = Awaited<ReturnType<(typeof api)['getHistoricalLow']>>;
+type IgnoredSellers = Awaited<ReturnType<Database['getIgnoredSellers']>>;
 
 export default class DealsEmbed extends BasicEmbed {
   private static readonly FIELD_CHAR_LIMIT = 1024;
@@ -16,7 +22,7 @@ export default class DealsEmbed extends BasicEmbed {
 
   private _game: string;
   private _gameId: string;
-  private _listings: Record<string, any>[] = [];
+  private _itadLink: string;
 
   constructor(
     ix: ChatInputCommandInteraction,
@@ -30,6 +36,7 @@ export default class DealsEmbed extends BasicEmbed {
     this._bot = bot;
     this._game = game;
     this._gameId = gameId;
+    this._itadLink = '';
   }
 
   async get(): Promise<EmbedBuilder> {
@@ -45,7 +52,7 @@ export default class DealsEmbed extends BasicEmbed {
     };
   }
 
-  private async _populate(): Promise<void> {
+  private async _populate() {
     if (!this._ix.guildId) {
       return;
     }
@@ -72,25 +79,24 @@ export default class DealsEmbed extends BasicEmbed {
     this.setTitle(gameDetails.title);
     this.setURL(gameDetails.urls.game);
 
-    this._listings = gameDeals.list.filter((x) => x.price_new < x.price_old);
-
-    if (this._listings.length === 0) {
+    if (gameDeals.length === 0) {
       this.setDescription('No deals found.');
-      this.setThumbnail(gameDetails.image);
+      this.setThumbnail(gameDetails.assets.banner145 || null);
       return;
     }
 
-    this.setImage(gameDetails.image);
+    this._itadLink = gameDetails.urls.game;
 
+    this.setImage(gameDetails.assets.banner300 || null);
     this._setListings(gameDeals);
     this._setHistoricalLow(historicalLow);
     this._setSteamReview(gameDetails);
     this._setIgnoredList(ignoredSellers);
   }
 
-  private _setListings(gameDeals: Record<string, any>): void {
-    const sellers = this._listings.map((x) => `[${x.shop.name}](${x.url})`);
-    const truncatedSellers = this._truncateSellers(sellers, gameDeals);
+  private _setListings(gameDeals: NonNullable<GameDeals>) {
+    const sellers = gameDeals.map((x) => `[${x.shop.name}](${x.url})`);
+    const truncatedSellers = this._truncateSellers(sellers);
 
     const listLength =
       truncatedSellers.length < sellers.length
@@ -98,10 +104,10 @@ export default class DealsEmbed extends BasicEmbed {
         : sellers.length;
 
     this._setSellerField(truncatedSellers);
-    this._setPriceFields(listLength);
+    this._setPriceFields(gameDeals, listLength);
   }
 
-  private _setSellerField(list: string[]): void {
+  private _setSellerField(list: string[]) {
     this.addFields({
       name: 'Seller',
       value: list.join(DealsEmbed.ROW_JOIN_CHARS),
@@ -109,11 +115,14 @@ export default class DealsEmbed extends BasicEmbed {
     });
   }
 
-  private _setPriceFields(listLength: number): void {
-    const newPrices = this._listings.map(
-      (x) => `${toCurrency(x.price_new)} (-${x.price_cut}%)`
+  private _setPriceFields(
+    gameDeals: NonNullable<GameDeals>,
+    listLength: number
+  ) {
+    const newPrices = gameDeals.map(
+      (x) => `${toCurrency(x.price.amount)} (-${x.cut}%)`
     );
-    const oldPrices = this._listings.map((x) => toCurrency(x.price_old));
+    const oldPrices = gameDeals.map((x) => toCurrency(x.regular.amount));
 
     this.addFields([
       {
@@ -129,70 +138,77 @@ export default class DealsEmbed extends BasicEmbed {
     ]);
   }
 
-  private _setHistoricalLow(historicalLow: Record<string, any>): void {
-    if (historicalLow) {
-      const free = `${toCurrency(historicalLow.price)} from ${
-        historicalLow.shop.name
-      }`;
-      const priceCut = `${toCurrency(historicalLow.price)} (-${
-        historicalLow.cut
-      }%) from ${historicalLow.shop.name}`;
-
-      this.addFields({
-        name: 'Historical Low',
-        value: historicalLow.price === 0 ? free : priceCut,
-      });
+  private _setHistoricalLow(historicalLow: HistoricalLow) {
+    if (!historicalLow) {
+      return;
     }
+
+    const free = `FREE from ${historicalLow.shop.name}`;
+    const priceCut = `${toCurrency(historicalLow.price.amount)} (-${
+      historicalLow.cut
+    }%) from ${historicalLow.shop.name}`;
+
+    this.addFields({
+      name: 'Historical Low',
+      value:
+        historicalLow.cut === 100 || historicalLow.price.amount === 0
+          ? free
+          : historicalLow.price.amount < historicalLow.regular.amount
+          ? priceCut
+          : 'None',
+    });
   }
 
-  private _setSteamReview(gameDetails: Record<string, any>): void {
-    const steamReview = gameDetails.reviews?.steam;
+  private _setSteamReview(gameDetails: NonNullable<GameDetails>) {
+    const steamReview = gameDetails.reviews?.find((x) => x.source === 'Steam');
 
-    if (steamReview) {
+    if (steamReview?.score && steamReview?.count) {
+      const text = getSteamReviewText(steamReview.score, steamReview.count);
+
       this.addFields({
         name: 'Steam User Review',
-        value: `${steamReview.text} (${steamReview.perc_positive}% from ${steamReview.total} users)`,
+        value: `${text} (${steamReview.score}% from ${steamReview.count} users)`,
       });
     }
   }
 
-  private _setIgnoredList(ignoredSellers: Record<string, any>[]): void {
-    if (ignoredSellers.length > 0) {
-      const overflowText = (count: number) => `and ${count} more`;
-      const ignoredSellerTitles = ignoredSellers.map((x) => x.title);
-      const shortenedList = this._truncateList(
-        ignoredSellerTitles,
-        DealsEmbed.INLINE_JOIN_CHARS,
-        0,
-        40,
-        overflowText
-      );
-
-      this.setFooter({
-        text: `Ignored sellers: ${shortenedList.join(
-          DealsEmbed.INLINE_JOIN_CHARS
-        )}`,
-      });
+  private _setIgnoredList(ignoredSellers: IgnoredSellers) {
+    if (!ignoredSellers || ignoredSellers.length === 0) {
+      return;
     }
+
+    const overflowText = (count: number) => `and ${count} more`;
+
+    const ignoredSellerTitles = ignoredSellers.map((x) => x.title);
+    const shortenedList = this._truncateList(
+      ignoredSellerTitles,
+      DealsEmbed.INLINE_JOIN_CHARS,
+      40,
+      0,
+      overflowText
+    );
+
+    this.setFooter({
+      text: `Ignored sellers: ${shortenedList.join(
+        DealsEmbed.INLINE_JOIN_CHARS
+      )}`,
+    });
   }
 
-  private _truncateSellers(
-    sellers: string[],
-    gameDeals: Record<string, any>
-  ): string[] {
+  private _truncateSellers(sellers: string[]) {
     if (
       sellers.join(DealsEmbed.ROW_JOIN_CHARS).length >
       DealsEmbed.FIELD_CHAR_LIMIT
     ) {
       const overflowText = (count: number) =>
-        `[...and ${count} more deals](${gameDeals.urls.game})`;
+        `[...and ${count} more deals](${this._itadLink})`;
       const charTotalStart = overflowText(100).length;
 
       return this._truncateList(
         sellers,
         DealsEmbed.INLINE_JOIN_CHARS,
-        charTotalStart,
         DealsEmbed.FIELD_CHAR_LIMIT,
+        charTotalStart,
         overflowText
       );
     }
@@ -203,10 +219,10 @@ export default class DealsEmbed extends BasicEmbed {
   private _truncateList(
     list: string[],
     joinChars: string,
-    charTotalStart = 0,
     charLimit: number,
-    overflowText: (x: any) => string
-  ): string[] {
+    charTotalStart: number,
+    overflowText: (x: number) => string
+  ) {
     let finalItemCount = list.length;
     let charTotal = charTotalStart;
 
@@ -225,7 +241,7 @@ export default class DealsEmbed extends BasicEmbed {
 
     const shortenedList = list.slice(0, finalItemCount);
 
-    if (overflowText && list.length > shortenedList.length) {
+    if (list.length > shortenedList.length) {
       shortenedList.push(overflowText(list.length - shortenedList.length));
     }
 
