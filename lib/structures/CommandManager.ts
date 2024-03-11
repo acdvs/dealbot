@@ -5,8 +5,8 @@ import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v10';
 
 import { Bot, Command } from '.';
+import CommandError, { CommandErrorCode } from './CommandError';
 import { createBasicEmbed } from '@/util/helpers';
-import { CommandError, CommandErrorCode } from '@/util/types';
 import { APIError } from '@/util/api';
 import log from '@/util/logger';
 

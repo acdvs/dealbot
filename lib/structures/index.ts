@@ -1,8 +1,17 @@
 import Bot from './Bot';
 import ChoicesEmbed from './ChoicesEmbed';
 import Command from './Command';
+import CommandError from './CommandError';
 import CommandManager from './CommandManager';
 import Database from './Database';
 import DealsEmbed from './DealsEmbed';
 
-export { Bot, ChoicesEmbed, Command, CommandManager, Database, DealsEmbed };
+export {
+  Bot,
+  ChoicesEmbed,
+  Command,
+  CommandError,
+  CommandManager,
+  Database,
+  DealsEmbed,
+};

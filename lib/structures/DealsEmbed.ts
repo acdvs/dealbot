@@ -3,9 +3,10 @@ import { EmbedBuilder } from '@discordjs/builders';
 
 import api from '@/util/api';
 import { Bot, Database } from '.';
+import CommandError, { CommandErrorCode } from './CommandError';
 import { toCurrency } from '@/util/formatters';
 import { getSteamReviewText } from '@/util/helpers';
-import { BasicEmbed, CommandError, CommandErrorCode } from '@/util/types';
+import { BasicEmbed } from '@/util/types';
 
 const FIELD_CHAR_LIMIT = 1024;
 const ROW_JOIN_CHARS = '\n';
