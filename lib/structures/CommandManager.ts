@@ -19,11 +19,11 @@ interface CommandImport {
 }
 
 export default class CommandManager extends Collection<string, Command> {
-  private _bot: Bot;
+  #bot: Bot;
 
   constructor(bot: Bot) {
     super();
-    this._bot = bot;
+    this.#bot = bot;
   }
 
   async load(): Promise<unknown> {
@@ -33,7 +33,7 @@ export default class CommandManager extends Collection<string, Command> {
     log.msg('Loading commands...');
 
     for (const file of files) {
-      const commandImport = this._importCommand(file);
+      const commandImport = this.#importCommand(file);
       commandImports.push(commandImport);
     }
 
@@ -52,13 +52,13 @@ export default class CommandManager extends Collection<string, Command> {
     return this.pushCommands();
   }
 
-  private async _importCommand(fileName: string): Promise<CommandImport> {
+  async #importCommand(fileName: string): Promise<CommandImport> {
     const filePath = join(COMMANDS_PATH, fileName);
     const commandImport = import(filePath);
     return commandImport;
   }
 
-  private _findCommand(name: string) {
+  #findCommand(name: string) {
     return this.get(name);
   }
 
@@ -72,13 +72,13 @@ export default class CommandManager extends Collection<string, Command> {
 
     if (process.env.NODE_ENV === 'production') {
       return rest.put(
-        Routes.applicationCommands(this._bot.application!.id),
+        Routes.applicationCommands(this.#bot.application!.id),
         restBody
       );
     } else {
       return rest.put(
         Routes.applicationGuildCommands(
-          this._bot.application!.id,
+          this.#bot.application!.id,
           process.env.DEV_GUILD_ID!
         ),
         restBody
@@ -87,20 +87,20 @@ export default class CommandManager extends Collection<string, Command> {
   }
 
   async runCommand(ix: ChatInputCommandInteraction): Promise<void> {
-    const command = this._findCommand(ix.commandName);
+    const command = this.#findCommand(ix.commandName);
     const timeout = setTimeout(() => {
       throw new CommandError(CommandErrorCode.TIMED_OUT, command?.options.name);
     }, COMMAND_TIMEOUT_SEC * 1000);
 
     try {
-      await command?.run(ix, this._bot);
+      await command?.run(ix, this.#bot);
     } catch (err) {
       if (err instanceof APIError) {
         ix.editReply(err.asEmbed());
         log.error('[API]', err.raw);
 
         if (err.hasAllData) {
-          this._bot.db.insertAPIError(err);
+          this.#bot.db.insertAPIError(err);
         }
 
         return;

@@ -7,12 +7,12 @@ import log from '@/util/logger';
 import { APIError } from '@/util/api';
 
 class Database {
-  private _bot: Bot;
-  private _instance: PrismaClient;
+  #bot: Bot;
+  #instance: PrismaClient;
 
   constructor(bot: Bot) {
-    this._bot = bot;
-    this._instance = new PrismaClient({
+    this.#bot = bot;
+    this.#instance = new PrismaClient({
       errorFormat: 'pretty',
     });
   }
@@ -22,7 +22,7 @@ class Database {
    */
 
   async updateGuildCount() {
-    const guilds = this._bot.guilds.cache;
+    const guilds = this.#bot.guilds.cache;
     const storedGuildCount = await this.getGuildCount();
 
     if (storedGuildCount !== guilds.size) {
@@ -33,7 +33,7 @@ class Database {
       }));
 
       try {
-        const { count } = await this._instance.guild.createMany({
+        const { count } = await this.#instance.guild.createMany({
           data: cachedGuildIds,
           skipDuplicates: true,
         });
@@ -47,7 +47,7 @@ class Database {
 
   async getGuildCount() {
     try {
-      return await this._instance.guild.count();
+      return await this.#instance.guild.count();
     } catch (err) {
       log.error('Unable to get guild count', err);
     }
@@ -55,7 +55,7 @@ class Database {
 
   async insertGuild(guildId: Snowflake) {
     try {
-      return await this._instance.guild.create({
+      return await this.#instance.guild.create({
         data: { id: BigInt(guildId) },
       });
     } catch (err) {
@@ -65,7 +65,7 @@ class Database {
 
   async deleteGuild(guildId: Snowflake) {
     try {
-      return await this._instance.guild.delete({
+      return await this.#instance.guild.delete({
         where: { id: BigInt(guildId) },
       });
     } catch (err) {
@@ -79,7 +79,7 @@ class Database {
 
   async getSellers() {
     try {
-      return await this._instance.seller.findMany();
+      return await this.#instance.seller.findMany();
     } catch (err) {
       log.error('Unable to get sellers', err);
     }
@@ -93,7 +93,7 @@ class Database {
         return;
       }
 
-      const { count } = await this._instance.seller.createMany({
+      const { count } = await this.#instance.seller.createMany({
         data: sellers.map((x) => ({
           id: x.id.toString(),
           title: x.title,
@@ -113,7 +113,7 @@ class Database {
 
   async getIgnoredSellers(guildId: Snowflake) {
     try {
-      const ignoredSellers = await this._instance.ignoredSeller.findMany({
+      const ignoredSellers = await this.#instance.ignoredSeller.findMany({
         where: {
           guild: { id: BigInt(guildId) },
         },
@@ -130,7 +130,7 @@ class Database {
 
   async hasIgnoredSeller(guildId: Snowflake, sellerTitle: string) {
     try {
-      const ignoredSeller = await this._instance.ignoredSeller.findFirst({
+      const ignoredSeller = await this.#instance.ignoredSeller.findFirst({
         where: {
           AND: [
             { guild: { id: BigInt(guildId) } },
@@ -154,7 +154,7 @@ class Database {
 
   async insertIgnoredSeller(guildId: Snowflake, sellerTitle: string) {
     try {
-      const seller = await this._instance.seller.findFirst({
+      const seller = await this.#instance.seller.findFirst({
         where: {
           title: {
             equals: sellerTitle,
@@ -168,7 +168,7 @@ class Database {
         return null;
       }
 
-      const ignoredSeller = await this._instance.ignoredSeller.create({
+      const ignoredSeller = await this.#instance.ignoredSeller.create({
         data: {
           guild: { connect: { id: BigInt(guildId) } },
           seller: { connect: { id: seller.id } },
@@ -186,7 +186,7 @@ class Database {
 
   async deleteIgnoredSeller(guildId: Snowflake, sellerTitle: string) {
     try {
-      const { count } = await this._instance.ignoredSeller.deleteMany({
+      const { count } = await this.#instance.ignoredSeller.deleteMany({
         where: {
           guildId: BigInt(guildId),
           seller: { title: sellerTitle },
@@ -201,7 +201,7 @@ class Database {
 
   async clearIgnoredSellers(guildId: Snowflake) {
     try {
-      const { count } = await this._instance.ignoredSeller.deleteMany({
+      const { count } = await this.#instance.ignoredSeller.deleteMany({
         where: { guildId: BigInt(guildId) },
       });
 
@@ -212,13 +212,13 @@ class Database {
   }
 
   async insertAPIError(error: APIError) {
-    return await this._instance.aPIError.create({
+    return await this.#instance.aPIError.create({
       data: error.json(),
     });
   }
 
   async hasRecentAPIError() {
-    const mostRecentError = await this._instance.aPIError.findFirst({
+    const mostRecentError = await this.#instance.aPIError.findFirst({
       orderBy: {
         timestamp: 'desc',
       },

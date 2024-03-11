@@ -11,7 +11,8 @@ import log from '@/util/logger';
 
 export default class Bot extends Client {
   public db = new Database(this);
-  private _commands = new CommandManager(this);
+
+  #commands = new CommandManager(this);
 
   async start(token: string): Promise<void> {
     try {
@@ -21,17 +22,17 @@ export default class Bot extends Client {
       log.error('Unable to login!');
     }
 
-    this.on('ready', this._onReady);
-    this.on('interactionCreate', this._onInteractionCreate);
-    this.on('guildCreate', this._onGuildCreate);
-    this.on('guildDelete', this._onGuildDelete);
+    this.on('ready', this.#onReady);
+    this.on('interactionCreate', this.#onInteractionCreate);
+    this.on('guildCreate', this.#onGuildCreate);
+    this.on('guildDelete', this.#onGuildDelete);
 
     process.on('exit', () => {
       this.destroy();
     });
   }
 
-  private async _onReady(): Promise<void> {
+  async #onReady(): Promise<void> {
     if (!this.user) {
       log.error('Client user does not exist');
       process.exit(1);
@@ -44,7 +45,7 @@ export default class Bot extends Client {
     }
 
     await Promise.all([
-      this._commands.load(),
+      this.#commands.load(),
       this.db.updateGuildCount(),
       this.db.insertSellers(),
     ]);
@@ -52,16 +53,16 @@ export default class Bot extends Client {
     log.msg(`${this.user.username} successfully started.`);
   }
 
-  private _onGuildCreate(guild: Guild) {
+  #onGuildCreate(guild: Guild) {
     this.db.insertGuild(guild.id);
-    this._commands.pushCommands();
+    this.#commands.pushCommands();
   }
 
-  private _onGuildDelete(guild: Guild) {
+  #onGuildDelete(guild: Guild) {
     this.db.deleteGuild(guild.id);
   }
 
-  private _onInteractionCreate(ix: Interaction): void {
+  #onInteractionCreate(ix: Interaction): void {
     const member = ix.member as GuildMember;
 
     if (!ix.inGuild() || !member || !('id' in member)) {
@@ -69,7 +70,7 @@ export default class Bot extends Client {
     }
 
     if (ix.isCommand() && ix instanceof ChatInputCommandInteraction) {
-      this._commands.runCommand(ix);
+      this.#commands.runCommand(ix);
     }
   }
 }

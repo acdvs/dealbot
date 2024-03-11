@@ -7,22 +7,22 @@ import { toCurrency } from '@/util/formatters';
 import { getSteamReviewText } from '@/util/helpers';
 import { BasicEmbed, CommandError, CommandErrorCode } from '@/util/types';
 
+const FIELD_CHAR_LIMIT = 1024;
+const ROW_JOIN_CHARS = '\n';
+const INLINE_JOIN_CHARS = ', ';
+
 type Prices = Awaited<ReturnType<(typeof api)['getGamePrices']>>;
 type Details = Awaited<ReturnType<(typeof api)['getGameInfo']>>;
 type HistoricalLow = Awaited<ReturnType<(typeof api)['getHistoricalLow']>>;
 type IgnoredSellers = Awaited<ReturnType<Database['getIgnoredSellers']>>;
 
 export default class DealsEmbed extends BasicEmbed {
-  private static readonly FIELD_CHAR_LIMIT = 1024;
-  private static readonly ROW_JOIN_CHARS = '\n';
-  private static readonly INLINE_JOIN_CHARS = ', ';
+  #ix: ChatInputCommandInteraction;
+  #bot: Bot;
 
-  private _ix: ChatInputCommandInteraction;
-  private _bot: Bot;
-
-  private _gameId: string;
-  private _itadLink: string;
-  private _includeAll: boolean;
+  #gameId: string;
+  #itadLink: string;
+  #includeAll: boolean;
 
   constructor(
     ix: ChatInputCommandInteraction,
@@ -32,39 +32,39 @@ export default class DealsEmbed extends BasicEmbed {
   ) {
     super();
 
-    this._ix = ix;
-    this._bot = bot;
-    this._gameId = gameId;
-    this._itadLink = '';
-    this._includeAll = includeAll;
+    this.#ix = ix;
+    this.#bot = bot;
+    this.#gameId = gameId;
+    this.#itadLink = '';
+    this.#includeAll = includeAll;
   }
 
   async get(): Promise<EmbedBuilder> {
-    await this._populate();
+    await this.#populate();
     return this;
   }
 
   async getAsMessageOpts(): Promise<BaseMessageOptions> {
-    await this._populate();
+    await this.#populate();
     return {
       embeds: [this],
       components: [],
     };
   }
 
-  private async _populate() {
-    if (!this._ix.guildId) {
+  async #populate() {
+    if (!this.#ix.guildId) {
       return;
     }
 
-    const ignoredSellers = await this._bot.db.getIgnoredSellers(
-      this._ix.guildId
+    const ignoredSellers = await this.#bot.db.getIgnoredSellers(
+      this.#ix.guildId
     );
 
     const [prices, details, historicalLow] = await Promise.all([
-      api.getGamePrices(this._gameId, this._includeAll),
-      api.getGameInfo(this._gameId),
-      api.getHistoricalLow(this._gameId),
+      api.getGamePrices(this.#gameId, this.#includeAll),
+      api.getGameInfo(this.#gameId),
+      api.getHistoricalLow(this.#gameId),
     ]);
 
     if (!details) {
@@ -80,37 +80,37 @@ export default class DealsEmbed extends BasicEmbed {
       return;
     }
 
-    this._itadLink = details.urls.game;
+    this.#itadLink = details.urls.game;
 
     this.setImage(details.assets.banner300 || null);
-    this._setListings(prices);
-    this._setHistoricalLow(historicalLow);
-    this._setSteamReview(details);
-    this._setIgnoredList(ignoredSellers);
+    this.#setListings(prices);
+    this.#setHistoricalLow(historicalLow);
+    this.#setSteamReview(details);
+    this.#setIgnoredList(ignoredSellers);
   }
 
-  private _setListings(prices: NonNullable<Prices>) {
+  #setListings(prices: NonNullable<Prices>) {
     const sellers = prices.map((x) => `[${x.shop.name}](${x.url})`);
-    const truncatedSellers = this._truncateSellers(sellers);
+    const truncatedSellers = this.#truncateSellers(sellers);
 
     const listLength =
       truncatedSellers.length < sellers.length
         ? truncatedSellers.length - 1
         : sellers.length;
 
-    this._setSellerField(truncatedSellers);
-    this._setPriceFields(prices, listLength);
+    this.#setSellerField(truncatedSellers);
+    this.#setPriceFields(prices, listLength);
   }
 
-  private _setSellerField(list: string[]) {
+  #setSellerField(list: string[]) {
     this.addFields({
       name: 'Seller',
-      value: list.join(DealsEmbed.ROW_JOIN_CHARS),
+      value: list.join(ROW_JOIN_CHARS),
       inline: true,
     });
   }
 
-  private _setPriceFields(prices: NonNullable<Prices>, listLength: number) {
+  #setPriceFields(prices: NonNullable<Prices>, listLength: number) {
     const newPrices = prices.map((x) =>
       x.cut > 0 ? `${toCurrency(x.price.amount)} (-${x.cut}%)` : '--'
     );
@@ -119,18 +119,18 @@ export default class DealsEmbed extends BasicEmbed {
     this.addFields([
       {
         name: 'New Price',
-        value: newPrices.slice(0, listLength).join(DealsEmbed.ROW_JOIN_CHARS),
+        value: newPrices.slice(0, listLength).join(ROW_JOIN_CHARS),
         inline: true,
       },
       {
         name: 'Old Price',
-        value: oldPrices.slice(0, listLength).join(DealsEmbed.ROW_JOIN_CHARS),
+        value: oldPrices.slice(0, listLength).join(ROW_JOIN_CHARS),
         inline: true,
       },
     ]);
   }
 
-  private _setHistoricalLow(historicalLow: HistoricalLow) {
+  #setHistoricalLow(historicalLow: HistoricalLow) {
     if (!historicalLow || historicalLow.cut === 0) {
       return;
     }
@@ -151,7 +151,7 @@ export default class DealsEmbed extends BasicEmbed {
     });
   }
 
-  private _setSteamReview(details: NonNullable<Details>) {
+  #setSteamReview(details: NonNullable<Details>) {
     const steamReview = details.reviews?.find((x) => x.source === 'Steam');
 
     if (steamReview?.score && steamReview?.count) {
@@ -164,7 +164,7 @@ export default class DealsEmbed extends BasicEmbed {
     }
   }
 
-  private _setIgnoredList(ignoredSellers: IgnoredSellers) {
+  #setIgnoredList(ignoredSellers: IgnoredSellers) {
     if (!ignoredSellers || ignoredSellers.length === 0) {
       return;
     }
@@ -172,34 +172,30 @@ export default class DealsEmbed extends BasicEmbed {
     const overflowText = (count: number) => `and ${count} more`;
 
     const ignoredSellerTitles = ignoredSellers.map((x) => x.title);
-    const shortenedList = this._truncateList(
+    const shortenedList = this.#truncateList(
       ignoredSellerTitles,
-      DealsEmbed.INLINE_JOIN_CHARS,
+      INLINE_JOIN_CHARS,
       40,
       0,
       overflowText
     );
 
     this.setFooter({
-      text: `Ignored sellers: ${shortenedList.join(
-        DealsEmbed.INLINE_JOIN_CHARS
-      )}`,
+      text: `Ignored sellers: ${shortenedList.join(INLINE_JOIN_CHARS)}`,
     });
   }
 
-  private _truncateSellers(sellers: string[]) {
-    if (
-      sellers.join(DealsEmbed.ROW_JOIN_CHARS).length >
-      DealsEmbed.FIELD_CHAR_LIMIT
-    ) {
+  #truncateSellers(sellers: string[]) {
+    if (sellers.join(ROW_JOIN_CHARS).length > FIELD_CHAR_LIMIT) {
       const overflowText = (count: number) =>
-        `[...and ${count} more deals](${this._itadLink})`;
+        `[...and ${count} more deals](${this.#itadLink})`;
+
       const charTotalStart = overflowText(100).length;
 
-      return this._truncateList(
+      return this.#truncateList(
         sellers,
-        DealsEmbed.INLINE_JOIN_CHARS,
-        DealsEmbed.FIELD_CHAR_LIMIT,
+        INLINE_JOIN_CHARS,
+        FIELD_CHAR_LIMIT,
         charTotalStart,
         overflowText
       );
@@ -208,7 +204,7 @@ export default class DealsEmbed extends BasicEmbed {
     return sellers;
   }
 
-  private _truncateList(
+  #truncateList(
     list: string[],
     joinChars: string,
     charLimit: number,
