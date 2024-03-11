@@ -6,6 +6,10 @@ import api from '@/util/api';
 import log from '@/util/logger';
 import { APIError } from '@/util/api';
 
+const API_ERROR_RECENCY_WINDOW_MIN = Number(
+  process.env.API_ERROR_RECENCY_WINDOW_MIN as string
+);
+
 class Database {
   #bot: Bot;
   #instance: PrismaClient;
@@ -228,11 +232,11 @@ class Database {
       return false;
     }
 
-    const threeHours = 1000 * 60 * 60 * 3;
+    const recencyWindow = 1000 * 60 * API_ERROR_RECENCY_WINDOW_MIN;
     const milliToLastError =
       Date.now() - new Date(mostRecentError.timestamp).getTime();
 
-    return milliToLastError < threeHours;
+    return milliToLastError < recencyWindow;
   }
 }
 
