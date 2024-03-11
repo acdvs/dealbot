@@ -9,6 +9,7 @@
     "db:init": "prisma migrate dev",
     "dev": "ts-node lib/index.ts",
     "build": "tsc",
+    "build:types": "npx openapi-typescript https://raw.githubusercontent.com/IsThereAnyDeal/API/master/dist/openapi.json -o ./lib/util/itad.d.ts",
     "start": "node dist/index.js",
     "test": "eslint lib/**.ts"
   },
