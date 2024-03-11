@@ -56,13 +56,13 @@ export default {
       params: {
         country: 'US',
         capacity: 8,
-        vouchers: false,
         nondeals: all,
+        vouchers: true,
       },
       data: [gameId],
     });
 
-    return data?.[0].deals;
+    return data?.[0]?.deals;
   },
   /**
    * Get historically lowest prices
@@ -76,7 +76,7 @@ export default {
       data: [gameId],
     });
 
-    return data?.[0].low;
+    return data?.[0]?.low;
   },
   /**
    * Get all sellers
