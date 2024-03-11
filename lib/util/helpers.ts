@@ -1,5 +1,5 @@
 import { InteractionReplyOptions } from 'discord.js';
-import { BasicEmbed } from './types';
+import BasicEmbed from '@/structures/BasicEmbed';
 
 /**
  * Create a description-only embed prewrapped in a reply object

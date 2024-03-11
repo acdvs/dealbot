@@ -1,3 +1,4 @@
+import BasicEmbed from './BasicEmbed';
 import Bot from './Bot';
 import ChoicesEmbed from './ChoicesEmbed';
 import Command from './Command';
@@ -7,6 +8,7 @@ import Database from './Database';
 import DealsEmbed from './DealsEmbed';
 
 export {
+  BasicEmbed,
   Bot,
   ChoicesEmbed,
   Command,

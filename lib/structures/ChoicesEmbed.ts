@@ -10,9 +10,8 @@ import {
   StringSelectMenuOptionBuilder,
 } from '@discordjs/builders';
 
-import { DealsEmbed } from './';
+import { BasicEmbed, DealsEmbed } from '.';
 import { createBasicEmbed, getSearchUrl } from '@/util/helpers';
-import { BasicEmbed } from '@/util/types';
 import log from '@/util/logger';
 import api, { APIError } from '@/util/api';
 
