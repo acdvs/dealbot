@@ -2,7 +2,8 @@ import { APIEmbedField, ChatInputCommandInteraction } from 'discord.js';
 import { SlashCommandBuilder } from '@discordjs/builders';
 
 import api from '@/util/api';
-import { createBasicEmbed, formatNumberCommas } from '@/util/helpers';
+import { createBasicEmbed } from '@/util/helpers';
+import { toReadableNumber } from '@/util/formatters';
 import { Command, BasicEmbed } from '@/util/types';
 
 type WaitlistChart = Awaited<ReturnType<(typeof api)['getWaitlistChart']>>;
@@ -93,7 +94,7 @@ function getGameCountFields<C extends TopChart>(
     },
     {
       name: 'Count',
-      value: list.map((x) => formatNumberCommas(x.count)).join('\n'),
+      value: list.map((x) => toReadableNumber(x.count)).join('\n'),
       inline: true,
     },
   ];

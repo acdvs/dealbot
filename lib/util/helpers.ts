@@ -30,28 +30,6 @@ export function getSteamReviewText(score: number, count: number) {
   else return 'Overwhelmingly Negative';
 }
 
-export function formatNumberCommas(num: number): string {
-  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-}
-
-export function toTitleCase(str: string): string {
-  return str.replace(/\b([A-Za-z])/g, (x) => x.toUpperCase());
-}
-
 export function getSearchUrl(name: string): string {
   return 'https://isthereanydeal.com/search/?q=' + name.replace(/\s/g, '+');
-}
-
-export function toCurrency(num: number | string): string {
-  const _num = typeof num === 'number' ? num.toString() : num;
-  const parsedNum = Number.parseFloat(_num);
-  const price = parsedNum.toFixed(2);
-
-  return parsedNum > 0 ? `$${price}` : 'FREE';
-}
-
-export function sleep(sec: number) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, sec * 1000);
-  });
 }
