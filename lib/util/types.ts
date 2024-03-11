@@ -1,12 +1,5 @@
-import { APIEmbed, ChatInputCommandInteraction } from 'discord.js';
-import { EmbedBuilder, SlashCommandBuilder } from '@discordjs/builders';
-
-import Bot from '@/structures/Bot';
-
-export interface Command {
-  options: SlashCommandBuilder;
-  run: (interaction: ChatInputCommandInteraction, bot?: Bot) => Promise<void>;
-}
+import { APIEmbed } from 'discord.js';
+import { EmbedBuilder } from '@discordjs/builders';
 
 export class BasicEmbed extends EmbedBuilder {
   color = 0xfbab0e;

@@ -1,10 +1,10 @@
 import { BaseMessageOptions, ChatInputCommandInteraction } from 'discord.js';
 import { EmbedBuilder } from '@discordjs/builders';
 
-import Bot from './Bot';
-import Database from './Database';
 import api from '@/util/api';
-import { getSteamReviewText, toCurrency } from '@/util/helpers';
+import { Bot, Database } from '.';
+import { toCurrency } from '@/util/formatters';
+import { getSteamReviewText } from '@/util/helpers';
 import { BasicEmbed, CommandError, CommandErrorCode } from '@/util/types';
 
 type Prices = Awaited<ReturnType<(typeof api)['getGamePrices']>>;

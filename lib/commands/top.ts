@@ -2,9 +2,10 @@ import { APIEmbedField, ChatInputCommandInteraction } from 'discord.js';
 import { SlashCommandBuilder } from '@discordjs/builders';
 
 import api from '@/util/api';
+import Command from '@/structures/Command';
 import { createBasicEmbed } from '@/util/helpers';
 import { toReadableNumber } from '@/util/formatters';
-import { Command, BasicEmbed } from '@/util/types';
+import { BasicEmbed } from '@/util/types';
 
 type WaitlistChart = Awaited<ReturnType<(typeof api)['getWaitlistChart']>>;
 type CollectionChart = Awaited<ReturnType<(typeof api)['getCollectionChart']>>;
