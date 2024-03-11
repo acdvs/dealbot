@@ -18,7 +18,7 @@ type IgnoredSellers = Awaited<ReturnType<Database['getIgnoredSellers']>>;
 
 export default class DealsEmbed extends BasicEmbed {
   #ix: ChatInputCommandInteraction;
-  #bot: Bot;
+  #db: Database;
 
   #gameId: string;
   #itadLink: string;
@@ -33,7 +33,7 @@ export default class DealsEmbed extends BasicEmbed {
     super();
 
     this.#ix = ix;
-    this.#bot = bot;
+    this.#db = bot.db;
     this.#gameId = gameId;
     this.#itadLink = '';
     this.#includeAll = includeAll;
@@ -57,9 +57,7 @@ export default class DealsEmbed extends BasicEmbed {
       return;
     }
 
-    const ignoredSellers = await this.#bot.db.getIgnoredSellers(
-      this.#ix.guildId
-    );
+    const ignoredSellers = await this.#db.getIgnoredSellers(this.#ix.guildId);
 
     const [prices, details, historicalLow] = await Promise.all([
       api.getGamePrices(this.#gameId, this.#includeAll),
