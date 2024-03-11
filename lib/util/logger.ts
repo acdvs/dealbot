@@ -1,7 +1,12 @@
-import colors from 'colors';
+import colors, { Color } from 'colors';
+
+const logFn =
+  (type: 'log' | 'warn' | 'error', text: string, color: keyof Color) =>
+  (...args: Parameters<typeof console.log>) =>
+    console[type](`[${colors.bold[color](text)}] ${args[0]}`, ...args.slice(1));
 
 export default {
-  msg: (str: string) => console.log(`[${colors.bold.green('LOG')}] ${str}`),
-  warn: (str: string) => console.log(`[${colors.bold.yellow('WARN')}] ${str}`),
-  error: (str: string) => console.log(`[${colors.bold.red('ERR')}] ${str}`),
+  msg: logFn('log', 'LOG', 'green'),
+  warn: logFn('warn', 'WARN', 'yellow'),
+  error: logFn('error', 'ERR', 'red'),
 };

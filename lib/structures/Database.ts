@@ -38,9 +38,9 @@ class Database {
           skipDuplicates: true,
         });
 
-        log.msg(`Total guilds created: ${count}`);
-      } catch (e) {
-        log.error('Unable to update guilds: ' + JSON.stringify(e));
+        log.msg('Total guilds created:', count);
+      } catch (err) {
+        log.error('Unable to update guilds', err);
       }
     }
   }
@@ -58,8 +58,8 @@ class Database {
       return await this._instance.guild.create({
         data: { id: BigInt(guildId) },
       });
-    } catch (e) {
-      log.error('Unable to insert guild: ' + JSON.stringify(e));
+    } catch (err) {
+      log.error('Unable to insert guild', err);
     }
   }
 
@@ -68,8 +68,8 @@ class Database {
       return await this._instance.guild.delete({
         where: { id: BigInt(guildId) },
       });
-    } catch (e) {
-      log.error('Unable to remove guild: ' + JSON.stringify(e));
+    } catch (err) {
+      log.error('Unable to remove guild', err);
     }
   }
 
@@ -79,9 +79,9 @@ class Database {
 
   async getSellers() {
     try {
-    } catch (e) {
-      log.error('Unable to get sellers: ' + JSON.stringify(e));
       return await this._instance.seller.findMany();
+    } catch (err) {
+      log.error('Unable to get sellers', err);
     }
   }
 
@@ -102,8 +102,8 @@ class Database {
       });
 
       return count;
-    } catch (e) {
-      log.error('Unable to insert sellers: ' + JSON.stringify(e));
+    } catch (err) {
+      log.error('Unable to insert sellers', err);
     }
   }
 
@@ -124,6 +124,7 @@ class Database {
 
       return ignoredSellers.map((x) => x.seller);
     } catch (err) {
+      log.error('Unable to get ignored sellers', err);
     }
   }
 
@@ -147,6 +148,7 @@ class Database {
 
       return !!ignoredSeller;
     } catch (err) {
+      log.error('Unable to check ignored seller', err);
     }
   }
 
@@ -178,6 +180,7 @@ class Database {
 
       return ignoredSeller.seller;
     } catch (err) {
+      log.error('Unable to insert ignored seller', err);
     }
   }
 
@@ -192,6 +195,7 @@ class Database {
 
       return count;
     } catch (err) {
+      log.error('Unable to delete ignored seller', err);
     }
   }
 
@@ -203,6 +207,7 @@ class Database {
 
       return count;
     } catch (err) {
+      log.error('Unable to clear ignored sellers', err);
     }
   }
 
