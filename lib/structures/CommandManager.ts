@@ -4,9 +4,8 @@ import { Collection, ChatInputCommandInteraction } from 'discord.js';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v10';
 
-import { Bot, Command } from '.';
+import { BasicEmbed, Bot, Command } from '.';
 import CommandError, { CommandErrorCode } from './CommandError';
-import { createBasicEmbed } from '@/util/helpers';
 import { APIError } from '@/util/api';
 import log from '@/util/logger';
 
@@ -107,7 +106,9 @@ export default class CommandManager extends Collection<string, Command> {
       }
 
       if (err instanceof CommandError) {
-        ix.editReply(createBasicEmbed(`${err.message} (Code: ${err.code})`));
+        ix.editReply(
+          BasicEmbed.asMessageOpts(`${err.message} (Code: ${err.code})`)
+        );
         log.warn(
           'Command timed out after %d seconds:',
           COMMAND_TIMEOUT_SEC,

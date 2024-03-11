@@ -1,23 +1,3 @@
-import { InteractionReplyOptions } from 'discord.js';
-import BasicEmbed from '@/structures/BasicEmbed';
-
-/**
- * Create a description-only embed prewrapped in a reply object
- */
-export function createBasicEmbed(
-  message: string,
-  ephemeral?: boolean
-): InteractionReplyOptions {
-  return {
-    embeds: [
-      new BasicEmbed({
-        description: message,
-      }),
-    ],
-    ephemeral,
-  };
-}
-
 export function getSteamReviewText(score: number, count: number) {
   if (score > 95 && count > 500) return 'Overwhelmingly Positive';
   else if (score > 85 && count > 50) return 'Very Positive';

@@ -1,7 +1,7 @@
 import axios, { AxiosError, Method } from 'axios';
 
-import { createBasicEmbed } from './helpers';
 import { paths } from './itad';
+import BasicEmbed from '@/structures/BasicEmbed';
 
 const BASE_URL = 'https://api.isthereanydeal.com';
 const API_KEY = process.env.API_KEY;
@@ -221,7 +221,7 @@ export class APIError {
   }
 
   asEmbed() {
-    return createBasicEmbed(
+    return BasicEmbed.asMessageOpts(
       `Unable to get info from IsThereAnyDeal. Please try again later. (Code: ${
         this.code || 0
       })`

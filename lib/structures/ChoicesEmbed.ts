@@ -11,7 +11,7 @@ import {
 } from '@discordjs/builders';
 
 import { BasicEmbed, DealsEmbed } from '.';
-import { createBasicEmbed, getSearchUrl } from '@/util/helpers';
+import { getSearchUrl } from '@/util/helpers';
 import log from '@/util/logger';
 import api, { APIError } from '@/util/api';
 
@@ -34,7 +34,7 @@ export default class ChoicesEmbed extends BasicEmbed {
 
     if (!this.#ix.channel) {
       ix.editReply(
-        createBasicEmbed('Unexpected error. Please try again later.')
+        BasicEmbed.asMessageOpts('Unexpected error. Please try again later.')
       );
       return;
     }

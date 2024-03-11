@@ -2,15 +2,18 @@ import { ChatInputCommandInteraction } from 'discord.js';
 import { SlashCommandBuilder } from '@discordjs/builders';
 
 import api from '@/util/api';
-import { Bot, ChoicesEmbed, Command, DealsEmbed } from '@/structures';
-import { createBasicEmbed } from '@/util/helpers';
+import {
+  BasicEmbed,
+  Bot,
+  ChoicesEmbed,
+  Command,
+  DealsEmbed,
+} from '@/structures';
 
 export default <Command>{
   options: new SlashCommandBuilder()
     .setName('prices')
-    .setDescription(
-      'Get a list of current prices for a game (including non-deals).'
-    )
+    .setDescription('Get a list of current deals AND non-deals for a game.')
     .addStringOption((option) =>
       option
         .setName('game')
@@ -37,7 +40,7 @@ async function run(ix: ChatInputCommandInteraction, bot: Bot): Promise<void> {
       ix.editReply(await choicesEmbed.getAsMessageOpts());
     } else {
       ix.editReply(
-        createBasicEmbed(
+        BasicEmbed.asMessageOpts(
           `No results were found for "${game}". Did you spell it correctly?`
         )
       );

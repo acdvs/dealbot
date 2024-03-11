@@ -3,7 +3,6 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 
 import api from '@/util/api';
 import { BasicEmbed, Command } from '@/structures';
-import { createBasicEmbed } from '@/util/helpers';
 import { toReadableNumber } from '@/util/formatters';
 
 type WaitlistChart = Awaited<ReturnType<(typeof api)['getWaitlistChart']>>;
@@ -43,7 +42,7 @@ async function run(ix: ChatInputCommandInteraction) {
     const list = await api.getWaitlistChart();
 
     if (!list || list.length === 0) {
-      ix.reply(createBasicEmbed('Top waitlisted games unavailable.'));
+      ix.reply(BasicEmbed.asMessageOpts('Top waitlisted games unavailable.'));
       return;
     }
 
@@ -53,7 +52,7 @@ async function run(ix: ChatInputCommandInteraction) {
     const list = await api.getCollectionChart();
 
     if (!list || list.length === 0) {
-      ix.reply(createBasicEmbed('Top collected games unavailable.'));
+      ix.reply(BasicEmbed.asMessageOpts('Top collected games unavailable.'));
       return;
     }
 
@@ -63,7 +62,7 @@ async function run(ix: ChatInputCommandInteraction) {
     const list = await api.getPopularityChart();
 
     if (!list || list.length === 0) {
-      ix.reply(createBasicEmbed('Top popular games unavailable.'));
+      ix.reply(BasicEmbed.asMessageOpts('Top popular games unavailable.'));
       return;
     }
 

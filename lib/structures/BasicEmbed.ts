@@ -8,4 +8,15 @@ export default class BasicEmbed extends EmbedBuilder {
     super(options);
     this.setColor(this.color);
   }
+
+  static asMessageOpts(message: string, ephemeral?: boolean) {
+    return {
+      embeds: [
+        new BasicEmbed({
+          description: message,
+        }),
+      ],
+      ephemeral,
+    };
+  }
 }
