@@ -20,7 +20,6 @@ export default class DealsEmbed extends BasicEmbed {
   private _ix: ChatInputCommandInteraction;
   private _bot: Bot;
 
-  private _game: string;
   private _gameId: string;
   private _itadLink: string;
   private _includeAll: boolean;
@@ -28,15 +27,13 @@ export default class DealsEmbed extends BasicEmbed {
   constructor(
     ix: ChatInputCommandInteraction,
     bot: Bot,
-    game: string,
-    gameId: string
+    gameId: string,
     includeAll = false
   ) {
     super();
 
     this._ix = ix;
     this._bot = bot;
-    this._game = game;
     this._gameId = gameId;
     this._itadLink = '';
     this._includeAll = includeAll;
