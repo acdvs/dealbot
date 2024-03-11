@@ -6,11 +6,13 @@ import { Routes } from 'discord-api-types/v10';
 
 import Bot from './Bot';
 import log from '@/util/logger';
-import { Command } from '@/util/types';
+import { Command, CommandError, CommandErrorCode } from '@/util/types';
 import { APIError } from '@/util/api';
+import { createBasicEmbed } from '@/util/helpers';
 
 const API_VERSION = '10';
 const COMMANDS_PATH = resolve(__dirname, '..', 'commands');
+const COMMAND_TIMEOUT_SEC = 5;
 
 interface CommandImport {
   default: Command;
@@ -86,18 +88,34 @@ export default class CommandManager extends Collection<string, Command> {
 
   async runCommand(ix: ChatInputCommandInteraction): Promise<void> {
     const command = this._findCommand(ix.commandName);
+    const timeout = setTimeout(() => {
+      throw new CommandError(CommandErrorCode.TIMED_OUT, command?.options.name);
+    }, COMMAND_TIMEOUT_SEC * 1000);
 
     try {
       await command?.run(ix, this._bot);
     } catch (err) {
       if (err instanceof APIError) {
         ix.editReply(err.asEmbed());
-        log.error('Command run error', err.raw);
+        log.error('[API]', err.raw);
 
         if (err.hasAllData) {
           this._bot.db.insertAPIError(err);
         }
+
+        return;
       }
+
+      if (err instanceof CommandError) {
+        ix.editReply(createBasicEmbed(`${err.message} (Code: ${err.code})`));
+        log.warn(
+          'Command timed out after %d seconds:',
+          COMMAND_TIMEOUT_SEC,
+          err.details
+        );
+      }
+    } finally {
+      clearTimeout(timeout);
     }
   }
 }

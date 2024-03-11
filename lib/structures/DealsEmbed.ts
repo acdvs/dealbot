@@ -5,7 +5,7 @@ import Bot from './Bot';
 import Database from './Database';
 import api from '@/util/api';
 import { getSteamReviewText, toCurrency, toTitleCase } from '@/util/helpers';
-import { BasicEmbed } from '@/util/types';
+import { BasicEmbed, CommandError, CommandErrorCode } from '@/util/types';
 
 type GameDeals = Awaited<ReturnType<(typeof api)['getGameDeals']>>;
 type GameDetails = Awaited<ReturnType<(typeof api)['getGameInfo']>>;
@@ -67,19 +67,14 @@ export default class DealsEmbed extends BasicEmbed {
       api.getHistoricalLow(this._gameId),
     ]);
 
-    if (!gameDeals || !gameDetails) {
-      this.setDescription(
-        `Unable to get info from IsThereAnyDeal for ${toTitleCase(
-          this._game
-        )}. Please try again later.`
-      );
-      return;
+    if (!details) {
+      throw new CommandError(CommandErrorCode.NO_DATA);
     }
 
     this.setTitle(gameDetails.title);
     this.setURL(gameDetails.urls.game);
 
-    if (gameDeals.length === 0) {
+    if (!prices || prices.length === 0) {
       this.setDescription('No deals found.');
       this.setThumbnail(gameDetails.assets.banner145 || null);
       return;
