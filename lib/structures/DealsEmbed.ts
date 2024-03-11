@@ -110,9 +110,9 @@ export default class DealsEmbed extends BasicEmbed {
     });
   }
 
-    const newPrices = gameDeals.map(
-      (x) => `${toCurrency(x.price.amount)} (-${x.cut}%)`
   private _setPriceFields(prices: NonNullable<Prices>, listLength: number) {
+    const newPrices = prices.map((x) =>
+      x.cut > 0 ? `${toCurrency(x.price.amount)} (-${x.cut}%)` : '--'
     );
     const oldPrices = prices.map((x) => toCurrency(x.regular.amount));
 
@@ -131,7 +131,7 @@ export default class DealsEmbed extends BasicEmbed {
   }
 
   private _setHistoricalLow(historicalLow: HistoricalLow) {
-    if (!historicalLow) {
+    if (!historicalLow || historicalLow.cut === 0) {
       return;
     }
 
