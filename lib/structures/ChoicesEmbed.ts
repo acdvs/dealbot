@@ -13,6 +13,7 @@ import {
 import { Bot, DealsEmbed } from './';
 import { createBasicEmbed, getSearchUrl } from '@/util/helpers';
 import { BasicEmbed } from '@/util/types';
+import log from '@/util/logger';
 
 export default class ChoicesEmbed extends BasicEmbed {
   private _ix: ChatInputCommandInteraction;
@@ -94,7 +95,11 @@ export default class ChoicesEmbed extends BasicEmbed {
       const { title: game, id: gameId } = this._games[menuIx.values[0]];
       const dealEmbed = new DealsEmbed(this._ix, this._bot, game, gameId);
 
-      this._ix.editReply(await dealEmbed.getAsMessageOpts());
+      try {
+        this._ix.editReply(await dealEmbed.getAsMessageOpts());
+      } catch (err) {
+        log.error('[ChoicesEmbed]', err);
+      }
     });
   }
 }
