@@ -28,8 +28,5 @@
     "node_modules",
     "docs",
     "prisma"
-  ],
-  "ts-node": {
-    "require": ["tsconfig-paths/register"]
-  }
+  ]
 }
