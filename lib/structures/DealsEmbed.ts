@@ -74,7 +74,11 @@ export default class DealsEmbed extends BasicEmbed {
     this.setTitle(details.title);
     this.setURL(details.urls.game);
 
-    if (!prices || prices.length === 0) {
+    const filteredPrices = prices?.filter(
+      (p) => !ignoredSellers?.includes(p.shop.name)
+    );
+
+    if (!filteredPrices || filteredPrices.length === 0) {
       this.setDescription('No deals found.');
       this.setThumbnail(details.assets.banner145 || null);
       return;
@@ -83,7 +87,7 @@ export default class DealsEmbed extends BasicEmbed {
     this.#itadLink = details.urls.game;
 
     this.setImage(details.assets.banner300 || null);
-    this.#setListings(prices);
+    this.#setListings(filteredPrices);
     this.#setHistoricalLow(historicalLow);
     this.#setSteamReview(details);
     this.#setIgnoredList(ignoredSellers);
@@ -171,9 +175,8 @@ export default class DealsEmbed extends BasicEmbed {
 
     const overflowText = (count: number) => `and ${count} more`;
 
-    const ignoredSellerTitles = ignoredSellers.map((x) => x.title);
     const shortenedList = this.#truncateList(
-      ignoredSellerTitles,
+      ignoredSellers,
       INLINE_JOIN_CHARS,
       40,
       0,

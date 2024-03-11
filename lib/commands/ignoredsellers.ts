@@ -90,10 +90,7 @@ async function listIgnoredSellers(
     embeds: [
       new BasicEmbed({
         title: `Ignored sellers (${ignoredSellers.length})`,
-        description: ignoredSellers
-          .map((x) => x.title)
-          .sort()
-          .join('\n'),
+        description: ignoredSellers.sort().join('\n'),
       }),
     ],
   });

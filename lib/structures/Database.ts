@@ -122,7 +122,7 @@ class Database {
         },
       });
 
-      return ignoredSellers.map((x) => x.seller);
+      return ignoredSellers.map((x) => x.seller.title);
     } catch (err) {
       log.error('Unable to get ignored sellers', err);
     }
