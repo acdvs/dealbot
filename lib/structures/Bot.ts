@@ -1,6 +1,7 @@
 import {
   ChatInputCommandInteraction,
   Client,
+  Events,
   Guild,
   GuildMember,
   Interaction,
@@ -22,10 +23,10 @@ export default class Bot extends Client {
       log.error('Unable to login!');
     }
 
-    this.on('ready', this.#onReady);
-    this.on('interactionCreate', this.#onInteractionCreate);
-    this.on('guildCreate', this.#onGuildCreate);
-    this.on('guildDelete', this.#onGuildDelete);
+    this.on(Events.ClientReady, this.#onReady);
+    this.on(Events.InteractionCreate, this.#onInteractionCreate);
+    this.on(Events.GuildCreate, this.#onGuildCreate);
+    this.on(Events.GuildDelete, this.#onGuildDelete);
 
     process.on('exit', () => {
       this.destroy();
