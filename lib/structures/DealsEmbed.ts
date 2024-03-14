@@ -39,11 +39,6 @@ export default class DealsEmbed extends BasicEmbed {
     this.#includeAll = includeAll;
   }
 
-  async get(): Promise<EmbedBuilder> {
-    await this.#populate();
-    return this;
-  }
-
   async getAsMessageOpts(): Promise<BaseMessageOptions> {
     await this.#populate();
     return {
