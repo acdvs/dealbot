@@ -77,7 +77,10 @@ export default class DealsEmbed extends BasicEmbed {
     );
 
     if (!filteredPrices || filteredPrices.length === 0) {
-      this.setDescription('No deals found.\nUse `/prices` to see non-deals.');
+      this.setDescription(
+        'No deals found.' +
+          (!this.#includeAll ? '\nUse `/prices` to see non-deals.' : '')
+      );
       this.setThumbnail(details.assets.banner145 || null);
       return;
     }
