@@ -1,4 +1,8 @@
-import { ChatInputCommandInteraction } from 'discord.js';
+import {
+  ApplicationCommandOptionChoiceData,
+  AutocompleteInteraction,
+  ChatInputCommandInteraction,
+} from 'discord.js';
 import { SlashCommandBuilder } from '@discordjs/builders';
 
 import api from '@/util/api';
@@ -21,6 +25,7 @@ export default <Command>{
         .setRequired(true)
     ),
   run,
+  autocomplete,
 };
 
 async function run(ix: ChatInputCommandInteraction, bot: Bot) {
@@ -46,4 +51,18 @@ async function run(ix: ChatInputCommandInteraction, bot: Bot) {
       );
     }
   }
+}
+
+async function autocomplete(ix: AutocompleteInteraction) {
+  const inputValue = ix.options.getFocused();
+
+  let suggestions: ApplicationCommandOptionChoiceData[] = [];
+
+  if (inputValue.length > 1) {
+    const results = await api.search(inputValue, 25);
+    suggestions =
+      results?.map((x) => ({ name: x.title, value: x.title })) || [];
+  }
+
+  await ix.respond(suggestions);
 }
