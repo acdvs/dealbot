@@ -25,7 +25,7 @@ export default class CommandManager extends Collection<string, Command> {
     this.#bot = bot;
   }
 
-  async load(): Promise<unknown> {
+  async load() {
     const files = await fs.readdir(COMMANDS_PATH);
     const commandImports: Promise<CommandImport>[] = [];
 
@@ -48,7 +48,7 @@ export default class CommandManager extends Collection<string, Command> {
       }
     }
 
-    return this.pushCommands();
+    this.pushCommands();
   }
 
   async #importCommand(fileName: string): Promise<CommandImport> {
@@ -61,7 +61,7 @@ export default class CommandManager extends Collection<string, Command> {
     return this.get(name);
   }
 
-  async pushCommands(): Promise<unknown> {
+  async pushCommands() {
     log.msg('Pushing commands...');
 
     const rest = new REST({ version: API_VERSION }).setToken(
@@ -70,12 +70,9 @@ export default class CommandManager extends Collection<string, Command> {
     const restBody = { body: this.map((x) => x.options) };
 
     if (process.env.NODE_ENV === 'production') {
-      return rest.put(
-        Routes.applicationCommands(this.#bot.application!.id),
-        restBody
-      );
+      rest.put(Routes.applicationCommands(this.#bot.application!.id), restBody);
     } else {
-      return rest.put(
+      rest.put(
         Routes.applicationGuildCommands(
           this.#bot.application!.id,
           process.env.DEV_GUILD_ID!
@@ -85,7 +82,7 @@ export default class CommandManager extends Collection<string, Command> {
     }
   }
 
-  async runCommand(ix: ChatInputCommandInteraction): Promise<void> {
+  async runCommand(ix: ChatInputCommandInteraction) {
     const command = this.#findCommand(ix.commandName);
     const timeout = setTimeout(() => {
       throw new CommandError(CommandErrorCode.TIMED_OUT, command?.options.name);

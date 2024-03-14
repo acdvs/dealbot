@@ -15,7 +15,7 @@ export default class Bot extends Client {
 
   #commands = new CommandManager(this);
 
-  async start(token: string): Promise<void> {
+  async start(token: string) {
     try {
       log.msg('Logging in...');
       this.login(token);
@@ -33,7 +33,7 @@ export default class Bot extends Client {
     });
   }
 
-  async #onReady(): Promise<void> {
+  async #onReady() {
     if (!this.user) {
       log.error('Client user does not exist');
       process.exit(1);
@@ -63,7 +63,7 @@ export default class Bot extends Client {
     this.db.deleteGuild(guild.id);
   }
 
-  #onInteractionCreate(ix: Interaction): void {
+  #onInteractionCreate(ix: Interaction) {
     const member = ix.member as GuildMember;
 
     if (!ix.inGuild() || !member || !('id' in member)) {

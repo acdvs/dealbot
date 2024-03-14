@@ -23,7 +23,7 @@ export default <Command>{
   run,
 };
 
-async function run(ix: ChatInputCommandInteraction, bot: Bot): Promise<void> {
+async function run(ix: ChatInputCommandInteraction, bot: Bot) {
   await ix.deferReply();
 
   const game = ix.options.getString('game', true);
