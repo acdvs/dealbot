@@ -1,5 +1,4 @@
 import { BaseMessageOptions, ChatInputCommandInteraction } from 'discord.js';
-import { EmbedBuilder } from '@discordjs/builders';
 
 import api from '@/util/api';
 import { BasicEmbed, Bot, Database } from '.';

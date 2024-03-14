@@ -2,7 +2,6 @@ import { Guild as DGuild, Snowflake } from 'discord.js';
 import { PrismaClient } from '@prisma/client';
 
 import Bot from './Bot';
-import api from '@/util/api';
 import log from '@/util/logger';
 import { APIError } from '@/util/api';
 
