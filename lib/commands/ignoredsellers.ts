@@ -8,7 +8,7 @@ export default <Command>{
   options: new SlashCommandBuilder()
     .setName('ignoredsellers')
     .setDescription(
-      'List all ignored sellers. Ignored sellers do not appear in /deals results.'
+      'List all ignored sellers. Ignored sellers do not appear in /deals or /prices results.'
     )
     .setDefaultMemberPermissions(0x8)
     .addSubcommand((command) =>
@@ -19,26 +19,22 @@ export default <Command>{
     .addSubcommand((command) =>
       command
         .setName('add')
-        .setDescription('Add an ignored seller.')
+        .setDescription('Ignore a seller.')
         .addStringOption((option) =>
           option
             .setName('seller')
-            .setDescription(
-              'Must be spelled exactly as it appears in the /sellers command.'
-            )
+            .setDescription('See `/sellers` for available options.')
             .setRequired(true)
         )
     )
     .addSubcommand((command) =>
       command
         .setName('remove')
-        .setDescription('Remove an ignored seller.')
+        .setDescription('Stop ignoring a seller.')
         .addStringOption((option) =>
           option
             .setName('seller')
-            .setDescription(
-              'Must be spelled exactly as it appears in the /sellers command.'
-            )
+            .setDescription('See `/ignoredsellers list` for available options.')
             .setRequired(true)
         )
     )
