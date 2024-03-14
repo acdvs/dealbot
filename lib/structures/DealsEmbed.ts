@@ -4,7 +4,7 @@ import { EmbedBuilder } from '@discordjs/builders';
 import api from '@/util/api';
 import { BasicEmbed, Bot, Database } from '.';
 import CommandError, { CommandErrorCode } from './CommandError';
-import { toCurrency } from '@/util/formatters';
+import { toCurrency, toReadableNumber } from '@/util/formatters';
 import { getSteamReviewText } from '@/util/helpers';
 
 const FIELD_CHAR_LIMIT = 1024;
@@ -164,7 +164,9 @@ export default class DealsEmbed extends BasicEmbed {
 
       this.addFields({
         name: 'Steam User Review',
-        value: `${text} (${steamReview.score}% from ${steamReview.count} users)`,
+        value: `${text} (${steamReview.score}% from ${toReadableNumber(
+          steamReview.count
+        )} users)`,
       });
     }
   }
