@@ -136,7 +136,7 @@ export default class DealsEmbed extends BasicEmbed {
   }
 
   #setHistoricalLow(historicalLow: HistoricalLow) {
-    if (!historicalLow || historicalLow.cut === 0) {
+    if (!historicalLow) {
       return;
     }
 
