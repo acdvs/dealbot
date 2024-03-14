@@ -8,10 +8,14 @@ import {
 } from 'discord.js';
 
 import { CommandManager, Database } from './';
+import api from '@/util/api';
 import log from '@/util/logger';
 
+type Sellers = Awaited<ReturnType<(typeof api)['getSellers']>>;
+
 export default class Bot extends Client {
-  public db = new Database(this);
+  db = new Database(this);
+  sellers: Sellers = [];
 
   #commands = new CommandManager(this);
 
@@ -45,11 +49,13 @@ export default class Bot extends Client {
       await this.application?.fetch();
     }
 
-    await Promise.all([
-      this.#commands.load(),
+    const [sellers] = await Promise.all([
+      api.getSellers(),
       this.db.updateGuildCount(),
-      this.db.insertSellers(),
+      this.#commands.load(),
     ]);
+
+    this.sellers = sellers;
 
     log.msg(`${this.user.username} successfully started.`);
   }

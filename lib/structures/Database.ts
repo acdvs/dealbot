@@ -78,40 +78,6 @@ class Database {
   }
 
   /**
-   * Seller methods
-   */
-
-  async getSellers() {
-    try {
-      return await this.#instance.seller.findMany();
-    } catch (err) {
-      log.error('Unable to get sellers', err);
-    }
-  }
-
-  async insertSellers() {
-    try {
-      const sellers = await api.getSellers();
-
-      if (!sellers || sellers.length === 0) {
-        return;
-      }
-
-      const { count } = await this.#instance.seller.createMany({
-        data: sellers.map((x) => ({
-          id: x.id.toString(),
-          title: x.title,
-        })),
-        skipDuplicates: true,
-      });
-
-      return count;
-    } catch (err) {
-      log.error('Unable to insert sellers', err);
-    }
-  }
-
-  /**
    * Ignored seller methods
    */
 

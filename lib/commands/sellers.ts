@@ -12,9 +12,7 @@ export default <Command>{
 };
 
 async function run(ix: ChatInputCommandInteraction, bot: Bot) {
-  const sellers = await bot.db.getSellers();
-
-  if (!sellers || sellers.length === 0) {
+  if (!bot.sellers || bot.sellers.length === 0) {
     ix.reply(BasicEmbed.asMessageOpts('No sellers found.'));
     return;
   }
@@ -23,7 +21,7 @@ async function run(ix: ChatInputCommandInteraction, bot: Bot) {
     embeds: [
       new BasicEmbed({
         title: 'Sellers (US)',
-        description: sellers.map((x) => x.title).join(', '),
+        description: bot.sellers.map((x) => x.title).join(', '),
       }),
     ],
     ephemeral: true,
