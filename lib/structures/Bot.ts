@@ -1,11 +1,4 @@
-import {
-  ChatInputCommandInteraction,
-  Client,
-  Events,
-  Guild,
-  GuildMember,
-  Interaction,
-} from 'discord.js';
+import { Client, Events, Guild, GuildMember, Interaction } from 'discord.js';
 
 import { CommandManager, Database } from './';
 import api from '@/util/api';
@@ -69,15 +62,17 @@ export default class Bot extends Client {
     this.db.deleteGuild(guild.id);
   }
 
-  #onInteractionCreate(ix: Interaction) {
+  async #onInteractionCreate(ix: Interaction) {
     const member = ix.member as GuildMember;
 
     if (!ix.inGuild() || !member || !('id' in member)) {
       return;
     }
 
-    if (ix.isCommand() && ix instanceof ChatInputCommandInteraction) {
+    if (ix.isChatInputCommand()) {
       this.#commands.runCommand(ix);
+    } else if (ix.isAutocomplete()) {
+      this.#commands.autocomplete(ix);
     }
   }
 }

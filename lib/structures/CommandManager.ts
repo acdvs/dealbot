@@ -1,6 +1,10 @@
 import { promises as fs } from 'fs';
 import { resolve, join } from 'path';
-import { Collection, ChatInputCommandInteraction } from 'discord.js';
+import {
+  Collection,
+  ChatInputCommandInteraction,
+  AutocompleteInteraction,
+} from 'discord.js';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v10';
 
@@ -84,12 +88,17 @@ export default class CommandManager extends Collection<string, Command> {
 
   async runCommand(ix: ChatInputCommandInteraction) {
     const command = this.#findCommand(ix.commandName);
+
+    if (!command) {
+      return;
+    }
+
     const timeout = setTimeout(() => {
-      throw new CommandError(CommandErrorCode.TIMED_OUT, command?.options.name);
+      throw new CommandError(CommandErrorCode.TIMED_OUT, command.options.name);
     }, COMMAND_TIMEOUT_SEC * 1000);
 
     try {
-      await command?.run(ix, this.#bot);
+      await command.run(ix, this.#bot);
     } catch (err) {
       if (err instanceof APIError) {
         ix.editReply(err.asEmbed());
@@ -114,6 +123,20 @@ export default class CommandManager extends Collection<string, Command> {
       }
     } finally {
       clearTimeout(timeout);
+    }
+  }
+
+  async autocomplete(ix: AutocompleteInteraction) {
+    const command = this.#findCommand(ix.commandName);
+
+    if (!command || !command?.autocomplete) {
+      return;
+    }
+
+    try {
+      await command.autocomplete(ix, this.#bot);
+    } catch (err) {
+      log.error('[AC]', err);
     }
   }
 }

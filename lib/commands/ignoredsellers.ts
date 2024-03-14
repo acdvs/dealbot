@@ -1,4 +1,8 @@
-import { ChatInputCommandInteraction } from 'discord.js';
+import {
+  ApplicationCommandOptionChoiceData,
+  AutocompleteInteraction,
+  ChatInputCommandInteraction,
+} from 'discord.js';
 import { SlashCommandBuilder } from '@discordjs/builders';
 
 import { BasicEmbed, Bot, Command, Database } from '@/structures';
@@ -24,6 +28,7 @@ export default <Command>{
           option
             .setName('seller')
             .setDescription('See `/sellers` for available options.')
+            .setAutocomplete(true)
             .setRequired(true)
         )
     )
@@ -35,6 +40,7 @@ export default <Command>{
           option
             .setName('seller')
             .setDescription('See `/ignoredsellers list` for available options.')
+            .setAutocomplete(true)
             .setRequired(true)
         )
     )
@@ -44,6 +50,7 @@ export default <Command>{
         .setDescription('Clear all previously added ignored sellers.')
     ),
   run,
+  autocomplete,
 };
 
 async function run(ix: ChatInputCommandInteraction, bot: Bot) {
@@ -177,4 +184,34 @@ async function clearIgnoredSellers(
       BasicEmbed.asMessageOpts(`Cleared ${count} ignored seller${s}.`)
     );
   }
+}
+
+async function autocomplete(ix: AutocompleteInteraction, bot: Bot) {
+  if (!bot.sellers || bot.sellers.length === 0) {
+    return;
+  }
+
+  const focusedOption = ix.options.getFocused(true);
+  let suggestions: ApplicationCommandOptionChoiceData[] = [];
+
+  if (focusedOption.value.length > 2) {
+    const ignoredSellers = await bot.db.getIgnoredSellers(ix.guildId as string);
+
+    if (ix.options.getSubcommand() === 'add') {
+      const matches = bot.sellers.filter(
+        (x) =>
+          x.title.toLowerCase().includes(focusedOption.value.toLowerCase()) &&
+          !ignoredSellers?.includes(x.title)
+      );
+      suggestions = matches.map((x) => ({ name: x.title, value: x.title }));
+    } else if (ix.options.getSubcommand() === 'remove') {
+      const matches =
+        ignoredSellers?.filter((x) =>
+          x.toLowerCase().includes(focusedOption.value.toLowerCase())
+        ) || [];
+      suggestions = matches.map((x) => ({ name: x, value: x }));
+    }
+  }
+
+  await ix.respond(suggestions);
 }
