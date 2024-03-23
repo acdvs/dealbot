@@ -175,19 +175,19 @@ export interface paths {
      */
     get: operations['user-info-v2'];
   };
-  '/unstable/id-lookup/game/v1': {
+  '/unstable/id-lookup/shop/{shopId}/v2': {
     /**
-     * Lookup game IDs
-     * @description Lookup IsThereAnyDeal game IDs by Steam IDs
+     * Lookup Shop's Game IDs
+     * @description Lookup shop's game IDs by IsThereAnyDeal game IDs
      */
-    post: operations['unstable-idlookup-game-v1'];
+    post: operations['unstable-idlookup-shop-v2'];
   };
-  '/unstable/id-lookup/steam/v1': {
+  '/unstable/id-lookup/itad/{shopId}/v2': {
     /**
-     * Lookup steam IDs
-     * @description Lookup Steam IDs by IsThereAnyDeal game IDs
+     * Lookup Game IDs
+     * @description Lookup IsThereAnyDeal's game IDs by shop's game IDs
      */
-    post: operations['unstable-idlookup-steam-v1'];
+    post: operations['unstable-idlookup-itad-v2'];
   };
   '/internal/early-access/v1': {
     /**
@@ -200,9 +200,13 @@ export interface paths {
     /** Number of Players Statistics */
     get: operations['internal-players-v1'];
   };
+  '/internal/htlb/v1': {
+    /** HowLongToBeat Overview */
+    get: operations['internal-hltb-v1'];
+  };
   '/internal/reviews/v1': {
     /**
-     * Reviews score
+     * Reviews Score
      * @description Returns Metacritic user reviews overview and OpenCritic overview for a given game
      */
     get: operations['internal-reviews-v1'];
@@ -533,15 +537,22 @@ export interface components {
     'resp.user.info': {
       username: string | null;
     };
+    /** Shop IDs Lookup Response */
+    'resp.unstable.idlookup-shop': Record<string, never>;
     /** Game IDs Lookup Response */
     'resp.unstable.idlookup-game': Record<string, never>;
-    /** Steam IDs Lookup Response */
-    'resp.unstable.idlookup-steam': Record<string, never>;
     /** Players Statistics Response */
     'resp.internal.players': {
       current: number;
       day: number;
       peak: number;
+    };
+    /** HowLongToBeat Overview Response */
+    'resp.internal.hltb': {
+      id: number;
+      main: null | number;
+      extra: null | number;
+      complete: null | number;
     };
     /** Reviews Overview Response */
     'resp.internal.reviews': {
@@ -621,6 +632,18 @@ export interface components {
         'application/json': string[];
       };
     };
+    /** @description List of Game IDs */
+    'gids-200'?: {
+      content: {
+        /**
+         * @example [
+         *   "01849783-6a26-7147-ab32-71804ca47e8e",
+         *   "01849782-1017-7389-8de4-c97c587fd7e3"
+         * ]
+         */
+        'application/json': string[];
+      };
+    };
   };
   headers: never;
   pathItems: never;
@@ -670,6 +693,10 @@ export interface operations {
         limit?: number;
         /** @description Sorting values, same as in deals list on the website */
         sort?: string;
+        /** @description Load non-sale prices */
+        nondeals?: boolean;
+        /** @description Load deals for mature prices */
+        mature?: boolean;
         /** @description List of shop IDs separated by comma */
         shops?: number[];
         /** @description Filter string */
@@ -777,7 +804,7 @@ export interface operations {
       };
     };
     /** @description List of Game IDs for which to load prices */
-    requestBody: components['requestBodies']['gids'];
+    requestBody: components['requestBodies']['gids-200'];
     responses: {
       /** @description Info response */
       200: {
@@ -800,7 +827,7 @@ export interface operations {
       };
     };
     /** @description List of Game IDs for which to load historical lows */
-    requestBody: components['requestBodies']['gids'];
+    requestBody: components['requestBodies']['gids-200'];
     responses: {
       /** @description Success response */
       200: {
@@ -824,7 +851,7 @@ export interface operations {
       };
     };
     /** @description List of Game IDs for which to load store lows */
-    requestBody: components['requestBodies']['gids'];
+    requestBody: components['requestBodies']['gids-200'];
     responses: {
       /** @description Success response */
       200: {
@@ -875,9 +902,11 @@ export interface operations {
       query?: {
         country?: components['parameters']['country'];
         shops?: components['parameters']['shops'];
+        /** @description Allow vouchers in prices */
+        vouchers?: boolean;
       };
     };
-    requestBody: components['requestBodies']['gids'];
+    requestBody: components['requestBodies']['gids-200'];
     responses: {
       /** @description Success response */
       200: {
@@ -1122,11 +1151,43 @@ export interface operations {
     };
   };
   /**
-   * Lookup game IDs
-   * @description Lookup IsThereAnyDeal game IDs by Steam IDs
+   * Lookup Shop's Game IDs
+   * @description Lookup shop's game IDs by IsThereAnyDeal game IDs
    */
-  'unstable-idlookup-game-v1': {
-    /** @description List of Steam IDs */
+  'unstable-idlookup-shop-v2': {
+    parameters: {
+      path: {
+        shopId: number;
+      };
+    };
+    /** @description List of game IDs */
+    requestBody?: {
+      content: {
+        'application/json': string[];
+      };
+    };
+    responses: {
+      /** @description Success response */
+      200: {
+        content: {
+          'application/json': components['schemas']['resp.unstable.idlookup-shop'];
+        };
+      };
+      400: components['responses']['error-response'];
+      default: components['responses']['error-response'];
+    };
+  };
+  /**
+   * Lookup Game IDs
+   * @description Lookup IsThereAnyDeal's game IDs by shop's game IDs
+   */
+  'unstable-idlookup-itad-v2': {
+    parameters: {
+      path: {
+        shopId: number;
+      };
+    };
+    /** @description List of shop's game IDs */
     requestBody?: {
       content: {
         /**
@@ -1142,28 +1203,6 @@ export interface operations {
       200: {
         content: {
           'application/json': components['schemas']['resp.unstable.idlookup-game'];
-        };
-      };
-      400: components['responses']['error-response'];
-      default: components['responses']['error-response'];
-    };
-  };
-  /**
-   * Lookup steam IDs
-   * @description Lookup Steam IDs by IsThereAnyDeal game IDs
-   */
-  'unstable-idlookup-steam-v1': {
-    /** @description List of game IDs */
-    requestBody?: {
-      content: {
-        'application/json': string[];
-      };
-    };
-    responses: {
-      /** @description Success response */
-      200: {
-        content: {
-          'application/json': components['schemas']['resp.unstable.idlookup-steam'];
         };
       };
       400: components['responses']['error-response'];
@@ -1204,8 +1243,26 @@ export interface operations {
       default: components['responses']['error-response'];
     };
   };
+  /** HowLongToBeat Overview */
+  'internal-hltb-v1': {
+    parameters: {
+      query: {
+        appid: number;
+      };
+    };
+    responses: {
+      /** @description Success response */
+      200: {
+        content: {
+          'application/json': components['schemas']['resp.internal.hltb'];
+        };
+      };
+      400: components['responses']['error-response'];
+      default: components['responses']['error-response'];
+    };
+  };
   /**
-   * Reviews score
+   * Reviews Score
    * @description Returns Metacritic user reviews overview and OpenCritic overview for a given game
    */
   'internal-reviews-v1': {
