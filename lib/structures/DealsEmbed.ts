@@ -135,6 +135,9 @@ export default class DealsEmbed extends BasicEmbed {
     }
 
     const free = `FREE from ${historicalLow.shop.name}`;
+    const price = `${toCurrency(historicalLow.price.amount)} from ${
+      historicalLow.shop.name
+    }`;
     const priceCut = `${toCurrency(historicalLow.price.amount)} (-${
       historicalLow.cut
     }%) from ${historicalLow.shop.name}`;
@@ -146,7 +149,7 @@ export default class DealsEmbed extends BasicEmbed {
           ? free
           : historicalLow.price.amount < historicalLow.regular.amount
           ? priceCut
-          : 'None',
+          : price,
     });
   }
 
