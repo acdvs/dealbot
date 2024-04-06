@@ -53,36 +53,44 @@ export default class DealsEmbed extends BasicEmbed {
 
     const ignoredSellers = await this.#db.getIgnoredSellers(this.#ix.guildId);
 
-    const [prices, details, historicalLow] = await Promise.all([
-      api.getGamePrices(this.#gameId, this.#includeAll),
+    // eslint-disable-next-line prefer-const
+    let [details, prices, historicalLow] = await Promise.all([
       api.getGameInfo(this.#gameId),
+      api.getGamePrices(this.#gameId),
       api.getHistoricalLow(this.#gameId),
     ]);
 
-    if (!details) {
+    if (!details || !prices) {
       throw new CommandError(CommandErrorCode.NO_DATA);
     }
 
     this.setTitle(details.title);
     this.setURL(details.urls.game);
 
-    const filteredPrices = prices?.filter(
-      (p) => !ignoredSellers?.includes(p.shop.name)
-    );
+    if (ignoredSellers && ignoredSellers.length > 0) {
+      prices = prices.filter((p) => !ignoredSellers.includes(p.shop.name));
+    }
 
-    if (!filteredPrices || filteredPrices.length === 0) {
-      this.setDescription(
-        'No deals found.' +
-          (!this.#includeAll ? '\nUse `/prices` to see non-deals.' : '')
-      );
-      this.setThumbnail(details.assets.banner145 || null);
-      return;
+    if (prices.length === 0) {
+      this.setDescription('No sellers found.');
+    } else {
+      if (!this.#includeAll) {
+        const deals = prices.filter((p) => p.cut > 0);
+
+        if (deals.length > 0) {
+          this.#setListings(deals);
+        } else {
+          this.setDescription('No deals found. Showing all prices.');
+          this.#setListings(prices);
+        }
+      } else {
+        this.#setListings(prices);
+      }
     }
 
     this.#itadLink = details.urls.game;
 
     this.setImage(details.assets.banner300 || null);
-    this.#setListings(filteredPrices);
     this.#setHistoricalLow(historicalLow);
     this.#setSteamReview(details);
     this.#setIgnoredList(ignoredSellers);
