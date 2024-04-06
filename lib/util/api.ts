@@ -51,12 +51,12 @@ export default {
    * Get games' prices
    * https://docs.isthereanydeal.com/#tag/games/operation/games-prices-v2
    */
-  async getGamePrices(gameId: string, all = false) {
+  async getGamePrices(gameId: string) {
     const data = await callApiProtected('post', '/games/prices/v2', {
       params: {
         country: 'US',
         capacity: 8,
-        nondeals: all,
+        nondeals: true,
         vouchers: true,
       },
       data: [gameId],
