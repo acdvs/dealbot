@@ -14,7 +14,7 @@ import { APIError } from '@/util/api';
 import log from '@/util/logger';
 
 const API_VERSION = '10';
-const COMMANDS_PATH = resolve(__dirname, '..', 'commands');
+const COMMANDS_PATH = resolve(__dirname, '../commands');
 const COMMAND_TIMEOUT_SEC = 5;
 
 interface CommandImport {
