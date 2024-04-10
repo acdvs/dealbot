@@ -126,17 +126,31 @@ code {
   vertical-align: top;
 }
 
-.command {
-  margin-bottom: 23px;
+.commands__section {
+  margin-bottom: 2rem;
 }
 
-.command .command__title {
-  font-size: 1.4em;
+.commands__section-title {
+  margin-bottom: 1rem;
+}
+
+.command {
+  margin-bottom: 1rem;
+}
+
+.command__title {
+  font-size: 1rem;
   margin-bottom: 5px;
   margin-left: -6px;
+  color: #90cdff;
 }
 
-.command .command__detail {
+.command .arg {
+  font-size: 1rem;
+  color: #1dacff;
+}
+
+.command__detail {
   line-height: 22px;
 }
 

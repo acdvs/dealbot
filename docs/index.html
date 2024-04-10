@@ -41,7 +41,7 @@
           <div class="name-line">
             <h1 class="name">IsThereAnyDeal Lookup</h1>
             <h2 class="tag">
-              <svg class="tag-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="5" stroke="currentColor" class="w-6 h-6">
+              <svg class="tag-icon" fill="none" viewBox="0 0 24 24" stroke-width="5" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.5l6.75 6.75L21 4.5" />
               </svg>
               <span>BOT</span>
@@ -79,29 +79,43 @@
       <div class="section row">
         <img class="example" src="public/images/example.png" alt="Example result">
         <div class="commands">
-          <div class="command">
-            <div class="command__title"><code>/deals [game]</code></div>
-            <p class="command__detail">Gets a list of current deals for the specified game. Lookup relies on spelling, so misspellings may return nothing. If an exact match is not found, the bot will attempt to suggest something similar.</p>
+          <div class="commands__section">
+            <h4 class="commands__section-title">Everyone</h4>
+            <div class="command">
+              <div class="command__title"><code>/deals <span class="arg">[game]</span></code></div>
+              <p class="command__detail">Gets a list of current deals for a game.</p>
+            </div>
+            <div class="command">
+              <div class="command__title"><code>/prices <span class="arg">[game]</span></code></div>
+              <p class="command__detail">Gets a list of all prices for a game including non-deals.</p>
+            </div>
+            <div class="command">
+              <div class="command__title"><code>/top <span class="arg">[waitlisted|collected|popular]</span></code></div>
+              <p class="command__detail">Gets the top most waitlisted, collected, or popular games.</p>
+            </div>
           </div>
-          <div class="command">
-            <div class="command__title"><code>/top [waitlisted|collected|popular]</code></div>
-            <p class="command__detail">Gets the top most waitlisted, collected, or popular games.</p>
-          </div>
-          <div class="command">
-            <div class="command__title"><code>/sellers</code></div>
-            <p class="command__detail">Lists all sellers.</p>
-          </div>
-          <div class="command">
-            <div class="command__title"><code>/ignoredsellers list</code></div>
-            <p class="command__detail">Lists all ignored sellers. Ignored sellers do not appear in <code>$deals</code> lists.</p>
-          </div>
-          <div class="command">
-            <div class="command__title"><code>/ignoredsellers [add|remove] [seller]</code></div>
-            <p class="command__detail">Adds or removes an ignored seller. Seller must be spelled exactly as it appears in the <code>$sellers</code> command.</p>
-          </div>
-          <div class="command">
-            <div class="command__title"><code>/ignoredsellers clear</code></div>
-            <p class="command__detail">Clears all previously added ignored sellers.</p>
+          <div class="commands__section">
+            <h4 class="commands__section-title">Admin-only</h4>
+            <div class="command">
+              <div class="command__title"><code>/sellers</code></div>
+              <p class="command__detail">Lists all sellers.</p>
+            </div>
+            <div class="command">
+              <div class="command__title"><code>/ignoredsellers list</code></div>
+              <p class="command__detail">Lists all ignored sellers. Ignored sellers do not appear in <code>/deals</code> or <code>/prices</code> lists.</p>
+            </div>
+            <div class="command">
+              <div class="command__title"><code>/ignoredsellers <span class="arg">[add|remove] [seller]</span></code></div>
+              <p class="command__detail">Adds or removes an ignored seller.</p>
+            </div>
+            <div class="command">
+              <div class="command__title"><code>/ignoredsellers clear</code></div>
+              <p class="command__detail">Clears all previously added ignored sellers.</p>
+            </div>
+            <div class="command">
+              <div class="command__title"><code>/help</code></div>
+              <p class="command__detail">See the ITAD API status, latest release notes, and links to report a bug or donate.</p>
+            </div>
           </div>
         </div>
       </div>
