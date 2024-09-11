@@ -43,4 +43,4 @@ IsThereAnyDeal Lookup is licensed under the [MIT License](https://opensource.org
 
 [invite-link]: https://discord.com/api/oauth2/authorize?client_id=722942824999288924&permissions=274877925376&scope=bot
 [donate-link]: https://www.patreon.com/acdvs
-[example]: docs/public/images/example.gif
+[example]: docs/public/images/example.png
