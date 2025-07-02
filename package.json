@@ -1,8 +1,8 @@
 {
-  "name": "isthereanydeal-lookup",
+  "name": "dealbot",
   "version": "3.0.0",
-  "description": "Discord bot for getting game discount info from IsThereAnyDeal",
-  "author": "Adam Davies <adam@adam-davies.me> (https://adam-davies.me)",
+  "description": "A Discord bot for searching PC game discounts via IsThereAnyDeal",
+  "author": "Adam Davies <adam@acdvs.dev> (https://acdvs.dev)",
   "main": "lib/index.ts",
   "license": "MIT",
   "scripts": {
@@ -12,14 +12,11 @@
     "start": "node dist/index.js",
     "lint": "eslint lib/**.ts"
   },
-  "engines": {
-    "node": ">=16.9.0"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/acdvs/dealbot.git"
   },
-  "homepage": "https://dealbot.gg",
+  "homepage": "https://dealbot.acdvs.dev",
   "dependencies": {
     "@discordjs/builders": "^1.7.0",
     "@discordjs/rest": "^0.4.1",
