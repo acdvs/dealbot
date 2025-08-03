@@ -1,0 +1,46 @@
+{
+  "name": "@dealbot/web",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbo",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@base-ui-components/react": "1.0.0-beta.2",
+    "@dealbot/api": "workspace:*",
+    "@dealbot/db": "workspace:*",
+    "@discordjs/core": "^2.2.0",
+    "@discordjs/rest": "^2.5.1",
+    "@hookform/resolvers": "^5.1.1",
+    "@next/env": "^15.4.4",
+    "@remixicon/react": "^4.6.0",
+    "@supabase/ssr": "^0.6.1",
+    "@supabase/supabase-js": "^2.50.5",
+    "@tanstack/react-query": "^5.81.5",
+    "axios": "^1.10.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "discord.js": "^14.21.0",
+    "next": "15.4.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-hook-form": "^7.60.0",
+    "tailwind-merge": "^3.3.0",
+    "uuid": "^11.1.0",
+    "zod": "^4.0.5"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4.1.11",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.1",
+    "postcss": "^8",
+    "tailwindcss": "^4.1.11",
+    "typescript": "^5"
+  }
+}
