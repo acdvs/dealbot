@@ -1,0 +1,53 @@
+@import 'tailwindcss';
+
+@theme {
+  --breakpoint-xs: 28rem;
+
+  --color-foreground: var(--foreground);
+  --color-foreground-accent: var(--foreground-accent);
+  --color-background: var(--background);
+  --color-background-accent: var(--background-accent);
+  --color-success: var(--success);
+  --color-destructive: var(--destructive);
+
+  --color-primary: var(--primary);
+  --color-blurple: var(--blurple);
+
+  --spacing-edge-gap: var(--edge-gap);
+}
+
+@layer base {
+  :root {
+    --foreground: var(--color-zinc-200);
+    --foreground-accent: var(--color-zinc-500);
+    --background: var(--color-zinc-950);
+    --background-accent: var(--color-zinc-800);
+    --success: var(--color-green-300);
+    --destructive: var(--color-red-400);
+
+    --primary: #ffa200;
+    --blurple: #525fe3;
+
+    --edge-gap: calc(var(--spacing) * 5);
+  }
+
+  h1 {
+    @apply text-2xl mb-2;
+  }
+
+  p {
+    @apply leading-6;
+  }
+}
+
+@utility scrollbar {
+  &::-webkit-scrollbar {
+    @apply w-2;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    @apply bg-zinc-600 rounded-full;
+  }
+}

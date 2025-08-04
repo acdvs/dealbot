@@ -1,0 +1,9 @@
+{
+  "name": "@dealbot/db",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@dealbot/api": "workspace:*",
+    "@supabase/supabase-js": "^2.50.5"
+  }
+}

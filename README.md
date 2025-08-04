@@ -1,46 +1,29 @@
-# IsThereAnyDeal Lookup
+<h1 align="center">
+  <img src="apps/web/public/avatar.png" width="75" />
+  <br>
+  Dealbot
+</h1>
 
-A simple Discord bot for getting game discount info from [isthereanydeal.com](https://isthereanydeal.com).
+<a href="https://discord.com/api/oauth2/authorize?client_id=722942824999288924&permissions=274877925376&scope=bot">Invite link</a> | <a href="https://dealbot.acdvs.dev/dashboard">Dashboard</a>
 
-## Usage
+A Discord bot for looking up PC game deals via [isthereanydeal.com][itad-link].
 
-1. [Click here][invite-link] to invite the bot to your server or look up "IsThereAnyDeal" on the Discord app directory.
-2. Once the bot has joined, use the commands below in any channel!
+## Features ✨
 
-## Support the Project
+- Look up game deals, current prices, historical lows, and Steam user ratings
+- View the top-most collected and wishlisted games
+- Quick links to a game's storefront and IsThereAnyDeal pages
+- Per-server configuration via the dashboard
 
-If you like what you see, consider helping with monthly server costs by clicking the "Sponsor" button on the repo or by following [this link][donate-link]. Any amount helps!
+## Support the project 🪙
 
-## Commands
+If you enjoy the bot, consider helping with monthly server costs by [sponsoring][sponsor-link] on GitHub or subscribing to the [Patreon][patreon-link]. Any amount helps!
 
-### Everyone
+<div align="center">
+  <img src="apps/web/public/example.png" height="350" />
+</div>
 
-- `/help`  
-  See the ITAD API status, latest release notes, and links to report a bug or donate.
-- `/deals [game]`  
-  Gets a list of current deals for a game.
-- `/prices [game]`  
-  Gets a list of all prices for a game including non-deals.
-- `/top [waitlisted|collected|popular]`  
-  Gets the top most waitlisted, collected, or popular games.
-
-### Admin-only
-
-- `/sellers`  
-  Lists all sellers.
-- `/ignoredsellers list`  
-  Lists all ignored sellers. Ignored sellers do not appear in `/deals` or `/prices` lists.
-- `/ignoredsellers [add|remove] [seller]`  
-  Adds or removes an ignored seller.
-- `/ignoredsellers clear`  
-  Clears all previously added ignored sellers.
-
-![Example usage][example]
-
-## License
-
-IsThereAnyDeal Lookup is licensed under the [MIT License](https://opensource.org/licenses/mit-license.php).
-
-[invite-link]: https://discord.com/api/oauth2/authorize?client_id=722942824999288924&permissions=274877925376&scope=bot
-[donate-link]: https://www.patreon.com/acdvs
-[example]: docs/public/images/example.png
+[itad-link]: https://isthereanydeal.com
+[dashboard-link]: https://dealbot.acdvs.dev/dashboard
+[sponsor-link]: https://github.com/sponsors/acdvs
+[patreon-link]: https://patreon.com/acdvs

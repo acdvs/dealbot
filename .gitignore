@@ -1,10 +1,11 @@
-dist/
+# packages
 node_modules/
 
-*.db
-*.code-workspace
-
+# environment
+.env*.local
 .env
-.env.*
 
-*.tsbuildinfo
+# build and output
+.next/
+out/
+next-env.d.ts
