@@ -13,6 +13,7 @@ import {
   getGamePrices,
   getHistoricalLow,
 } from '@dealbot/api/requests';
+import { DEFAULT_COUNTRY_CODE } from '@dealbot/db/values';
 
 const FIELD_CHAR_LIMIT = 1024;
 const ROW_JOIN_CHARS = '\n';
@@ -62,6 +63,7 @@ export class DealsEmbed extends Embed {
 
   private async loadData() {
     this.countryCode ||= await Bot.db.getCountryCode(this.ix.guildId!);
+    this.countryCode ??= DEFAULT_COUNTRY_CODE;
 
     const [gameInfo, listings, historicalLow] = await Promise.all([
       getGameInfo(this.gameId),
