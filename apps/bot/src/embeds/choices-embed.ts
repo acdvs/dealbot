@@ -12,10 +12,11 @@ import { Embed } from '../lib/embed';
 import { getSearchUrl, log } from '../lib/utils';
 import { APIMethod } from '@dealbot/api/client';
 
-const SELECTION_TIME_SEC = 30;
 type SimilarGames = APIMethod<'search'>;
 
 export class ChoicesEmbed extends Embed {
+  private static readonly SELECTION_TIME_SEC = 30;
+
   private readonly games: NonNullable<SimilarGames>;
   private countryCode: string | undefined;
 
@@ -82,7 +83,7 @@ export class ChoicesEmbed extends Embed {
       componentType: ComponentType.StringSelect,
       filter: (menuIX) => menuIX.user.id === chatIX.user.id,
       max: 1,
-      time: SELECTION_TIME_SEC * 1000,
+      time: ChoicesEmbed.SELECTION_TIME_SEC * 1000,
     });
 
     collector.on('collect', async (menuIX: StringSelectMenuInteraction) => {
