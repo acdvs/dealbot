@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "tsc-alias": "^1.8.16",
+    "@dealbot/typescript-config": "workspace:*",
     "typescript": "^5.9.2"
   }
 }

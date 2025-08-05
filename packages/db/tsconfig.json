@@ -1,16 +1,5 @@
 {
-  "compilerOptions": {
-    "allowJs": true,
-    "esModuleInterop": true,
-    "isolatedModules": true,
-    "module": "nodenext",
-    "moduleDetection": "force",
-    "noUncheckedIndexedAccess": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "es2022"
-  },
-  "include": ["**/*.ts", "types.d.ts"],
+  "extends": "@dealbot/typescript-config/base.json",
+  "include": ["**/*.ts"],
   "exclude": ["node_modules"]
 }

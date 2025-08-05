@@ -1,18 +1,5 @@
 {
-  "compilerOptions": {
-    "outDir": "dist",
-    "target": "ES2020",
-    "module": "nodenext",
-    "strict": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "noImplicitAny": true,
-    "skipLibCheck": true,
-    "noEmitHelpers": true,
-    "noEmitOnError": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true
-  },
+  "extends": "@dealbot/typescript-config/base.json",
   "include": [
     "**/*.ts",
     "**/*.d.ts"
