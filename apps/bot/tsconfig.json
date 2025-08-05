@@ -1,29 +1,24 @@
 {
   "compilerOptions": {
-    "outDir": "out",
+    "outDir": "dist",
     "target": "ES2020",
-    "module": "commonjs",
+    "module": "nodenext",
     "strict": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
     "noImplicitAny": true,
     "skipLibCheck": true,
     "noEmitHelpers": true,
     "noEmitOnError": true,
-    "importHelpers": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "isolatedModules": true
   },
   "include": [
     "**/*.ts",
     "**/*.d.ts"
   ],
   "exclude": [
-    "node_modules"
-  ],
-  "ts-node": {
-    "transpileOnly": true,
-    "require": ["tsconfig-paths/register"]
-  }
+    "node_modules",
+    "dist"
+  ]
 }
