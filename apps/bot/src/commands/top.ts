@@ -14,32 +14,28 @@ type CollectionChart = APIMethod<'getCollectionChart'>;
 type PopularityChart = APIMethod<'getPopularityChart'>;
 type TopChart = WaitlistChart | CollectionChart | PopularityChart;
 
-enum TopChartOption {
-  WAITLISTED,
-  COLLECTED,
-  POPULAR,
-}
+type TopChartOption = 'waitlisted' | 'collected' | 'popular';
 
 export const options = new SlashCommandBuilder()
   .setName('top')
   .setDescription('Get the top most waitlisted, collected, or popular games.')
-  .addIntegerOption((option) =>
+  .addStringOption((option) =>
     option
       .setName('chart')
       .setDescription('Chart type')
-      .setChoices(
-        { name: 'waitlisted', value: TopChartOption.WAITLISTED },
-        { name: 'collected', value: TopChartOption.COLLECTED },
-        { name: 'popular', value: TopChartOption.POPULAR }
+      .setChoices<{ name: string; value: TopChartOption }>(
+        { name: 'waitlisted', value: 'waitlisted' },
+        { name: 'collected', value: 'collected' },
+        { name: 'popular', value: 'popular' }
       )
       .setRequired(true)
   );
 
 export async function run(ix: ChatInputCommandInteraction) {
-  const chart = ix.options.getInteger('chart', true);
+  const chart = ix.options.getString('chart', true) as TopChartOption;
   const embed = new Embed();
 
-  if (chart === TopChartOption.WAITLISTED) {
+  if (chart === 'waitlisted') {
     const list = await Bot.api.getWaitlistChart();
 
     if (!list || list.length === 0) {
@@ -49,7 +45,7 @@ export async function run(ix: ChatInputCommandInteraction) {
 
     embed.setTitle('Top Waitlisted Games');
     embed.addFields(getGameCountFields<WaitlistChart>(list));
-  } else if (chart === TopChartOption.COLLECTED) {
+  } else if (chart === 'collected') {
     const list = await Bot.api.getCollectionChart();
 
     if (!list || list.length === 0) {
@@ -59,7 +55,7 @@ export async function run(ix: ChatInputCommandInteraction) {
 
     embed.setTitle('Top Collected Games');
     embed.addFields(getGameCountFields<CollectionChart>(list));
-  } else if (chart === TopChartOption.POPULAR) {
+  } else if (chart === 'popular') {
     const list = await Bot.api.getPopularityChart();
 
     if (!list || list.length === 0) {
