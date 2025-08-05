@@ -1,0 +1,17 @@
+{
+  "tasks": {
+    "build": {
+      "dependsOn": ["lint", "^build"],
+      "outputs": ["dist/**"]
+    },
+    "api#build": {
+      "dependsOn": ["build:types"]
+    },
+    "web#build": {
+      "outputs": [".next/**", "!.next/cache/**"]
+    },
+    "dev": {},
+    "lint": {},
+    "update-types": {}
+  }
+}
