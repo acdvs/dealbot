@@ -66,13 +66,9 @@ export class DealsEmbed extends Embed {
       (p) => p.cut > 0 || p.price.amount < p.regular.amount
     );
 
-    this.setTitle(gameInfo.title);
-    this.setURL(gameInfo.urls.game);
-    this.setImage(gameInfo.assets.banner300 || null);
-
+    this.game = game;
     this.hasDeals = this.dealsOnly && deals.length > 0;
     this.listings = this.hasDeals ? deals : listings;
-    this.reviews = gameInfo.reviews;
     this.historicalLow = historicalLow;
 
     if (this.listings.length > 0) {
@@ -87,6 +83,15 @@ export class DealsEmbed extends Embed {
   }
 
   private async populate() {
+    if (!this.game) {
+      this.setDescription('No IsThereAnyDeal data found.');
+      return;
+    }
+
+    this.setTitle(this.game.title);
+    this.setURL(this.game.urls.game);
+    this.setImage(this.game.assets.banner300 || null);
+
     if (this.listings.length > 0) {
       if (this.dealsOnly && !this.hasDeals) {
         this.setDescription('No deals found. Showing all prices.');
@@ -174,10 +179,10 @@ export class DealsEmbed extends Embed {
   }
 
   private setSteamReview() {
-    if (!this.reviews) return;
+    if (!this.game?.reviews) return;
 
     const { score, count } =
-      this.reviews?.find((x) => x.source === 'Steam') || {};
+      this.game.reviews.find((x) => x.source === 'Steam') || {};
 
     if (score && count) {
       const text = getSteamReviewText(score, count);
@@ -236,6 +241,6 @@ export class DealsEmbed extends Embed {
   }
 
   private getListingOverflowText(remaining: number) {
-    return `[...and ${remaining} more deals](${this.link})`;
+    return `[...and ${remaining} more deals](${this.game?.urls.game})`;
   }
 }
