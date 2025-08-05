@@ -8,30 +8,21 @@ import {
   toReadableNumber,
   truncateStringList,
 } from '../lib/utils';
-import {
-  getGameInfo,
-  getGamePrices,
-  getHistoricalLow,
-} from '@dealbot/api/requests';
+import { APIMethod } from '@dealbot/api/client';
 import { DEFAULT_COUNTRY_CODE } from '@dealbot/db/values';
 
 const FIELD_CHAR_LIMIT = 1024;
 const ROW_JOIN_CHARS = '\n';
 const INLINE_JOIN_CHARS = ', ';
 
-type Listings = Awaited<ReturnType<typeof getGamePrices>>;
-type GameInfo = Awaited<ReturnType<typeof getGameInfo>>;
-type HistoricalLow = Awaited<ReturnType<typeof getHistoricalLow>>;
-
 export class DealsEmbed extends Embed {
   private readonly ix: ChatInputCommandInteraction;
   private readonly gameId: string;
   private readonly dealsOnly: boolean;
 
-  private link = '';
-  private listings: Listings = [];
-  private historicalLow: HistoricalLow | undefined;
-  private reviews: GameInfo['reviews'] | undefined;
+  private game: APIMethod<'getGameInfo'>;
+  private listings: APIMethod<'getGamePrices'> = [];
+  private historicalLow: APIMethod<'getHistoricalLow'>;
   private ignoredSellers: string[] = [];
   private countryCode: string | undefined;
 
@@ -65,10 +56,10 @@ export class DealsEmbed extends Embed {
     this.countryCode ||= await Bot.db.getCountryCode(this.ix.guildId!);
     this.countryCode ??= DEFAULT_COUNTRY_CODE;
 
-    const [gameInfo, listings, historicalLow] = await Promise.all([
-      getGameInfo(this.gameId),
-      getGamePrices(this.gameId, this.countryCode),
-      getHistoricalLow(this.gameId, this.countryCode),
+    const [game, listings, historicalLow] = await Promise.all([
+      Bot.api.getGameInfo(this.gameId),
+      Bot.api.getGamePrices(this.gameId, this.countryCode),
+      Bot.api.getHistoricalLow(this.gameId, this.countryCode),
     ]);
 
     const deals = listings.filter(

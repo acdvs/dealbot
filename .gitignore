@@ -7,5 +7,6 @@ node_modules/
 
 # build and output
 .next/
+dist/
 out/
 next-env.d.ts

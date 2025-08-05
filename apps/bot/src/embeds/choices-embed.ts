@@ -10,11 +10,10 @@ import {
 import { DealsEmbed } from './deals-embed';
 import { Embed } from '../lib/embed';
 import { getSearchUrl, log } from '../lib/utils';
-import { search } from '@dealbot/api/requests';
-
-type SimilarGames = Awaited<ReturnType<typeof search>>;
+import { APIMethod } from '@dealbot/api/client';
 
 const SELECTION_TIME_SEC = 30;
+type SimilarGames = APIMethod<'search'>;
 
 export class ChoicesEmbed extends Embed {
   private readonly games: NonNullable<SimilarGames>;

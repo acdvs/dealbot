@@ -2,10 +2,23 @@
   "name": "@dealbot/api",
   "version": "1.0.0",
   "private": true,
+  "scripts": {
+    "build": "tsc && tsc-alias",
+    "build:types": "openapi-typescript https://raw.githubusercontent.com/IsThereAnyDeal/API/master/dist/openapi.json -o ./types.d.ts"
+  },
+  "exports": {
+    "./*": {
+      "types": "./src/*.ts",
+      "default": "./dist/*.js"
+    }
+  },
   "dependencies": {
     "openapi-fetch": "^0.14.0"
   },
   "devDependencies": {
-    "@types/node": "^24.1.0"
+    "@types/node": "^24.1.0",
+    "openapi-typescript": "^7.8.0",
+    "tsc-alias": "^1.8.16",
+    "typescript": "^5.9.2"
   }
 }

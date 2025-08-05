@@ -2,8 +2,21 @@
   "name": "@dealbot/db",
   "version": "1.0.0",
   "private": true,
+  "scripts": {
+    "build": "tsc && tsc-alias"
+  },
+  "exports": {
+    "./*": {
+      "types": "./src/*.ts",
+      "default": "./dist/*.js"
+    }
+  },
   "dependencies": {
     "@dealbot/api": "workspace:*",
     "@supabase/supabase-js": "^2.50.5"
+  },
+  "devDependencies": {
+    "tsc-alias": "^1.8.16",
+    "typescript": "^5.9.2"
   }
 }

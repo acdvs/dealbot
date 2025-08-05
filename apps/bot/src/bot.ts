@@ -10,6 +10,7 @@ import {
 import { CommandManager } from './command-manager';
 import { log } from './lib/utils';
 import { Database } from '@dealbot/db/client';
+import APIClient from '@dealbot/api/client';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -17,6 +18,7 @@ export class Bot extends Client {
   private readonly commandManager = new CommandManager(this);
 
   static db = new Database(
+  static readonly api = new APIClient(process.env.ITAD_API_KEY!);
     process.env.SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_KEY!
   );

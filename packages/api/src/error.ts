@@ -1,4 +1,4 @@
-type OpenAPIError = {
+export type OpenAPIError = {
   status_code: number;
   reason_phrase: string;
 };
