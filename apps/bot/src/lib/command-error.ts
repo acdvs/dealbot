@@ -1,4 +1,4 @@
-type ErrorCode = 'RUNTIME_ERR' | 'TIMED_OUT' | 'NO_DATA' | 'DATABASE_ERR';
+type ErrorCode = 'RUNTIME_ERR' | 'TIMED_OUT' | 'NO_DATA';
 
 export class CommandError extends Error {
   readonly message = 'Something went wrong. Please try again later.';
