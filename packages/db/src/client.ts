@@ -1,7 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
-import type { Database as TDatabase } from '../types';
 import { APIError } from '@dealbot/api/error';
+import type { Database as TDatabase } from './types';
 
 export class Database extends SupabaseClient<TDatabase> {
   async updateGuildCount(guildIds: Record<'id', string>[]) {

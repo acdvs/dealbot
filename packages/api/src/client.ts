@@ -3,7 +3,7 @@
 import createClient from 'openapi-fetch';
 
 import middleware from './middleware';
-import type { paths } from '../types';
+import type { paths } from './types';
 
 type APIMember = keyof InstanceType<typeof APIClient>;
 export type APIMethod<Fn extends APIMember> = Awaited<
