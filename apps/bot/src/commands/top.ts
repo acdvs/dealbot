@@ -4,17 +4,14 @@ import {
   SlashCommandBuilder,
 } from 'discord.js';
 
+import { Bot } from '../bot';
 import { Embed } from '../lib/embed';
 import { toReadableNumber } from '../lib/utils';
-import {
-  getCollectionChart,
-  getPopularityChart,
-  getWaitlistChart,
-} from '@dealbot/api/requests';
+import { APIMethod } from '@dealbot/api/client';
 
-type WaitlistChart = Awaited<ReturnType<typeof getWaitlistChart>>;
-type CollectionChart = Awaited<ReturnType<typeof getCollectionChart>>;
-type PopularityChart = Awaited<ReturnType<typeof getPopularityChart>>;
+type WaitlistChart = APIMethod<'getWaitlistChart'>;
+type CollectionChart = APIMethod<'getCollectionChart'>;
+type PopularityChart = APIMethod<'getPopularityChart'>;
 type TopChart = WaitlistChart | CollectionChart | PopularityChart;
 
 enum TopChartOption {
@@ -43,7 +40,7 @@ export async function run(ix: ChatInputCommandInteraction) {
   const embed = new Embed();
 
   if (chart === TopChartOption.WAITLISTED) {
-    const list = await getWaitlistChart();
+    const list = await Bot.api.getWaitlistChart();
 
     if (!list || list.length === 0) {
       ix.reply(Embed.basic('Top waitlisted games unavailable.'));
@@ -53,7 +50,7 @@ export async function run(ix: ChatInputCommandInteraction) {
     embed.setTitle('Top Waitlisted Games');
     embed.addFields(getGameCountFields<WaitlistChart>(list));
   } else if (chart === TopChartOption.COLLECTED) {
-    const list = await getCollectionChart();
+    const list = await Bot.api.getCollectionChart();
 
     if (!list || list.length === 0) {
       ix.reply(Embed.basic('Top collected games unavailable.'));
@@ -63,7 +60,7 @@ export async function run(ix: ChatInputCommandInteraction) {
     embed.setTitle('Top Collected Games');
     embed.addFields(getGameCountFields<CollectionChart>(list));
   } else if (chart === TopChartOption.POPULAR) {
-    const list = await getPopularityChart();
+    const list = await Bot.api.getPopularityChart();
 
     if (!list || list.length === 0) {
       ix.reply(Embed.basic('Top popular games unavailable.'));

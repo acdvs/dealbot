@@ -4,10 +4,10 @@ import {
   SlashCommandBuilder,
 } from 'discord.js';
 
+import { Bot } from '../../bot';
 import { ChoicesEmbed } from '../../embeds/choices-embed';
 import { DealsEmbed } from '../../embeds/deals-embed';
 import { Embed } from '../../lib/embed';
-import { search } from '@dealbot/api/requests';
 import { countries } from '@dealbot/db/values';
 
 function getListingsCommand({
@@ -47,8 +47,8 @@ function getListingsCommand({
         countryCode &&
         (countries.find((x) => x.code === countryCode)?.code || 'US');
 
-      const results = await search(game, 10);
-      const exactResult = results.find((x) => x.title === game);
+      const results = await Bot.api.search(game, 10);
+      const exactResult = results?.find((x) => x.title === game);
 
       if (exactResult) {
         const embed = new DealsEmbed(
@@ -59,7 +59,7 @@ function getListingsCommand({
         );
         const messageOptions = await embed.asyncOptions();
         ix.editReply(messageOptions);
-      } else if (results.length > 0) {
+      } else if (results && results.length > 0) {
         const embed = new ChoicesEmbed(
           ix,
           results,
@@ -81,7 +81,7 @@ function getListingsCommand({
       const focusedOption = ix.options.getFocused(true);
 
       if (focusedOption.name === 'game' && focusedOption.value.length > 1) {
-        const results = await search(focusedOption.value, 25);
+        const results = await Bot.api.search(focusedOption.value, 25);
         const suggestions =
           results?.map((x) => ({ name: x.title, value: x.title })) || [];
 
