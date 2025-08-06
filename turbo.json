@@ -5,6 +5,14 @@
       "dependsOn": ["check-types", "lint", "^build"],
       "outputs": ["dist/**"]
     },
+    "@dealbot/bot#build": {
+      "env": [
+        "DISCORD_BOT_TOKEN",
+        "ITAD_API_KEY",
+        "NEXT_PUBLIC_BASE_URL",
+        "SUPABASE_*"
+      ]
+    },
     "check-types": {},
     "dev": {
       "dependsOn": ["check-types"]
