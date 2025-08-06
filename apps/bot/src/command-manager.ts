@@ -4,7 +4,6 @@ import {
   AutocompleteInteraction,
   ChatInputCommandInteraction,
   Collection,
-  DiscordAPIError,
   REST,
   SlashCommandBuilder,
   Snowflake,
@@ -12,15 +11,15 @@ import {
 import { API } from '@discordjs/core';
 
 import { Bot } from './bot';
+import { CommandError } from './command-error';
 import { Embed } from './lib/embed';
-import { CommandError } from './lib/command-error';
 import { log } from './lib/utils';
 import { APIError } from '@dealbot/api/error';
 
 const API_VERSION = '10';
 const COMMAND_TIMEOUT_SEC = 5;
 
-const commandsPath = path.resolve(__dirname, './commands');
+const commandsPath = path.resolve(__dirname, 'commands');
 const isProduction = process.env.NODE_ENV === 'production';
 
 const rest = new REST({ version: API_VERSION }).setToken(
@@ -44,15 +43,19 @@ export class CommandManager {
   }
 
   static async load(): Promise<Command[]> {
-    const files = await fs.readdir(commandsPath);
-    const commandImports = files
-      .filter((x) => x.endsWith('.ts'))
-      .map((x) => {
-        const filepath = path.join(commandsPath, x);
-        return import(filepath);
-      });
+    try {
+      const files = await fs.readdir(commandsPath);
+      const commandImports: Promise<Command>[] = files
+        .filter((x) => /\.[tj]s$/.test(x))
+        .map((x) => {
+          const filePath = './' + path.join('commands', x);
+          return import(filePath);
+        });
 
-    return await Promise.all(commandImports);
+      return await Promise.all(commandImports);
+    } catch (err) {
+      throw new CommandError('IMPORT_ERR', err);
+    }
   }
 
   async set() {
@@ -151,7 +154,7 @@ export class CommandManager {
       log.warn(
         '[COMMAND] Command timed out after %d seconds:',
         COMMAND_TIMEOUT_SEC,
-        error.details
+        error.cause
       );
       return;
     }
