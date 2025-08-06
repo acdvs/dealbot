@@ -11,7 +11,11 @@
       ]
     },
     "dev": {
-      "env": ["DISCORD_DEV_GUILD_ID"]
+      "env": [
+        "DISCORD_*",
+        "NEXT_PUBLIC_BASE_URL",
+        "SUPABASE_*"
+      ]
     }
   }
 }
