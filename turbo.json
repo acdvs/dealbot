@@ -25,9 +25,6 @@
       "outputs": [".next/**", "!.next/cache/**"]
     },
     "check-types": {},
-    "dev": {
-      "dependsOn": ["check-types"]
-    },
     "@dealbot/bot#dev": {
       "dependsOn": ["check-types"],
       "env": [
@@ -46,8 +43,22 @@
       ]
     },
     "lint": {},
-    "start": {
-      "dependsOn": ["^build"]
+    "@dealbot/bot#start": {
+      "dependsOn": ["^build"],
+      "env": [
+        "DISCORD_BOT_TOKEN",
+        "ITAD_API_KEY",
+        "NEXT_PUBLIC_BASE_URL",
+        "SUPABASE_*"
+      ]
+    },
+    "@dealbot/web#start": {
+      "dependsOn": ["^build"],
+      "env": [
+        "DISCORD_*",
+        "ITAD_API_KEY",
+        "SUPABASE_*"
+      ]
     },
     "update-types": {
       "outputs": ["src/types.ts"]
