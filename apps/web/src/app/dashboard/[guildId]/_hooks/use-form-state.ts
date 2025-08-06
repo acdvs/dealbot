@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { getGuildSettings } from '@/actions/guild';
 import { getSellers } from '@dealbot/api/requests';
 import { countries } from '@dealbot/db/values';
+import { countries, DEFAULT_COUNTRY_CODE } from '@dealbot/db/values';
 
 const countryCodes = countries.map((x) => x.code);
 
@@ -31,7 +32,7 @@ function useFormState(guildId: string) {
     resolver: zodResolver(schema),
     defaultValues: {
       guildId,
-      countryCode: 'US',
+      countryCode: DEFAULT_COUNTRY_CODE,
       ignoredSellers: [],
     },
   });
