@@ -6,7 +6,6 @@ import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { getGuildSettings } from '@/actions/guild';
-import { countries } from '@dealbot/db/values';
 import { getSellers } from '@/actions/itad-api';
 import { countries, DEFAULT_COUNTRY_CODE } from '@dealbot/db/values';
 
@@ -44,8 +43,8 @@ function useFormState(guildId: string) {
       (async function getFormData() {
         const _sellers = await getSellers();
         const _guildSettings = await getGuildSettings(guildId);
-        console.log({ _guildSettings });
-        setSellers(_sellers.map((x) => x.title));
+
+        setSellers(_sellers?.map((x) => x.title) || []);
         setGuildSettings(_guildSettings);
 
         setValue('countryCode', _guildSettings?.countryCode);

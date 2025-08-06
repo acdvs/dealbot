@@ -5,9 +5,9 @@ import Image from 'next/image';
 import { useQuery } from '@tanstack/react-query';
 
 import { getGuilds } from '@/actions/discord/user-api';
+import ErrorState from '@/components/state/error';
 import Skeleton from '@/components/ui/skeleton';
 import { cx } from '@/lib/utils';
-import ErrorState from '@/components/state/error';
 
 function GuildSelector() {
   const { data, isPending, isError } = useQuery({
