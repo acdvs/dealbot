@@ -2,17 +2,19 @@
   "$schema": "https://turbo.build/schema.json",
   "tasks": {
     "build": {
-      "dependsOn": ["lint", "^build"],
+      "dependsOn": ["^check-types", "^lint", "^build"],
       "outputs": ["dist/**"]
     },
     "api#build": {
       "dependsOn": ["update-types"]
+    "check-types": {},
+    "dev": {
+      "dependsOn": ["^check-types"]
     },
     "web#build": {
       "dependsOn": ["lint"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
-    "dev": {},
     "lint": {},
     "update-types": {}
   }
