@@ -1,5 +1,3 @@
 {
-  "extends": "@dealbot/typescript-config/base.json",
-  "include": ["**/*.ts"],
-  "exclude": ["node_modules"]
+  "extends": "@dealbot/typescript-config/tsc-prod.json"
 }

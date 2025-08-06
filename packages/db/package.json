@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "tsc && tsc-alias"
+    "build": "tsc"
   },
   "exports": {
     "./*": {
@@ -16,7 +16,6 @@
     "@supabase/supabase-js": "^2.50.5"
   },
   "devDependencies": {
-    "tsc-alias": "^1.8.16",
     "@dealbot/typescript-config": "workspace:*",
     "typescript": "^5.9.2"
   }
