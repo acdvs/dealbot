@@ -3,7 +3,6 @@
   "version": "3.4.0",
   "private": true,
   "scripts": {
-    "build:types": "npx openapi-typescript https://raw.githubusercontent.com/IsThereAnyDeal/API/master/dist/openapi.json -o ./lib/util/itad.d.ts",
     "lint": "eslint src/**.ts",
     "start": "ts-node src/index.ts"
   },

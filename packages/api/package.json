@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build:types": "openapi-typescript https://raw.githubusercontent.com/IsThereAnyDeal/API/master/dist/openapi.json -o ./types.d.ts"
     "build": "tsc",
+    "update-types": "openapi-typescript https://raw.githubusercontent.com/IsThereAnyDeal/API/master/dist/openapi.json -o ./src/types.ts"
   },
   "exports": {
     "./*": {
