@@ -7,9 +7,7 @@ import axios from 'axios';
 
 import { Bot } from '../bot';
 import { Embed } from '../lib/embed';
-
-const ITAD_API_ERROR_RECENCY_WINDOW_MIN =
-  process.env.ITAD_API_ERROR_RECENCY_WINDOW_MIN!;
+import { Database } from '@dealbot/db/client';
 
 export const options = new SlashCommandBuilder()
   .setName('help')
@@ -38,7 +36,7 @@ export async function run(ix: ChatInputCommandInteraction) {
   embed.addFields({
     name: 'IsThereAnyDeal Status',
     value: hasRecentError
-      ? `⚠️ Errored within the last ${ITAD_API_ERROR_RECENCY_WINDOW_MIN} minutes`
+      ? `⚠️ Errored within the last ${Database.ITAD_API_ERROR_RECENCY_MIN} minutes`
       : '✅ Good',
   });
 

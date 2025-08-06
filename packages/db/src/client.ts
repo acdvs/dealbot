@@ -4,6 +4,8 @@ import { APIError } from '@dealbot/api/error';
 import type { Database as TDatabase } from './types';
 
 export class Database extends SupabaseClient<TDatabase> {
+  static readonly ITAD_API_ERROR_RECENCY_MIN = 15;
+
   async updateGuildCount(guildIds: Record<'id', string>[]) {
     const { count, error } = await this.from('guilds').insert(guildIds, {
       count: 'estimated',
@@ -106,8 +108,7 @@ export class Database extends SupabaseClient<TDatabase> {
 
     if (!recentError) return false;
 
-    const recencyWindow =
-      Number(process.env.ITAD_API_ERROR_RECENCY_WINDOW_MIN) * 1000;
+    const recencyWindow = Database.ITAD_API_ERROR_RECENCY_MIN * 1000;
     const milliToLastError =
       Date.now() - new Date(recentError.timestamp).getTime();
 
