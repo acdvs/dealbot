@@ -5,6 +5,8 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
+    "dev:bot": "turbo dev --filter=@dealbot/bot",
+    "dev:web": "turbo dev --filter=@dealbot/web",
     "lint": "turbo lint",
     "start": "turbo start"
   },
