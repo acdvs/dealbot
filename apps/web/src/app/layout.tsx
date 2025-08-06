@@ -11,11 +11,12 @@ const rubik = Rubik({
 });
 
 export const metadata: Metadata = {
+  description: 'A Discord bot for looking up PC game deals via IsThereAnyDeal.',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL!),
   title: {
     template: 'Dealbot | %s',
     default: 'Dealbot',
   },
-  description: 'A Discord bot for looking up PC game deals via IsThereAnyDeal.',
 };
 
 export default function RootLayout({
