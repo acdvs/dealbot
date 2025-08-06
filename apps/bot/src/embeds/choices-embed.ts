@@ -17,12 +17,12 @@ type SimilarGames = APIMethod<'search'>;
 export class ChoicesEmbed extends Embed {
   private static readonly SELECTION_TIME_SEC = 30;
 
-  private readonly games: NonNullable<SimilarGames>;
+  private readonly games: SimilarGames;
   private countryCode: string | undefined;
 
   constructor(
     ix: ChatInputCommandInteraction,
-    games: NonNullable<SimilarGames>,
+    games: SimilarGames,
     countryCode?: string,
     includeAll = false
   ) {
@@ -52,25 +52,29 @@ export class ChoicesEmbed extends Embed {
   }
 
   options() {
+    const selectMenu = this.getSelectMenu();
+
     return {
       ...super.options(),
-      components: [this.getSelectMenu()],
+      components: selectMenu ? [selectMenu] : [],
     };
   }
 
   private getSelectMenu() {
-    return new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
-      new StringSelectMenuBuilder()
-        .setCustomId(`deal_opts_select_${new Date().getTime()}`)
-        .setPlaceholder('Nothing selected')
-        .addOptions(
-          ...this.games.map((v, i) =>
-            new StringSelectMenuOptionBuilder()
-              .setLabel(v.title)
-              .setValue(i.toString())
+    if (this.games) {
+      return new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+        new StringSelectMenuBuilder()
+          .setCustomId(`deal_opts_select_${new Date().getTime()}`)
+          .setPlaceholder('Nothing selected')
+          .addOptions(
+            ...this.games.map((v, i) =>
+              new StringSelectMenuOptionBuilder()
+                .setLabel(v.title)
+                .setValue(i.toString())
+            )
           )
-        )
-    );
+      );
+    }
   }
 
   private createCollector(
@@ -92,12 +96,14 @@ export class ChoicesEmbed extends Embed {
       collector.stop();
 
       const optionIdx = Number(menuIX.values[0]);
-      const { id: gameId } = this.games[optionIdx];
+      const game = this.games?.[optionIdx];
+
+      if (!game) return;
 
       try {
         const dealsEmbed = new DealsEmbed(
           chatIX,
-          gameId,
+          game.id,
           this.countryCode,
           includeAll
         );

@@ -54,7 +54,7 @@ export function truncateStringList(
       charTotal += joinChars.length;
     }
 
-    charTotal += list[i].length;
+    charTotal += list[i]?.length || 0;
 
     if (charTotal > charLimit) {
       finalItemCount = i - 1;
