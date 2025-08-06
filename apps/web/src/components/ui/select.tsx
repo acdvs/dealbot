@@ -1,5 +1,5 @@
 import { Select } from '@base-ui-components/react/select';
-import { RiCheckLine, RiExpandUpDownLine } from '@remixicon/react';
+import { RiExpandUpDownLine } from '@remixicon/react';
 
 import { cx } from '@/lib/utils';
 
@@ -11,7 +11,7 @@ type Items = {
 function CustomSelect({
   className,
   ...props
-}: { className?: string } & React.ComponentProps<Select.Root>) {
+}: { className?: string } & React.ComponentProps<typeof Select.Root>) {
   const items = props.items as Items;
 
   return (

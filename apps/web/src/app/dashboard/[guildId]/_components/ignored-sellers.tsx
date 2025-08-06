@@ -18,7 +18,7 @@ export default function IgnoredSellers({ items }: { items: string[] }) {
     if (currentValues.length === 0) {
       append(currentValues);
     }
-  }, []);
+  }, [append, currentValues]);
 
   const selectChoices = items
     .filter((x) => !currentValues.includes(x))
@@ -32,7 +32,7 @@ export default function IgnoredSellers({ items }: { items: string[] }) {
           ...selectChoices,
         ]}
         value={null}
-        onValueChange={(x: string) => append(x)}
+        onValueChange={(x) => append(x)}
         className="mb-2 text-zinc-500 hover:text-foreground transition-colors"
       />
       <div className="flex gap-2 flex-wrap">

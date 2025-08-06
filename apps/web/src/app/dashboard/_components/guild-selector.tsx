@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useQuery } from '@tanstack/react-query';
-import { RiErrorWarningLine } from '@remixicon/react';
 
 import { getGuilds } from '@/actions/discord/user-api';
 import Skeleton from '@/components/ui/skeleton';

@@ -52,7 +52,7 @@ function useFormState(guildId: string) {
         setValue('ignoredSellers', _guildSettings?.ignoredSellers);
       })();
     }
-  }, []);
+  }, [guildId, guildSettings, sellers, setValue]);
 
   useEffect(() => {
     if (submitCount > 0) {
