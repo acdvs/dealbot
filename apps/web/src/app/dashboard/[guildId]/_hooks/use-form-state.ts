@@ -6,8 +6,8 @@ import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { getGuildSettings } from '@/actions/guild';
-import { getSellers } from '@dealbot/api/requests';
 import { countries } from '@dealbot/db/values';
+import { getSellers } from '@/actions/itad-api';
 import { countries, DEFAULT_COUNTRY_CODE } from '@dealbot/db/values';
 
 const countryCodes = countries.map((x) => x.code);
