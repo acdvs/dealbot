@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "packageManager": "pnpm@10.13.1",
   "scripts": {
-    "build": "turbo build",
+    "build:bot": "turbo build --filter=@dealbot/bot",
+    "build:web": "turbo build --filter=@dealbot/web",
     "dev": "turbo dev",
     "dev:bot": "turbo dev --filter=@dealbot/bot",
     "dev:web": "turbo dev --filter=@dealbot/web",
