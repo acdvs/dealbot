@@ -9,10 +9,6 @@
     "dev": {
       "dependsOn": ["^check-types"]
     },
-    "web#build": {
-      "dependsOn": ["lint"],
-      "outputs": [".next/**", "!.next/cache/**"]
-    },
     "lint": {},
     "update-types": {
       "outputs": ["src/types.ts"]
