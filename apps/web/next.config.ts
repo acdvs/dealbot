@@ -1,8 +1,6 @@
 import path from 'node:path';
 import type { NextConfig } from 'next';
 
-import 'src/env';
-
 const config: NextConfig = {
   images: {
     remotePatterns: [

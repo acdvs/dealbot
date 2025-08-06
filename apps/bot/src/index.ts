@@ -1,4 +1,4 @@
-import 'dotenv-mono/load';
+import 'dotenv/config';
 import { ActivityType, GatewayIntentBits } from 'discord.js';
 
 import { Bot } from './bot';

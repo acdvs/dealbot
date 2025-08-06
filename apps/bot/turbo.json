@@ -1,0 +1,17 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "env": [
+        "DISCORD_*",
+        "!DISCORD_DEV_GUILD_ID",
+        "NEXT_PUBLIC_BASE_URL",
+        "SUPABASE_*"
+      ]
+    },
+    "dev": {
+      "env": ["DISCORD_DEV_GUILD_ID"]
+    }
+  }
+}
