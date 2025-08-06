@@ -8,7 +8,8 @@
     "dev:bot": "turbo dev --filter=@dealbot/bot",
     "dev:web": "turbo dev --filter=@dealbot/web",
     "lint": "turbo lint",
-    "start": "turbo start"
+    "start:bot": "turbo start --filter=@dealbot/bot",
+    "start:web": "turbo start --filter=@dealbot/web"
   },
   "devDependencies": {
     "turbo": "^2.5.5"
