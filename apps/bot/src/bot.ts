@@ -17,8 +17,8 @@ const isProduction = process.env.NODE_ENV === 'production';
 export class Bot extends Client {
   private readonly commandManager = new CommandManager(this);
 
-  static db = new Database(
   static readonly api = new APIClient(process.env.ITAD_API_KEY!);
+  static readonly db = new Database(
     process.env.SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_KEY!
   );

@@ -1,7 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
-import { APIError } from '@dealbot/api/error';
 import type { Database as TDatabase } from './types';
+import type { APIError } from '@dealbot/api/error';
 
 export class Database extends SupabaseClient<TDatabase> {
   static readonly ITAD_API_ERROR_RECENCY_MIN = 15;
