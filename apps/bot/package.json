@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "lint": "eslint src/**.ts",
-    "start": "ts-node src/index.ts"
+    "build": "tsc -p tsconfig.build.json",
+    "check-types": "tsc -p tsconfig.build.json --noemit",
+    "dev": "ts-node -P tsconfig.dev.json src/index.ts",
+    "lint": "eslint",
+    "start": "node dist/index.js"
   },
   "dependencies": {
     "@dealbot/api": "workspace:*",
