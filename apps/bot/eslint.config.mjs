@@ -9,6 +9,7 @@ import tsParser from '@typescript-eslint/parser';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
 const compat = new FlatCompat({
   baseDirectory: __dirname,
   recommendedConfig: js.configs.recommended,
@@ -17,17 +18,18 @@ const compat = new FlatCompat({
 
 export default defineConfig([
   {
-    extends: compat.extends('plugin:@typescript-eslint/recommended'),
+    ...compat.extends('plugin:@typescript-eslint/recommended'),
     plugins: {
       '@typescript-eslint': typescriptEslint,
     },
+    files: ['src/**'],
     languageOptions: {
       globals: {
         ...globals.node,
       },
       parser: tsParser,
-      ecmaVersion: 2020,
-      sourceType: 'commonjs',
+      ecmaVersion: 2022,
+      sourceType: 'module',
       parserOptions: {
         project: './tsconfig.json',
       },
