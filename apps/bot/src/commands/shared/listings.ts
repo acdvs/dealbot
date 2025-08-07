@@ -9,6 +9,7 @@ import { ChoicesEmbed } from '../../embeds/choices-embed';
 import { DealsEmbed } from '../../embeds/deals-embed';
 import { Embed } from '../../lib/embed';
 import { countries } from '@dealbot/db/values';
+import { Command } from '../../command';
 
 function getListingsCommand({
   name,
@@ -19,7 +20,7 @@ function getListingsCommand({
   description: string;
   dealsOnly: boolean;
 }) {
-  return {
+  return new Command({
     options: new SlashCommandBuilder()
       .setName(name)
       .setDescription(description)
@@ -36,7 +37,7 @@ function getListingsCommand({
           .setName('country')
           .setDescription("Overrides the server's country setting.")
           .setAutocomplete(true)
-      ),
+      ) as SlashCommandBuilder,
 
     async run(ix: ChatInputCommandInteraction) {
       await ix.deferReply();
@@ -100,7 +101,7 @@ function getListingsCommand({
         await ix.respond(suggestions);
       }
     },
-  };
+  });
 }
 
 export default getListingsCommand;

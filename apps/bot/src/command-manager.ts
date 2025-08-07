@@ -3,13 +3,13 @@ import {
   ChatInputCommandInteraction,
   Collection,
   REST,
-  SlashCommandBuilder,
   Snowflake,
 } from 'discord.js';
 import { API } from '@discordjs/core';
 
 import { Bot } from './bot';
 import { CommandError } from './command-error';
+import { CommandDefinition } from './command';
 import commands from './commands';
 import { Embed } from './lib/embed';
 import { log } from './lib/utils';
@@ -25,20 +25,15 @@ const rest = new REST({ version: API_VERSION }).setToken(
 );
 const api = new API(rest);
 
-type Command = {
-  options: SlashCommandBuilder;
-  run: (ix: ChatInputCommandInteraction) => Promise<void>;
-  autocomplete?: (ix: AutocompleteInteraction) => Promise<void>;
-};
-
 export class CommandManager {
-  private readonly commands: Collection<string, Command> = new Collection();
+  private readonly commands: Collection<string, CommandDefinition> =
+    new Collection();
 
   constructor() {
     log.msg('Loading commands');
 
     for (const command of commands) {
-      this.commands.set(command.options.name, command as Command);
+      this.commands.set(command.options.name, command as CommandDefinition);
       log.msg(`  |  ${command.options.name}`);
     }
   }
