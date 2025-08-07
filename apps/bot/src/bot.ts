@@ -1,11 +1,4 @@
-import {
-  Client,
-  ClientOptions,
-  Events,
-  Guild,
-  GuildMember,
-  Interaction,
-} from 'discord.js';
+import { Client, ClientOptions, Events, Guild, Interaction } from 'discord.js';
 
 import { CommandManager } from './command-manager';
 import { log } from './lib/utils';
@@ -63,12 +56,6 @@ export class Bot extends Client {
   }
 
   private async onInteractionCreate(ix: Interaction) {
-    const member = ix.member as GuildMember;
-
-    if (!ix.inGuild() || !member || !('id' in member)) {
-      return;
-    }
-
     if (ix.isChatInputCommand()) {
       this.commandManager.run(ix);
     } else if (ix.isAutocomplete()) {
