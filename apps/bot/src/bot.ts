@@ -2,13 +2,13 @@ import { Client, ClientOptions, Events, Guild, Interaction } from 'discord.js';
 
 import { CommandManager } from './command-manager';
 import { log } from './lib/utils';
-import { Database } from '@dealbot/db/client';
 import APIClient from '@dealbot/api/client';
+import { Database } from '@dealbot/db/client';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
 export class Bot extends Client {
-  private readonly commandManager = new CommandManager(this);
+  private readonly commandManager = new CommandManager();
 
   static readonly api = new APIClient(process.env.ITAD_API_KEY!);
   static readonly db = new Database(
@@ -24,8 +24,10 @@ export class Bot extends Client {
     this.on(Events.GuildDelete, this.onGuildDelete);
     this.on(Events.InteractionCreate, this.onInteractionCreate);
 
+    ['SIGINT', 'SIGTERM', 'SIGQUIT'].forEach((signal) =>
+      process.on(signal, () => process.exit())
+    );
     process.on('exit', () => this.destroy());
-    process.on('SIGINT', () => this.destroy());
   }
 
   async start(token: string) {
@@ -37,18 +39,18 @@ export class Bot extends Client {
     }
   }
 
-  private async onReady() {
-    log.msg(`Starting ${this.user!.username}`);
+  private async onReady(client: Client<true>) {
+    log.msg(`Starting ${client.user.username.toUpperCase()}`);
 
     await this.checkGuildCount();
-    await this.commandManager.update();
+    await this.commandManager.update(client.application.id);
 
-    log.msg(`${this.user!.username} successfully started.`);
+    log.msg(`Successfully started ${client.user.username.toUpperCase()}`);
   }
 
   private onGuildCreate(guild: Guild) {
     Bot.db.addGuild(guild.id);
-    this.commandManager.update(guild.id);
+    this.commandManager.update(guild.client.application.id, guild.id);
   }
 
   private onGuildDelete(guild: Guild) {
@@ -63,10 +65,8 @@ export class Bot extends Client {
     }
   }
 
-  async checkGuildCount() {
-    if (!isProduction) {
-      return;
-    }
+  private async checkGuildCount() {
+    if (!isProduction) return;
 
     const guilds = this.guilds.cache;
     const storedGuildCount = await Bot.db.getGuildCount();

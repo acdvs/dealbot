@@ -32,13 +32,9 @@ type Command = {
 };
 
 export class CommandManager {
-  private readonly bot: Bot;
-  private readonly commands: Collection<string, Command>;
+  private readonly commands: Collection<string, Command> = new Collection();
 
-  constructor(bot: Bot) {
-    this.bot = bot;
-    this.commands = new Collection();
-
+  constructor() {
     log.msg('Loading commands');
 
     for (const command of commands) {
@@ -47,7 +43,7 @@ export class CommandManager {
     }
   }
 
-  async update(guildId?: Snowflake) {
+  async update(appId: string, guildId?: Snowflake) {
     log.msg('Updating commands');
 
     const payload = this.commands.map((x) => x.options.toJSON());
@@ -55,19 +51,16 @@ export class CommandManager {
     if (isProduction) {
       if (guildId) {
         api.applicationCommands.bulkOverwriteGuildCommands(
-          this.bot.user!.id,
+          appId,
           guildId,
           payload
         );
       } else {
-        api.applicationCommands.bulkOverwriteGlobalCommands(
-          this.bot.user!.id,
-          payload
-        );
+        api.applicationCommands.bulkOverwriteGlobalCommands(appId, payload);
       }
     } else {
       api.applicationCommands.bulkOverwriteGuildCommands(
-        this.bot.user!.id,
+        appId,
         process.env.DISCORD_DEV_GUILD_ID!,
         payload
       );
