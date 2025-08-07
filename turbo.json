@@ -12,9 +12,7 @@
       "persistent": true
     },
     "lint": {},
-    "start": {
-      "dependsOn": ["build"]
-    },
+    "start": {},
     "@dealbot/api#update-types": {
       "outputs": ["src/types.ts"]
     }
