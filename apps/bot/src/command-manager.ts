@@ -1,5 +1,3 @@
-import { promises as fs } from 'node:fs';
-import path from 'node:path';
 import {
   AutocompleteInteraction,
   ChatInputCommandInteraction,
@@ -12,6 +10,7 @@ import { API } from '@discordjs/core';
 
 import { Bot } from './bot';
 import { CommandError } from './command-error';
+import commands from './commands';
 import { Embed } from './lib/embed';
 import { log } from './lib/utils';
 import { APIError } from '@dealbot/api/error';
@@ -19,7 +18,6 @@ import { APIError } from '@dealbot/api/error';
 const API_VERSION = '10';
 const COMMAND_TIMEOUT_SEC = 5;
 
-const commandsPath = path.resolve(__dirname, 'commands');
 const isProduction = process.env.NODE_ENV === 'production';
 
 const rest = new REST({ version: API_VERSION }).setToken(
@@ -40,36 +38,12 @@ export class CommandManager {
   constructor(bot: Bot) {
     this.bot = bot;
     this.commands = new Collection();
-  }
 
-  static async load(): Promise<Command[]> {
-    try {
-      const files = await fs.readdir(commandsPath);
-      const commandImports: Promise<Command>[] = files
-        .filter((x) => /\.[tj]s$/.test(x))
-        .map((x) => {
-          const filePath = './' + path.join('commands', x);
-          return import(filePath);
-        });
-
-      return await Promise.all(commandImports);
-    } catch (err) {
-      throw new CommandError('IMPORT_ERR', err);
-    }
-  }
-
-  async set() {
     log.msg('Loading commands');
 
-    const commands = await CommandManager.load();
-
     for (const command of commands) {
-      this.commands.set(command.options.name, command);
-      console.log('%s\x1b[32m%s\x1b[0m', '  | ', `/${command.options.name}`);
-
-      for (const subcommand of command.options.options) {
-        console.log('%s\x1b[32m%s\x1b[0m', '  |   ', subcommand.toJSON().name);
-      }
+      this.commands.set(command.options.name, command as Command);
+      log.msg(`  |  ${command.options.name}`);
     }
   }
 

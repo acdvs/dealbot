@@ -57,8 +57,6 @@ export class Bot extends Client {
     }
 
     await this.checkGuildCount();
-
-    await this.commandManager.set();
     await this.commandManager.update();
 
     log.msg(`${this.user.username} successfully started.`);
