@@ -19,7 +19,7 @@ export class Bot extends Client {
   constructor(options: ClientOptions) {
     super(options);
 
-    this.on(Events.ClientReady, this.onReady);
+    this.once(Events.ClientReady, this.onReady);
     this.on(Events.GuildCreate, this.onGuildCreate);
     this.on(Events.GuildDelete, this.onGuildDelete);
     this.on(Events.InteractionCreate, this.onInteractionCreate);
