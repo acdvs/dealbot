@@ -1,0 +1,29 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "env": [
+        "DISCORD_*",
+        "ITAD_API_KEY",
+        "SUPABASE_*"
+      ],
+      "outputs": [".next/**", "!.next/cache/**"]
+    },
+    "dev": {
+      "env": [
+        "DISCORD_*",
+        "ITAD_API_KEY",
+        "SUPABASE_*"
+      ]
+    },
+    "start": {
+      "dependsOn": ["build"],
+      "env": [
+        "DISCORD_*",
+        "ITAD_API_KEY",
+        "SUPABASE_*"
+      ]
+    }
+  }
+}

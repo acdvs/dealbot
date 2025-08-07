@@ -3,14 +3,12 @@
   "version": "1.0.0",
   "packageManager": "pnpm@10.13.1",
   "scripts": {
-    "build:bot": "turbo build --filter=@dealbot/bot",
-    "build:web": "turbo build --filter=@dealbot/web",
-    "dev": "turbo dev",
-    "dev:bot": "turbo dev --filter=@dealbot/bot",
-    "dev:web": "turbo dev --filter=@dealbot/web",
-    "lint": "turbo lint",
-    "start:bot": "turbo start --filter=@dealbot/bot",
-    "start:web": "turbo start --filter=@dealbot/web"
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "dev:bot": "pnpm run dev --filter=@dealbot/bot",
+    "dev:web": "pnpm run dev --filter=@dealbot/web",
+    "lint": "turbo run lint",
+    "start": "turbo run start"
   },
   "devDependencies": {
     "turbo": "^2.5.5"
