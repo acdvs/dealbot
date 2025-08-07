@@ -33,12 +33,11 @@
     "zod": "^4.0.5"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
+    "@dealbot/eslint-config": "workspace:*",
     "@tailwindcss/postcss": "^4.1.11",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "15.4.5",
     "postcss": "^8",
     "tailwindcss": "^4.1.11",
     "typescript": "^5"
