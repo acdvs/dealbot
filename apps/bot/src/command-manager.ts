@@ -39,19 +39,29 @@ export class CommandManager {
   async add(appId: string, guildId: Snowflake) {
     log.msg('Adding guild production commands');
 
-    const payload = this.commands.map((x) => x.options.toJSON());
-    await api.applicationCommands.bulkOverwriteGuildCommands(
-      appId,
-      guildId,
-      payload
-    );
+    try {
+      const payload = this.commands.map((x) => x.options.toJSON());
+      await api.applicationCommands.bulkOverwriteGuildCommands(
+        appId,
+        guildId,
+        payload
+      );
+    } catch (err) {
+      log.error(err);
+      process.exit(1);
+    }
   }
 
   async update(appId: string) {
     log.msg('Updating global commands');
 
-    const payload = this.commands.map((x) => x.options.toJSON());
-    await api.applicationCommands.bulkOverwriteGlobalCommands(appId, payload);
+    try {
+      const payload = this.commands.map((x) => x.options.toJSON());
+      await api.applicationCommands.bulkOverwriteGlobalCommands(appId, payload);
+    } catch (err) {
+      log.error(err);
+      process.exit(1);
+    }
   }
 
   async run(ix: ChatInputCommandInteraction) {
