@@ -14,9 +14,6 @@ export const options = new SlashCommandBuilder()
   .setDescription('Forgot the commands again?');
 
 export async function run(ix: ChatInputCommandInteraction) {
-  const serverCount = ix.client.guilds.cache.size;
-  const s = serverCount !== 1 ? 's' : '';
-
   const embed = new Embed({
     description: [
       'If you find the bot useful, consider helping with monthly server costs.',

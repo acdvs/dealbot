@@ -196,7 +196,7 @@ export class DealsEmbed extends Embed {
   }
 
   private setCustomFooter() {
-    let lines = [];
+    const lines: string[] = [];
     let configText = `Country: ${this.countryCode}`;
 
     if (this.ignoredSellers.length > 0) {

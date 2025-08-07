@@ -39,7 +39,7 @@ export class Bot extends Client {
     try {
       log.msg('Logging in');
       await this.login(token);
-    } catch (err) {
+    } catch {
       log.error('Unable to login');
     }
   }
