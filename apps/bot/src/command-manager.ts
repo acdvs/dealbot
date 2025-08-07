@@ -18,8 +18,6 @@ import { APIError } from '@dealbot/api/error';
 const API_VERSION = '10';
 const COMMAND_TIMEOUT_SEC = 5;
 
-const isProduction = process.env.NODE_ENV === 'production';
-
 const rest = new REST({ version: API_VERSION }).setToken(
   process.env.DISCORD_BOT_TOKEN!
 );
@@ -50,19 +48,10 @@ export class CommandManager {
   }
 
   async update(appId: string) {
-    const payload = this.commands.map((x) => x.options.toJSON());
+    log.msg('Updating global commands');
 
-    if (isProduction) {
-      log.msg('Updating global production commands');
-      await api.applicationCommands.bulkOverwriteGlobalCommands(appId, payload);
-    } else {
-      log.msg('Updating development commands');
-      await api.applicationCommands.bulkOverwriteGuildCommands(
-        appId,
-        process.env.DISCORD_DEV_GUILD_ID!,
-        payload
-      );
-    }
+    const payload = this.commands.map((x) => x.options.toJSON());
+    await api.applicationCommands.bulkOverwriteGlobalCommands(appId, payload);
   }
 
   async run(ix: ChatInputCommandInteraction) {
