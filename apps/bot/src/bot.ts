@@ -50,7 +50,7 @@ export class Bot extends Client {
 
   private onGuildCreate(guild: Guild) {
     Bot.db.addGuild(guild.id);
-    this.commandManager.update(guild.client.application.id, guild.id);
+    this.commandManager.add(guild.client.application.id, guild.id);
   }
 
   private onGuildDelete(guild: Guild) {

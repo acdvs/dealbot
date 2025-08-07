@@ -38,23 +38,26 @@ export class CommandManager {
     }
   }
 
-  async update(appId: string, guildId?: Snowflake) {
-    log.msg('Updating commands');
+  async add(appId: string, guildId: Snowflake) {
+    log.msg('Adding guild production commands');
 
+    const payload = this.commands.map((x) => x.options.toJSON());
+    await api.applicationCommands.bulkOverwriteGuildCommands(
+      appId,
+      guildId,
+      payload
+    );
+  }
+
+  async update(appId: string) {
     const payload = this.commands.map((x) => x.options.toJSON());
 
     if (isProduction) {
-      if (guildId) {
-        api.applicationCommands.bulkOverwriteGuildCommands(
-          appId,
-          guildId,
-          payload
-        );
-      } else {
-        api.applicationCommands.bulkOverwriteGlobalCommands(appId, payload);
-      }
+      log.msg('Updating global production commands');
+      await api.applicationCommands.bulkOverwriteGlobalCommands(appId, payload);
     } else {
-      api.applicationCommands.bulkOverwriteGuildCommands(
+      log.msg('Updating development commands');
+      await api.applicationCommands.bulkOverwriteGuildCommands(
         appId,
         process.env.DISCORD_DEV_GUILD_ID!,
         payload
