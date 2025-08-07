@@ -45,21 +45,12 @@ export class Bot extends Client {
   }
 
   private async onReady() {
-    if (!this.user) {
-      log.error('Client user does not exist');
-      process.exit(1);
-    }
-
-    log.msg(`Starting ${this.user.username}`);
-
-    if (!this.application?.owner) {
-      await this.application?.fetch();
-    }
+    log.msg(`Starting ${this.user!.username}`);
 
     await this.checkGuildCount();
     await this.commandManager.update();
 
-    log.msg(`${this.user.username} successfully started.`);
+    log.msg(`${this.user!.username} successfully started.`);
   }
 
   private onGuildCreate(guild: Guild) {

@@ -55,19 +55,19 @@ export class CommandManager {
     if (isProduction) {
       if (guildId) {
         api.applicationCommands.bulkOverwriteGuildCommands(
-          this.bot.application!.id,
+          this.bot.user!.id,
           guildId,
           payload
         );
       } else {
         api.applicationCommands.bulkOverwriteGlobalCommands(
-          this.bot.application!.id,
+          this.bot.user!.id,
           payload
         );
       }
     } else {
       api.applicationCommands.bulkOverwriteGuildCommands(
-        this.bot.application!.id,
+        this.bot.user!.id,
         process.env.DISCORD_DEV_GUILD_ID!,
         payload
       );
