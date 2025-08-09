@@ -1,22 +1,24 @@
 import {
   ActionRowBuilder,
+  ButtonStyle,
   ChatInputCommandInteraction,
   ComponentType,
+  ContainerBuilder,
+  MessageFlags,
   StringSelectMenuBuilder,
-  StringSelectMenuInteraction,
-  StringSelectMenuOptionBuilder,
 } from 'discord.js';
 
 import { DealsEmbed } from './deals-embed';
 import { Embed } from '../lib/embed';
-import { getSearchUrl, log } from '../lib/utils';
+import { getSearchUrl } from '../lib/utils';
 import { APIMethod } from '@dealbot/api/client';
 
 type SimilarGames = APIMethod<'search'>;
 
-export class ChoicesEmbed extends Embed {
+export class ChoicesEmbed {
   private static readonly SELECTION_TIME_SEC = 30;
 
+  private readonly input: string;
   private readonly games: SimilarGames;
   private countryCode: string | undefined;
 
@@ -26,55 +28,61 @@ export class ChoicesEmbed extends Embed {
     countryCode?: string,
     includeAll = false
   ) {
-    super();
+    this.input = ix.options.getString('game', true);
     this.games = games;
     this.countryCode = countryCode;
-
-    const game = ix.options.getString('game', true);
-
-    if (!ix.channel) {
-      ix.editReply(Embed.basic('Unexpected error. Please try again later.'));
-      return;
-    }
-
-    this.setTitle('Similar Results');
-    this.setDescription(
-      [
-        `An exact match was not found for "${game}".\n`,
-        `[Click here](${getSearchUrl(
-          game
-        )}) to search directly on IsThereAnyDeal`,
-        'or select a similar result below.',
-      ].join('\n')
-    );
 
     this.createCollector(ix, includeAll);
   }
 
   options() {
+    const container = this.getContainer();
     const selectMenu = this.getSelectMenu();
 
     return {
-      ...super.options(),
-      components: selectMenu ? [selectMenu] : [],
+      components: [container, selectMenu],
+      flags: [MessageFlags.IsComponentsV2],
     };
   }
 
-  private getSelectMenu() {
-    if (this.games) {
-      return new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
-        new StringSelectMenuBuilder()
-          .setCustomId(`deal_opts_select_${new Date().getTime()}`)
-          .setPlaceholder('Nothing selected')
-          .addOptions(
-            ...this.games.map((v, i) =>
-              new StringSelectMenuOptionBuilder()
-                .setLabel(v.title)
-                .setValue(i.toString())
-            )
+  private getContainer() {
+    const searchURL = getSearchUrl(this.input);
+
+    return new ContainerBuilder()
+      .setAccentColor(Embed.COLOR)
+      .addSectionComponents((section) =>
+        section
+          .addTextDisplayComponents((text) =>
+            text.setContent('### Similar Results')
           )
+          .setButtonAccessory((btn) =>
+            btn
+              .setLabel('IsThereAnyDeal')
+              .setURL(searchURL)
+              .setStyle(ButtonStyle.Link)
+          )
+      )
+      .addTextDisplayComponents((text) =>
+        text.setContent(
+          [
+            `No match found for **${this.input}**.  `,
+            'Select a similar result below or click the button\nto see results on IsThereAnyDeal.',
+          ].join('\n')
+        )
       );
-    }
+  }
+
+  private getSelectMenu() {
+    const options = this.games
+      ? this.games.map((v) => ({ label: v.title, value: v.id }))
+      : [];
+
+    return new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+      new StringSelectMenuBuilder()
+        .setCustomId(`deal_opts_select_${new Date().getTime()}`)
+        .setPlaceholder('Select a similar result')
+        .addOptions(options)
+    );
   }
 
   private createCollector(
@@ -90,32 +98,29 @@ export class ChoicesEmbed extends Embed {
       time: ChoicesEmbed.SELECTION_TIME_SEC * 1000,
     });
 
-    collector.on('collect', async (menuIX: StringSelectMenuInteraction) => {
-      if (!menuIX.values[0]) return;
+    collector.on('collect', async (menuIX) => {
+      const gameId = menuIX.values[0];
 
-      collector.stop();
+      if (!gameId) return;
 
-      const optionIdx = Number(menuIX.values[0]);
-      const game = this.games?.[optionIdx];
-
-      if (!game) return;
-
-      try {
-        const dealsEmbed = new DealsEmbed(
-          chatIX,
-          game.id,
-          this.countryCode,
-          includeAll
-        );
-        const messageOptions = await dealsEmbed.asyncOptions();
-        await chatIX.editReply(messageOptions);
-      } catch (err) {
-        log.error('[CHOICESEMBED]', err);
-      }
+      const dealsEmbed = new DealsEmbed(
+        chatIX,
+        gameId,
+        this.countryCode,
+        includeAll
+      );
+      const messageOptions = await dealsEmbed.asyncOptions();
+      await chatIX.followUp(messageOptions);
     });
 
-    collector.on('end', () => {
-      chatIX.deleteReply();
+    collector.on('end', (c, reason) => {
+      if (reason === 'time') {
+        chatIX.deleteReply();
+      } else {
+        chatIX.editReply({
+          components: [this.getContainer()],
+        });
+      }
     });
   }
 }

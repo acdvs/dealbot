@@ -1,6 +1,7 @@
 import {
   AutocompleteInteraction,
   ChatInputCommandInteraction,
+  MessageFlags,
   SlashCommandBuilder,
 } from 'discord.js';
 
@@ -67,8 +68,10 @@ function getListingsCommand({
           validCountryCode,
           dealsOnly
         );
-        const messageOptions = await embed.options();
-        ix.editReply(messageOptions);
+        ix.editReply({
+          ...embed.options(),
+          flags: [MessageFlags.IsComponentsV2],
+        });
       } else {
         ix.editReply(
           Embed.basic(
