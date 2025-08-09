@@ -68,17 +68,20 @@ export class Bot extends Client {
   private async checkGuildCount() {
     if (!isProduction) return;
 
-    const guilds = this.guilds.cache;
-    const storedGuildCount = await Bot.db.getGuildCount();
+    try {
+      const guilds = this.guilds.cache;
+      const storedGuildCount = await Bot.db.getGuildCount();
 
-    if (storedGuildCount && guilds.size > storedGuildCount) {
-      console.log('Guild count mismatch. Updating...');
+      if (storedGuildCount && guilds.size > storedGuildCount) {
+        log.warn('Guild count mismatch');
+        log.warn('Updating stored guilds');
 
-      const cachedGuildIds = guilds.map((guild: Guild) => ({
-        id: guild.id,
-      }));
+        const cachedGuildIds = guilds.map((guild) => guild.id);
 
-      Bot.db.updateGuildCount(cachedGuildIds);
+        Bot.db.updateGuilds(cachedGuildIds);
+      }
+    } catch (err) {
+      log.error('[GUILDS]', err);
     }
   }
 }

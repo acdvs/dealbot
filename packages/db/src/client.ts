@@ -17,8 +17,9 @@ export class Database {
     this.client = new SupabaseClient<TDatabase>(clientId, clientSecret);
   }
 
-  async updateGuildCount(guildIds: Record<'id', string>[]) {
-    const { count, error } = await this.client.from('guilds').insert(guildIds, {
+  async updateGuilds(guildIds: string[]) {
+    const guilds = guildIds.map((x) => ({ id: x }));
+    const { count, error } = await this.client.from('guilds').upsert(guilds, {
       count: 'estimated',
     });
 
