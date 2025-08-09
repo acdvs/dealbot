@@ -37,6 +37,10 @@ const command = new Command({
               .setLabel('Support Server')
               .setURL(SERVER_INVITE_LINK)
               .setStyle(ButtonStyle.Link)
+              .setEmoji({
+                name: 'DiscordLogo',
+                id: '1403667556610342962',
+              })
           )
       )
       .addSeparatorComponents(new SeparatorBuilder())
@@ -61,6 +65,10 @@ const command = new Command({
               .setLabel('Full Changelog')
               .setURL(GITHUB_RELEASES_LINK)
               .setStyle(ButtonStyle.Link)
+              .setEmoji({
+                name: 'GithubLogo',
+                id: '1403669223581945927',
+              })
           )
       )
       .addSeparatorComponents(new SeparatorBuilder())
