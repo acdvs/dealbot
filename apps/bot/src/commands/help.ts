@@ -7,6 +7,7 @@ import {
   SeparatorBuilder,
   SlashCommandBuilder,
 } from 'discord.js';
+import type { RestEndpointMethodTypes } from '@octokit/rest';
 
 import { Command } from '../command';
 import { Embed } from '../lib/embed';
@@ -15,8 +16,6 @@ const SERVER_INVITE_LINK = 'https://discord.gg/UBy2yVU7ac';
 const PATREON_DONATE_LINK = 'https://patreon.com/acdvs';
 
 const GITHUB_RELEASES_LINK = 'https://github.com/acdvs/dealbot/releases';
-const GITHUB_RELEASES_ENDPOINT =
-  'https://api.github.com/repos/acdvs/dealbot/releases/latest';
 const GITHUB_ISSUE_LINK = 'https://github.com/acdvs/dealbot/issues/new/choose';
 const GITHUB_DONATE_LINK = 'https://github.com/sponsors/acdvs';
 
@@ -26,7 +25,7 @@ const command = new Command({
     .setDescription('Forgot the commands again?'),
 
   run: async (ix: ChatInputCommandInteraction) => {
-    const changelog = await getChangelog();
+    const latestRelease = await getLatestRelease();
 
     const container = new ContainerBuilder()
       .setAccentColor(Embed.COLOR)
@@ -52,11 +51,10 @@ const command = new Command({
           ].join('\n')
         )
       )
-      .addSeparatorComponents(new SeparatorBuilder())
       .addSectionComponents((section) =>
         section
           .addTextDisplayComponents((text) =>
-            text.setContent(['## Latest update', changelog].join('\n'))
+            text.setContent('## Latest update')
           )
           .setButtonAccessory((btn) =>
             btn
@@ -64,7 +62,9 @@ const command = new Command({
               .setURL(GITHUB_RELEASES_LINK)
               .setStyle(ButtonStyle.Link)
           )
-      );
+      )
+      .addSeparatorComponents(new SeparatorBuilder())
+      .addTextDisplayComponents((text) => text.setContent(latestRelease));
 
     ix.reply({
       components: [container.toJSON()],
@@ -73,17 +73,28 @@ const command = new Command({
   },
 });
 
-async function getChangelog() {
+type LatestRelease =
+  RestEndpointMethodTypes['repos']['listReleases']['response']['data'][number];
+
+async function getLatestRelease() {
   try {
-    const { data } = await axios.get(GITHUB_RELEASES_ENDPOINT);
+    const { data } = await axios.get<LatestRelease>(
+      'https://api.github.com/repos/acdvs/dealbot/releases/latest'
+    );
     const { tag_name, published_at, body } = data;
 
-    const publishedAt = new Date(published_at).toLocaleString('en-GB', {
-      month: 'short',
-      year: 'numeric',
-      day: '2-digit',
-    });
-    const bodyFormatted = body.replace(/(\n|\r)+/g, '\n');
+    const publishedAt = new Date(published_at as string).toLocaleString(
+      'en-GB',
+      {
+        month: 'short',
+        year: 'numeric',
+        day: '2-digit',
+      }
+    );
+
+    const bodyFormatted = (body as string)
+      .replace(/[\n\r]{2,}/g, '\n')
+      .replace(/#+/g, '###');
 
     return [`${tag_name} on ${publishedAt}`, bodyFormatted].join('\n');
   } catch {
