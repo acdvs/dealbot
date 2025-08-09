@@ -31,7 +31,7 @@ const command = new Command({
       .setAccentColor(Embed.COLOR)
       .addSectionComponents((section) =>
         section
-          .addTextDisplayComponents((text) => text.setContent('# Dealbot'))
+          .addTextDisplayComponents((text) => text.setContent('## Dealbot'))
           .setButtonAccessory((btn) =>
             btn
               .setLabel('Support Server')
@@ -58,7 +58,7 @@ const command = new Command({
       .addSectionComponents((section) =>
         section
           .addTextDisplayComponents((text) =>
-            text.setContent('## Latest update')
+            text.setContent('### Latest update')
           )
           .setButtonAccessory((btn) =>
             btn
@@ -102,7 +102,7 @@ async function getLatestRelease() {
 
     const bodyFormatted = (body as string)
       .replace(/[\n\r]{2,}/g, '\n')
-      .replace(/#+/g, '###');
+      .replace(/#+\s*(.+)/g, '**$1**');
 
     return [`${tag_name} on ${publishedAt}`, bodyFormatted].join('\n');
   } catch {
