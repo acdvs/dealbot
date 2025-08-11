@@ -71,7 +71,6 @@ const command = new Command({
               })
           )
       )
-      .addSeparatorComponents(new SeparatorBuilder())
       .addTextDisplayComponents((text) => text.setContent(latestRelease));
 
     ix.reply({
