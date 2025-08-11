@@ -1,7 +1,10 @@
 import {
+  ButtonStyle,
   ChatInputCommandInteraction,
+  ContainerBuilder,
   MessageFlags,
   PermissionFlagsBits,
+  SeparatorBuilder,
   SlashCommandBuilder,
 } from 'discord.js';
 
@@ -21,11 +24,6 @@ const command = new Command({
   run: async (ix: ChatInputCommandInteraction) => {
     await ix.deferReply({ flags: MessageFlags.Ephemeral });
 
-    const embed = new Embed({
-      title: 'Settings',
-      description: `<${BASE_URL}/dashboard/${ix.guildId}>`,
-    });
-
     const [countryCode, ignoredSellers] = await Promise.all([
       Bot.db.getCountryCode(ix.guildId!),
       Bot.db.getIgnoredSellers(ix.guildId!),
@@ -36,21 +34,35 @@ const command = new Command({
     }
 
     const country = countries.find((x) => x.code === countryCode);
+    const ignoredList =
+      ignoredSellers.length > 0 ? ignoredSellers.join(', ') : 'None';
 
-    embed.addFields([
-      {
-        name: 'Ignored Sellers',
-        value: ignoredSellers.length > 0 ? ignoredSellers.join(', ') : 'None',
-        inline: true,
-      },
-      {
-        name: 'Country',
-        value: country!.name,
-        inline: true,
-      },
-    ]);
+    const container = new ContainerBuilder()
+      .setAccentColor(Embed.COLOR)
+      .addSectionComponents((section) =>
+        section
+          .addTextDisplayComponents((text) => text.setContent('## Settings'))
+          .setButtonAccessory((btn) =>
+            btn
+              .setLabel('Server Dashboard')
+              .setStyle(ButtonStyle.Link)
+              .setURL(`${BASE_URL}/dashboard/${ix.guildId}`)
+          )
+      )
+      .addSeparatorComponents(new SeparatorBuilder())
+      .addTextDisplayComponents((text) =>
+        text.setContent(
+          [
+            `**Country**\n${country?.name}`,
+            `**Ignored sellers**\n${ignoredList}`,
+          ].join('\n\n')
+        )
+      );
 
-    ix.editReply(embed.options());
+    ix.editReply({
+      components: [container],
+      flags: MessageFlags.IsComponentsV2,
+    });
   },
 });
 
