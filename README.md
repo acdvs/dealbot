@@ -2,9 +2,8 @@
   <img src="apps/web/public/avatar.png" width="75" />
   <br>
   Dealbot
+  <a href="https://discord.com/api/oauth2/authorize?client_id=722942824999288924&permissions=274877925376&scope=bot"><img src="resources/invite_to_server.png" /></a><a href="https://dealbot.acdvs.dev/dashboard"><img src="resources/dashboard.png" /></a>
 </h1>
-
-<a href="https://discord.com/api/oauth2/authorize?client_id=722942824999288924&permissions=274877925376&scope=bot">Invite link</a> | <a href="https://dealbot.acdvs.dev/dashboard">Dashboard</a>
 
 A Discord bot for looking up PC game deals via [isthereanydeal.com][itad-link].
 
