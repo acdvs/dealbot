@@ -25,7 +25,7 @@ export class Database {
 
     if (error) throw error;
 
-    console.log('Total guilds created:', count);
+    console.log('New guild total:', count);
   }
 
   async getGuildCount() {

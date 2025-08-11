@@ -32,7 +32,7 @@ export class CommandManager {
 
     for (const command of commands) {
       this.commands.set(command.options.name, command as CommandDefinition);
-      log.msg(`  |  ${command.options.name}`);
+      log.msg(` | ${command.options.name}`);
     }
   }
 

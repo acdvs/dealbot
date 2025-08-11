@@ -74,7 +74,7 @@ export class Bot extends Client {
 
       if (storedGuildCount && guilds.size > storedGuildCount) {
         log.warn('Guild count mismatch');
-        log.warn('Updating stored guilds');
+        log.msg('Updating stored guilds');
 
         const cachedGuildIds = guilds.map((guild) => guild.id);
 
