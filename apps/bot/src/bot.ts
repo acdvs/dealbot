@@ -1,4 +1,11 @@
-import { Client, ClientOptions, Events, Guild, Interaction } from 'discord.js';
+import {
+  ActivityType,
+  Client,
+  Events,
+  GatewayIntentBits,
+  Guild,
+  Interaction,
+} from 'discord.js';
 
 import { CommandManager } from './command-manager';
 import { log } from './lib/utils';
@@ -16,8 +23,18 @@ export class Bot extends Client {
     process.env.SUPABASE_SERVICE_KEY!
   );
 
-  constructor(options: ClientOptions) {
-    super(options);
+  constructor() {
+    super({
+      presence: {
+        activities: [
+          {
+            type: ActivityType.Watching,
+            name: `for /deals`,
+          },
+        ],
+      },
+      intents: [GatewayIntentBits.Guilds],
+    });
 
     this.once(Events.ClientReady, this.onReady);
     this.on(Events.GuildCreate, this.onGuildCreate);
