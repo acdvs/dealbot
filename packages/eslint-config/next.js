@@ -6,7 +6,7 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.config({
-    extends: ['next/core-web-vitals', 'next/typescript', 'prettier'],
+    extends: ['turbo', 'next/core-web-vitals', 'next/typescript', 'prettier'],
     rules: {
       // Temporary fix for next/typescript bugs
       '@typescript-eslint/no-empty-function': 'off',
