@@ -3,17 +3,19 @@
   "globalEnv": ["NODE_ENV"],
   "tasks": {
     "build": {
-      "dependsOn": ["check-types", "lint", "^build"],
+      "dependsOn": ["lint", "^build"],
       "outputs": ["dist/**"]
     },
     "check-types": {},
     "dev": {
       "cache": false,
-      "dependsOn": ["check-types"],
+      "dependsOn": ["check-types", "lint"],
       "persistent": true
     },
     "lint": {},
-    "start": {},
+    "start": {
+      "persistent": true
+    },
     "@dealbot/api#update-types": {
       "outputs": ["src/types.ts"]
     }

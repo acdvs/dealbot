@@ -2,14 +2,6 @@
   "$schema": "https://turbo.build/schema.json",
   "extends": ["//"],
   "tasks": {
-    "build": {
-      "env": [
-        "DISCORD_BOT_TOKEN",
-        "ITAD_API_KEY",
-        "NEXT_PUBLIC_BASE_URL",
-        "SUPABASE_*"
-      ]
-    },
     "dev": {
       "env": [
         "DISCORD_BOT_TOKEN",
