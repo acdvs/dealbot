@@ -8,7 +8,7 @@ import {
   toReadableNumber,
   truncateStringList,
 } from '../lib/utils';
-import { APIMethod } from '@dealbot/api/client';
+import { type APIMethodReturn } from '@dealbot/api/client';
 import { DEFAULT_COUNTRY_CODE } from '@dealbot/db/values';
 
 const FIELD_CHAR_LIMIT = 1024;
@@ -20,9 +20,9 @@ export class DealsEmbed extends Embed {
   private readonly gameId: string;
   private readonly dealsOnly: boolean;
 
-  private game: APIMethod<'getGameInfo'>;
-  private listings: APIMethod<'getGamePrices'> = [];
-  private historicalLow: APIMethod<'getHistoricalLow'>;
+  private game: APIMethodReturn<'getGameInfo'>;
+  private listings: APIMethodReturn<'getGamePrices'> = [];
+  private historicalLow: APIMethodReturn<'getHistoricalLow'>;
   private ignoredSellers: string[] = [];
   private countryCode: string | undefined;
 

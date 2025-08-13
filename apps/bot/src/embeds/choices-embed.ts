@@ -11,9 +11,9 @@ import {
 import { DealsEmbed } from './deals-embed';
 import { Embed } from '../lib/embed';
 import { getSearchUrl } from '../lib/utils';
-import { APIMethod } from '@dealbot/api/client';
+import { type APIMethodReturn } from '@dealbot/api/client';
 
-type SimilarGames = APIMethod<'search'>;
+type SimilarGames = APIMethodReturn<'search'>;
 
 export class ChoicesEmbed {
   private static readonly SELECTION_TIME_SEC = 30;

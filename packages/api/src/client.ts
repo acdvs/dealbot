@@ -5,12 +5,12 @@ import createClient from 'openapi-fetch';
 import middleware from './middleware';
 import type { paths } from './types';
 
-type APIMember = keyof InstanceType<typeof APIClient>;
-export type APIMethod<Fn extends APIMember> = Awaited<
+type APIMethod = keyof InstanceType<typeof APIClient>;
+export type APIMethodReturn<Fn extends APIMethod> = Awaited<
   ReturnType<APIClient[Fn]>
 >;
 
-export default class APIClient {
+export class APIClient {
   private static readonly BASE_URL = 'https://api.isthereanydeal.com';
 
   private readonly apiKey;
@@ -98,7 +98,7 @@ export default class APIClient {
   }
 
   // Get top waitlisted games
-  async getWaitlistChart(limit = 20) {
+  async getMostWaitlistedStat(limit = 20) {
     const { data } = await this.client.GET('/stats/most-waitlisted/v1', {
       params: {
         query: {
@@ -113,7 +113,7 @@ export default class APIClient {
   }
 
   // Get top collected games
-  async getCollectionChart(limit = 20) {
+  async getMostCollectedStat(limit = 20) {
     const { data } = await this.client.GET('/stats/most-collected/v1', {
       params: {
         query: {
@@ -128,7 +128,7 @@ export default class APIClient {
   }
 
   // Get most popular games
-  async getPopularityChart(limit = 20) {
+  async getMostPopularStat(limit = 20) {
     const { data } = await this.client.GET('/stats/most-popular/v1', {
       params: {
         query: {

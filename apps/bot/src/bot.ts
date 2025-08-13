@@ -9,7 +9,7 @@ import {
 
 import { CommandManager } from './command-manager';
 import { log } from './lib/utils';
-import APIClient from '@dealbot/api/client';
+import { APIClient } from '@dealbot/api/client';
 import { Database } from '@dealbot/db/client';
 
 const isProduction = process.env.NODE_ENV === 'production';
