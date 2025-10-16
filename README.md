@@ -4,7 +4,7 @@
   <a href="https://dealbot.acdvs.dev/invite"><img src="resources/invite_to_server.png" height="32" /></a> <a href="https://dealbot.acdvs.dev/dashboard"><img src="resources/dashboard.png" height="32" /></a>
 </h1>
 
-A Discord bot for looking up PC game deals via [isthereanydeal.com][itad-link].
+A Discord bot for looking up PC game deals via [isthereanydeal.com][itad].
 
 ## Features ✨
 
@@ -15,13 +15,12 @@ A Discord bot for looking up PC game deals via [isthereanydeal.com][itad-link].
 
 ## Support the project 🪙
 
-If you enjoy the bot, consider helping with monthly server costs by [sponsoring][sponsor-link] on GitHub or subscribing to the [Patreon][patreon-link]. Any amount helps!
+If you enjoy the bot, consider helping with monthly server costs by [sponsoring][sponsor] on GitHub or subscribing to the [Patreon][patreon]. Any amount helps!
 
 <div align="center">
   <img src="apps/web/public/example.png" height="350" />
 </div>
 
-[itad-link]: https://isthereanydeal.com
-[dashboard-link]: https://dealbot.acdvs.dev/dashboard
-[sponsor-link]: https://github.com/sponsors/acdvs
-[patreon-link]: https://patreon.com/acdvs
+[itad]: https://isthereanydeal.com
+[patreon]: https://patreon.com/acdvs
+[sponsor]: https://github.com/sponsors/acdvs
