@@ -4,6 +4,10 @@ import { Rubik } from 'next/font/google';
 import './globals.css';
 import Providers from '@/components/providers';
 
+const METADATA_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
+  ? new URL(process.env.NEXT_PUBLIC_BASE_URL)
+  : undefined;
+
 const rubik = Rubik({
   variable: '--font-rubik',
   display: 'swap',
@@ -12,7 +16,7 @@ const rubik = Rubik({
 
 export const metadata: Metadata = {
   description: 'A Discord bot for looking up PC game deals via IsThereAnyDeal.',
-  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL!),
+  metadataBase: METADATA_BASE_URL,
   title: {
     template: 'Dealbot | %s',
     default: 'Dealbot',
