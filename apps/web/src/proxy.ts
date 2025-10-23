@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { checkSessionId, getSession } from './actions/session';
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   await checkSessionId();
   const session = await getSession();
 
