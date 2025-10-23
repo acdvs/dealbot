@@ -20,7 +20,7 @@
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.50.5",
     "@tanstack/react-query": "^5.81.5",
-    "axios": "^1.10.0",
+    "axios": "^1.12.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "discord.js": "^14.21.0",
