@@ -15,9 +15,6 @@
     "lint": {},
     "start": {
       "persistent": true
-    },
-    "@dealbot/api#update-types": {
-      "outputs": ["src/types.ts"]
     }
   }
 }

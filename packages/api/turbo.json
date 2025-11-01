@@ -1,0 +1,9 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "update-types": {
+      "outputs": ["src/types.ts"]
+    }
+  }
+}
