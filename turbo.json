@@ -5,13 +5,18 @@
       "dependsOn": ["lint", "^build"],
       "outputs": ["dist/**"]
     },
-    "check-types": {},
+    "check-types": {
+      "dependsOn": ["parallel-with-deps"]
+    },
     "dev": {
       "cache": false,
       "dependsOn": ["check-types", "lint"],
       "persistent": true
     },
     "lint": {},
+    "parallel-with-deps": {
+      "dependsOn": ["^parallel-with-deps"]
+    },
     "start": {
       "persistent": true
     }
