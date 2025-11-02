@@ -1,12 +1,21 @@
-import { FlatCompat } from '@eslint/eslintrc';
+import { defineConfig, globalIgnores } from 'eslint/config';
+import prettierConfig from 'eslint-config-prettier/flat';
+import nextTSConfig from 'eslint-config-next/typescript';
+import turboConfig from 'eslint-config-turbo/flat';
+import nextPlugin from '@next/eslint-plugin-next';
 
-const compat = new FlatCompat({
-  baseDirectory: import.meta.dirname,
-});
-
-const eslintConfig = [
-  ...compat.config({
-    extends: ['turbo', 'next/core-web-vitals', 'next/typescript', 'prettier'],
+export default defineConfig([
+  {
+    plugins: {
+      next: nextPlugin,
+    },
+    settings: {
+      next: {
+        rootDir: 'apps/web/',
+      },
+    },
+  },
+  {
     rules: {
       // Temporary fix for next/typescript bugs
       '@typescript-eslint/no-empty-function': 'off',
@@ -14,7 +23,9 @@ const eslintConfig = [
       '@typescript-eslint/no-unused-expressions': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
     },
-  }),
-];
-
-export default eslintConfig;
+  },
+  turboConfig,
+  nextTSConfig,
+  prettierConfig,
+  globalIgnores(['.next/**', 'out/**', 'build/**', 'next-env.d.ts']),
+]);
