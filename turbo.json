@@ -3,13 +3,16 @@
   "tasks": {
     "build": {
       "dependsOn": ["lint", "check-types", "^build"],
+      "inputs": ["$TURBO_DEFAULT$", "!**/*.md"],
       "outputs": ["dist/**"]
     },
     "check-types": {
-      "dependsOn": ["parallel-with-deps"]
+      "dependsOn": ["parallel-with-deps"],
+      "inputs": ["$TURBO_DEFAULT$", "!**/*.md"]
     },
     "dev": {
       "cache": false,
+      "inputs": ["$TURBO_DEFAULT$", "!**/*.md"],
       "persistent": true
     },
     "lint": {},
@@ -17,6 +20,8 @@
       "dependsOn": ["^parallel-with-deps"]
     },
     "start": {
+      "inputs": ["$TURBO_DEFAULT$", "!**/*.md"],
+      "outputs": ["dist/**"],
       "persistent": true
     }
   }
