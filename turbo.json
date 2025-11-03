@@ -8,8 +8,7 @@
     },
     "check-types": {
       "dependsOn": ["parallel-with-deps"],
-      "inputs": ["$TURBO_DEFAULT$", "!**/*.md"],
-      "outputs": ["**/*.tsbuildinfo"]
+      "inputs": ["$TURBO_DEFAULT$", "!**/*.md"]
     },
     "dev": {
       "cache": false,
