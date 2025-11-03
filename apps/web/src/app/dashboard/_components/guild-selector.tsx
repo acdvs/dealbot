@@ -46,13 +46,7 @@ function GuildSelector() {
         <Link key={guild.id} href={`/dashboard/${guild.id}`}>
           <Guild className="group justify-between rounded-xl border-1 border-transparent hover:border-foreground/30 active:border-foreground/30 transition-colors">
             <div className="flex items-center gap-3 overflow-hidden">
-              <Image
-                src={`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.webp`}
-                height={45}
-                width={45}
-                alt="guild icon"
-                className="size-[45px] rounded-xl"
-              />
+              <GuildIcon {...guild} />
               <p className="text-center truncate" title={guild.name}>
                 {guild.name}
               </p>
@@ -84,6 +78,34 @@ function Guild({
     <div className={cx('p-2 flex items-center gap-4', className)}>
       {children}
     </div>
+  );
+}
+
+function GuildIcon({
+  icon,
+  id,
+  name,
+}: {
+  icon: string | null;
+  id: string;
+  name: string;
+}) {
+  if (!icon) {
+    return (
+      <div className="size-[45px] flex justify-center items-center text-2xl">
+        {name[0].toUpperCase()}
+      </div>
+    );
+  }
+
+  return (
+    <Image
+      src={`https://cdn.discordapp.com/icons/${id}/${icon}.webp`}
+      height={45}
+      width={45}
+      alt="guild icon"
+      className="size-[45px] rounded-xl"
+    />
   );
 }
 
