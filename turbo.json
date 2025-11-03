@@ -21,7 +21,6 @@
     },
     "start": {
       "inputs": ["$TURBO_DEFAULT$", "!**/*.md"],
-      "outputs": ["dist/**"],
       "persistent": true
     }
   }
