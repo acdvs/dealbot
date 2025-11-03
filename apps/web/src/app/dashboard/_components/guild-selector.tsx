@@ -43,7 +43,10 @@ function GuildSelector() {
   return (
     <Grid>
       {data.map((guild) => (
-        <Link key={guild.id} href={`/dashboard/${guild.id}`}>
+        <Link
+          key={guild.id}
+          href={guild.joined ? `/dashboard/${guild.id}` : '/invite'}
+        >
           <Guild className="group justify-between rounded-xl border-1 border-transparent hover:border-foreground/30 active:border-foreground/30 transition-colors">
             <div className="flex items-center gap-3 overflow-hidden">
               <GuildIcon {...guild} />
