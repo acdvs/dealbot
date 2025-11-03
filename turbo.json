@@ -1,19 +1,27 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalEnv": ["NODE_ENV"],
   "tasks": {
     "build": {
-      "dependsOn": ["lint", "^build"],
+      "dependsOn": ["lint", "check-types", "^build"],
+      "inputs": ["$TURBO_DEFAULT$", "!**/*.md"],
       "outputs": ["dist/**"]
     },
-    "check-types": {},
+    "check-types": {
+      "dependsOn": ["parallel-with-deps"],
+      "inputs": ["$TURBO_DEFAULT$", "!**/*.md"],
+      "outputs": ["**/*.tsbuildinfo"]
+    },
     "dev": {
       "cache": false,
-      "dependsOn": ["check-types", "lint"],
+      "inputs": ["$TURBO_DEFAULT$", "!**/*.md"],
       "persistent": true
     },
     "lint": {},
+    "parallel-with-deps": {
+      "dependsOn": ["^parallel-with-deps"]
+    },
     "start": {
+      "inputs": ["$TURBO_DEFAULT$", "!**/*.md"],
       "persistent": true
     }
   }
