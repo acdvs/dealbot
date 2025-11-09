@@ -7,6 +7,7 @@
         "DISCORD_BOT_TOKEN",
         "ITAD_API_KEY",
         "NEXT_PUBLIC_BASE_URL",
+        "NODE_ENV",
         "SUPABASE_*"
       ]
     },
@@ -15,6 +16,7 @@
         "DISCORD_BOT_TOKEN",
         "ITAD_API_KEY",
         "NEXT_PUBLIC_BASE_URL",
+        "NODE_ENV",
         "SUPABASE_*"
       ]
     }
