@@ -35,7 +35,7 @@ export class APIClient {
       },
     });
 
-    return data?.sort((a, b) => (a.title > b.title ? 1 : -1));
+    return data?.sort((a, b) => (a.title > b.title ? 1 : -1)) || [];
   }
 
   // Get basic game information
