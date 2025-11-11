@@ -21,7 +21,7 @@ export default async function GuildPage({
   const guilds = await getGuilds();
   const guild = guilds.find((x) => x.id === guildId);
 
-  if (!guild) {
+  if (!guild || !guild.joined) {
     redirect('/', RedirectType.replace);
   }
 

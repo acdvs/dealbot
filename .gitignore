@@ -10,4 +10,5 @@ node_modules/
 .turbo/
 dist/
 out/
+*.tsbuildinfo
 next-env.d.ts
