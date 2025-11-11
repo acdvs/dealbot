@@ -1,5 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalEnv": ["NODE_ENV"],
   "tasks": {
     "build": {
       "dependsOn": ["lint", "check-types"],
@@ -8,8 +9,7 @@
     },
     "check-types": {
       "dependsOn": ["parallel-with-deps"],
-      "inputs": ["$TURBO_DEFAULT$", "!**/*.md"],
-      "outputs": ["**/*.tsbuildinfo"]
+      "inputs": ["$TURBO_DEFAULT$", "!**/*.md"]
     },
     "dev": {
       "cache": false,

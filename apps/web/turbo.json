@@ -6,7 +6,8 @@
       "env": [
         "DISCORD_*",
         "ITAD_API_KEY",
-        "SUPABASE_*"
+        "SUPABASE_*",
+        "VERCEL*"
       ],
       "outputs": [".next/**", "!.next/dev/**", "!.next/cache/**"]
     },
@@ -19,12 +20,7 @@
       "outputs": [".next/dev/**"]
     },
     "start": {
-      "dependsOn": ["build"],
-      "env": [
-        "DISCORD_*",
-        "ITAD_API_KEY",
-        "SUPABASE_*"
-      ]
+      "dependsOn": ["build"]
     }
   }
 }
