@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { checkSessionId } from '@/actions/session';
+import { BASE_URL } from '@/lib/environment';
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL!;
 const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID!;
 
 export async function GET() {
