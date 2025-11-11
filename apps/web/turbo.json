@@ -20,12 +20,7 @@
       "outputs": [".next/dev/**"]
     },
     "start": {
-      "dependsOn": ["build"],
-      "env": [
-        "DISCORD_*",
-        "ITAD_API_KEY",
-        "SUPABASE_*"
-      ]
+      "dependsOn": ["build"]
     }
   }
 }
