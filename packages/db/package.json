@@ -9,8 +9,8 @@
   },
   "exports": {
     "./*": {
-      "types": "./src/*.ts",
-      "default": "./dist/*.js"
+      "default": "./src/*.ts",
+      "types": "./src/*.ts"
     }
   },
   "dependencies": {
