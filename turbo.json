@@ -21,6 +21,7 @@
       "dependsOn": ["^parallel-with-deps"]
     },
     "start": {
+      "dependsOn": ["build"],
       "inputs": ["$TURBO_DEFAULT$", "!**/*.md"],
       "persistent": true
     }
