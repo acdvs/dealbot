@@ -18,9 +18,6 @@
         "SUPABASE_*"
       ],
       "outputs": [".next/dev/**"]
-    },
-    "start": {
-      "dependsOn": ["build"]
     }
   }
 }
