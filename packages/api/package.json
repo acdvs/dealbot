@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "build": "tsc",
     "check-types": "tsc --noemit",
     "lint": "eslint .",
     "update-types": "openapi-typescript https://raw.githubusercontent.com/IsThereAnyDeal/API/master/dist/openapi.json -o ./src/types.ts"
