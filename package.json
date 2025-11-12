@@ -6,8 +6,8 @@
     "build": "turbo run build",
     "check-types": "turbo run check-types",
     "dev": "turbo run dev",
-    "dev:bot": "pnpm run dev --filter=@dealbot/bot",
-    "dev:web": "pnpm run dev --filter=@dealbot/web",
+    "dev:bot": "pnpm run dev --filter @dealbot/bot",
+    "dev:web": "pnpm run dev --filter @dealbot/web",
     "lint": "turbo run lint",
     "start": "turbo run start"
   },
