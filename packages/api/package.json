@@ -10,7 +10,7 @@
   },
   "exports": {
     "./*": {
-      "default": "./src/*.ts",
+      "default": "./dist/*.js",
       "types": "./src/*.ts"
     }
   },
