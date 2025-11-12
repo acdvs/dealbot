@@ -3,7 +3,7 @@
   "globalEnv": ["NODE_ENV"],
   "tasks": {
     "build": {
-      "dependsOn": ["lint", "check-types"],
+      "dependsOn": ["lint", "check-types", "^build"],
       "inputs": ["$TURBO_DEFAULT$", "!**/*.md"],
       "outputs": ["dist/**"]
     },
@@ -21,6 +21,7 @@
       "dependsOn": ["^parallel-with-deps"]
     },
     "start": {
+      "dependsOn": ["build"],
       "inputs": ["$TURBO_DEFAULT$", "!**/*.md"],
       "persistent": true
     }
