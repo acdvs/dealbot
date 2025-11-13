@@ -1,8 +1,8 @@
+import axios from 'axios';
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
-import axios from 'axios';
+import { BASE_URL } from '@/lib/environment';
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL!;
 const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID!;
 const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET!;
 
