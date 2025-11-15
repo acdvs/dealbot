@@ -11,7 +11,6 @@ const config: NextConfig = {
       },
     ],
   },
-  transpilePackages: ['@dealbot/api', '@dealbot/db'],
   turbopack: {
     root: path.join(__dirname, '../..'),
   },

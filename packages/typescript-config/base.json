@@ -7,7 +7,6 @@
     "module": "nodenext",
     "moduleDetection": "force",
     "moduleResolution": "nodenext",
-    "noEmitHelpers": true,
     "noEmitOnError": true,
     "noImplicitAny": true,
     "noUncheckedIndexedAccess": true,
