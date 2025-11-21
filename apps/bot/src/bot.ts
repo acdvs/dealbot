@@ -1,5 +1,4 @@
 import {
-  ActivityType,
   Client,
   Events,
   GatewayIntentBits,
@@ -24,17 +23,9 @@ export class Bot extends Client {
   );
 
   constructor() {
-    super({
-      presence: {
-        activities: [
-          {
-            type: ActivityType.Watching,
-            name: `for /deals`,
-          },
-        ],
-      },
-      intents: [GatewayIntentBits.Guilds],
-    });
+    super({ intents: [GatewayIntentBits.Guilds] });
+
+    this.user?.setActivity({ name: 'Looking for /deals' });
 
     this.once(Events.ClientReady, this.onReady);
     this.on(Events.GuildCreate, this.onGuildCreate);
