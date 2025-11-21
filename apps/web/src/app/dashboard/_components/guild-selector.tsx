@@ -54,15 +54,6 @@ function GuildSelector() {
                 {guild.name}
               </p>
             </div>
-            {guild.joined && (
-              <Image
-                src="/avatar.png"
-                height={20}
-                width={20}
-                alt="joined guild"
-                className="grayscale group-hover:grayscale-0 group-active:grayscale-0 transition-all"
-              />
-            )}
           </Guild>
         </Link>
       ))}

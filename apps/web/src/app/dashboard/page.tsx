@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 export default async function Dashboard() {
   return (
     <div>
-      <div className="pb-4 mb-3 border-b-1 border-foreground-accent">
+      <div className="pb-4 mb-3">
         <h1>Select a server</h1>
         <p className="text-foreground-accent">
           Only servers where you have the admin permission are shown.
