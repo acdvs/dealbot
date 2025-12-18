@@ -1,19 +1,18 @@
+import { countries } from '@dealbot/db/values';
 import {
   ButtonStyle,
-  ChatInputCommandInteraction,
+  type ChatInputCommandInteraction,
   ContainerBuilder,
   MessageFlags,
   PermissionFlagsBits,
   SeparatorBuilder,
   SlashCommandBuilder,
 } from 'discord.js';
-
 import { Bot } from '../bot';
 import { Command } from '../command';
 import { Embed } from '../lib/embed';
-import { countries } from '@dealbot/db/values';
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL!;
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL as string;
 
 const command = new Command({
   options: new SlashCommandBuilder()
@@ -25,8 +24,8 @@ const command = new Command({
     await ix.deferReply({ flags: MessageFlags.Ephemeral });
 
     const [countryCode, ignoredSellers] = await Promise.all([
-      Bot.db.getCountryCode(ix.guildId!),
-      Bot.db.getIgnoredSellers(ix.guildId!),
+      Bot.db.getCountryCode(ix.guildId as string),
+      Bot.db.getIgnoredSellers(ix.guildId as string),
     ]);
 
     if (!countryCode || !ignoredSellers) {
@@ -46,8 +45,8 @@ const command = new Command({
             btn
               .setLabel('Server Dashboard')
               .setStyle(ButtonStyle.Link)
-              .setURL(`${BASE_URL}/dashboard/${ix.guildId}`)
-          )
+              .setURL(`${BASE_URL}/dashboard/${ix.guildId}`),
+          ),
       )
       .addSeparatorComponents(new SeparatorBuilder())
       .addTextDisplayComponents((text) =>
@@ -55,8 +54,8 @@ const command = new Command({
           [
             `**Country**\n${country?.name}`,
             `**Ignored sellers**\n${ignoredList}`,
-          ].join('\n\n')
-        )
+          ].join('\n\n'),
+        ),
       );
 
     ix.editReply({

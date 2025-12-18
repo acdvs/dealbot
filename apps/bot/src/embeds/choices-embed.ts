@@ -1,17 +1,16 @@
+import type { APIMethodReturn } from '@dealbot/api/client';
 import {
   ActionRowBuilder,
   ButtonStyle,
-  ChatInputCommandInteraction,
+  type ChatInputCommandInteraction,
   ComponentType,
   ContainerBuilder,
   MessageFlags,
   StringSelectMenuBuilder,
 } from 'discord.js';
-
-import { DealsEmbed } from './deals-embed';
 import { Embed } from '../lib/embed';
 import { getSearchUrl } from '../lib/utils';
-import { type APIMethodReturn } from '@dealbot/api/client';
+import { DealsEmbed } from './deals-embed';
 
 type SimilarGames = APIMethodReturn<'search'>;
 
@@ -26,7 +25,7 @@ export class ChoicesEmbed {
     ix: ChatInputCommandInteraction,
     games: SimilarGames,
     countryCode?: string,
-    includeAll = false
+    includeAll = false,
   ) {
     this.input = ix.options.getString('game', true);
     this.games = games;
@@ -53,22 +52,22 @@ export class ChoicesEmbed {
       .addSectionComponents((section) =>
         section
           .addTextDisplayComponents((text) =>
-            text.setContent('### Similar Results')
+            text.setContent('### Similar Results'),
           )
           .setButtonAccessory((btn) =>
             btn
               .setLabel('IsThereAnyDeal')
               .setURL(searchURL)
-              .setStyle(ButtonStyle.Link)
-          )
+              .setStyle(ButtonStyle.Link),
+          ),
       )
       .addTextDisplayComponents((text) =>
         text.setContent(
           [
             `No match found for **${this.input}**.  `,
             'Select a similar result below or click the button\nto see results on IsThereAnyDeal.',
-          ].join('\n')
-        )
+          ].join('\n'),
+        ),
       );
   }
 
@@ -79,15 +78,15 @@ export class ChoicesEmbed {
 
     return new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
       new StringSelectMenuBuilder()
-        .setCustomId(`deal_opts_select_${new Date().getTime()}`)
+        .setCustomId(`deal_opts_select_${Date.now()}`)
         .setPlaceholder('Select a similar result')
-        .addOptions(options)
+        .addOptions(options),
     );
   }
 
   private createCollector(
     chatIX: ChatInputCommandInteraction,
-    includeAll: boolean
+    includeAll: boolean,
   ) {
     if (!chatIX.channel) return;
 
@@ -107,13 +106,13 @@ export class ChoicesEmbed {
         chatIX,
         gameId,
         this.countryCode,
-        includeAll
+        includeAll,
       );
       const messageOptions = await dealsEmbed.asyncOptions();
       await chatIX.followUp(messageOptions);
     });
 
-    collector.on('end', (c, reason) => {
+    collector.on('end', (_, reason) => {
       if (reason === 'time') {
         chatIX.deleteReply();
       } else {

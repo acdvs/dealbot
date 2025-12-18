@@ -1,4 +1,4 @@
-import colors, { Color } from 'colors';
+import colors, { type Color } from 'colors';
 
 export function getSteamReviewText(score: number, count: number) {
   if (score > 95 && count > 500) return 'Overwhelmingly Positive';
@@ -27,7 +27,7 @@ export function toTitleCase(str: string) {
 export function toCurrency(
   amount: number | string,
   locale: Intl.LocalesArgument,
-  currency: string
+  currency: string,
 ) {
   const val = amount.toLocaleString(locale, {
     style: 'currency',
@@ -44,7 +44,7 @@ export function truncateStringList(
   joinChars: string,
   charLimit: number,
   charTotalStart: number,
-  getOverflowText: (x: number) => string
+  getOverflowText: (x: number) => string,
 ) {
   let finalItemCount = list.length;
   let charTotal = charTotalStart;

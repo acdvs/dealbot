@@ -1,8 +1,8 @@
 'use server';
 
+import axios, { type AxiosError, type AxiosRequestConfig } from 'axios';
 import { cookies } from 'next/headers';
-import { redirect, RedirectType } from 'next/navigation';
-import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import { RedirectType, redirect } from 'next/navigation';
 
 import { getSession } from '../session';
 
@@ -14,8 +14,8 @@ type CustomError = {
   config: CustomRequestConfig;
 } & AxiosError;
 
-const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID!;
-const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET!;
+const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID as string;
+const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET as string;
 
 export const api = axios.create({
   baseURL: 'https://discord.com/api/v10',
@@ -68,7 +68,7 @@ async function handleUnauthorized(error: CustomError) {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-      }
+      },
     );
 
     const cookieStore = await cookies();
@@ -90,7 +90,7 @@ async function handleTooManyRequests(error: CustomError) {
 
   if (retryAfter) {
     return await new Promise((res) =>
-      setTimeout(() => res(api(error.config)), retryAfter)
+      setTimeout(() => res(api(error.config)), retryAfter),
     );
   }
 

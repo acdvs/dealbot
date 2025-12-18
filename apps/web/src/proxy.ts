@@ -1,4 +1,4 @@
-import { NextResponse, type NextRequest } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { checkSessionId, getSession } from './actions/session';
 
 export async function proxy(req: NextRequest) {

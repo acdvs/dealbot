@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import { RiArrowRightSLine, RiMoreFill } from '@remixicon/react';
+import Link from 'next/link';
 
 import { cx } from '@/lib/utils';
 
@@ -13,7 +13,7 @@ function BreadcrumbList({ className, ...props }: React.ComponentProps<'ol'>) {
       data-slot="breadcrumb-list"
       className={cx(
         'text-muted-foreground flex flex-wrap items-center gap-1.5 text-sm break-words sm:gap-2.5',
-        className
+        className,
       )}
       {...props}
     />
@@ -41,18 +41,17 @@ function BreadcrumbLink({
       data-slot="breadcrumb-link"
       className={cx(
         'text-zinc-500 hover:text-foreground transition-colors',
-        className
+        className,
       )}
       {...props}
     />
   );
 }
 
-function BreadcrumbPage({ className, ...props }: React.ComponentProps<'span'>) {
+function BreadcrumbPage({ className, ...props }: React.ComponentProps<'a'>) {
   return (
-    <span
+    <a
       data-slot="breadcrumb-page"
-      role="link"
       aria-disabled="true"
       aria-current="page"
       className={cx('text-foreground font-normal', className)}

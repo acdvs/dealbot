@@ -1,4 +1,7 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
+import {
+  type ChatInputCommandInteraction,
+  SlashCommandBuilder,
+} from 'discord.js';
 
 import { Bot } from '../bot';
 import { Command } from '../command';
@@ -33,9 +36,9 @@ const command = new Command({
         .setChoices<{ name: StatOption; value: StatOption }>(
           { name: 'waitlisted', value: 'waitlisted' },
           { name: 'collected', value: 'collected' },
-          { name: 'popular', value: 'popular' }
+          { name: 'popular', value: 'popular' },
         )
-        .setRequired(true)
+        .setRequired(true),
     ) as SlashCommandBuilder,
 
   run: async (ix: ChatInputCommandInteraction) => {
@@ -72,7 +75,7 @@ const command = new Command({
         [
           'Popularity is computed as normalized count in waitlists',
           'plus normalized count in collections.',
-        ].join('\n')
+        ].join('\n'),
       );
     }
 

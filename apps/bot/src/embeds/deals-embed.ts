@@ -1,5 +1,6 @@
-import { ChatInputCommandInteraction } from 'discord.js';
-
+import type { APIMethodReturn } from '@dealbot/api/client';
+import { DEFAULT_COUNTRY_CODE } from '@dealbot/db/values';
+import type { ChatInputCommandInteraction } from 'discord.js';
 import { Bot } from '../bot';
 import { Embed } from '../lib/embed';
 import {
@@ -8,8 +9,6 @@ import {
   toReadableNumber,
   truncateStringList,
 } from '../lib/utils';
-import { type APIMethodReturn } from '@dealbot/api/client';
-import { DEFAULT_COUNTRY_CODE } from '@dealbot/db/values';
 
 const FIELD_CHAR_LIMIT = 1024;
 const ROW_JOIN_CHARS = '\n';
@@ -33,7 +32,7 @@ export class DealsEmbed extends Embed {
     ix: ChatInputCommandInteraction,
     gameId: string,
     countryCode: string | undefined,
-    dealsOnly = true
+    dealsOnly = true,
   ) {
     super();
 
@@ -53,7 +52,7 @@ export class DealsEmbed extends Embed {
   }
 
   private async loadData() {
-    this.countryCode ||= await Bot.db.getCountryCode(this.ix.guildId!);
+    this.countryCode ||= await Bot.db.getCountryCode(this.ix.guildId as string);
     this.countryCode ??= DEFAULT_COUNTRY_CODE;
 
     const [game, listings, historicalLow] = await Promise.all([
@@ -63,7 +62,7 @@ export class DealsEmbed extends Embed {
     ]);
 
     const deals = listings.filter(
-      (p) => p.cut > 0 || p.price.amount < p.regular.amount
+      (p) => p.cut > 0 || p.price.amount < p.regular.amount,
     );
 
     this.game = game;
@@ -72,11 +71,13 @@ export class DealsEmbed extends Embed {
     this.historicalLow = historicalLow;
 
     if (this.listings.length > 0) {
-      this.ignoredSellers = await Bot.db.getIgnoredSellers(this.ix.guildId!);
+      this.ignoredSellers = await Bot.db.getIgnoredSellers(
+        this.ix.guildId as string,
+      );
 
       if (this.ignoredSellers.length > 0) {
         this.listings = this.listings.filter(
-          (x) => !this.ignoredSellers.includes(x.shop.name)
+          (x) => !this.ignoredSellers.includes(x.shop.name),
         );
       }
     }
@@ -126,7 +127,7 @@ export class DealsEmbed extends Embed {
         const price = toCurrency(
           x.price.amount,
           this.countryCode,
-          x.price.currency
+          x.price.currency,
         );
         return `${price} (-${x.cut}%)`;
       });
@@ -139,11 +140,11 @@ export class DealsEmbed extends Embed {
     }
 
     const regPrices = this.listings.map((x) =>
-      toCurrency(x.regular.amount, this.countryCode, x.regular.currency)
+      toCurrency(x.regular.amount, this.countryCode, x.regular.currency),
     );
     const longestPrice = regPrices.reduce(
       (t, x) => (x.length > t.length ? x : t),
-      ''
+      '',
     );
 
     if (!this.hasDeals || longestPrice.length <= 7) {
@@ -165,7 +166,7 @@ export class DealsEmbed extends Embed {
     const formattedPrice = toCurrency(
       price.amount,
       this.countryCode,
-      price.currency
+      price.currency,
     );
 
     this.addFields({
@@ -173,8 +174,8 @@ export class DealsEmbed extends Embed {
       value: isFree
         ? `FREE from ${shop.name}`
         : isCut
-        ? `${formattedPrice} (-${cut}%) from ${shop.name}`
-        : `${formattedPrice} from ${shop.name}`,
+          ? `${formattedPrice} (-${cut}%) from ${shop.name}`
+          : `${formattedPrice} from ${shop.name}`,
     });
   }
 
@@ -207,7 +208,7 @@ export class DealsEmbed extends Embed {
 
     if (this.hasDupedSellers) {
       lines.push(
-        'Some sellers shown have multiple DRM listings. View on IsThereAnyDeal to see the full list.'
+        'Some sellers shown have multiple DRM listings. View on IsThereAnyDeal to see the full list.',
       );
     }
 
@@ -216,7 +217,7 @@ export class DealsEmbed extends Embed {
 
   private truncateSellers() {
     const dedupedSellers = this.listings.filter(
-      (x, i, a) => a.find((y) => y.shop.name === x.shop.name)?.url === x.url
+      (x, _, a) => a.find((y) => y.shop.name === x.shop.name)?.url === x.url,
     );
 
     if (dedupedSellers.length < this.listings.length) {
@@ -233,7 +234,7 @@ export class DealsEmbed extends Embed {
         INLINE_JOIN_CHARS,
         FIELD_CHAR_LIMIT,
         this.getListingOverflowText(100).length,
-        this.getListingOverflowText
+        this.getListingOverflowText,
       );
     }
 

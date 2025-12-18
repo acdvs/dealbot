@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { cookies } from 'next/headers';
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { BASE_URL } from '@/lib/environment';
 
-const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID!;
-const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET!;
+const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID as string;
+const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET as string;
 
 export async function GET(req: NextRequest) {
   const code = req.nextUrl.searchParams.get('code');
@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-      }
+      },
     );
 
     cookieStore.set(`session`, JSON.stringify(res.data), {

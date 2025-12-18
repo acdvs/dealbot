@@ -1,3 +1,10 @@
+type JSONSerializable =
+  | string
+  | number
+  | boolean
+  | null
+  | undefined
+  | { [k: string]: JSONSerializable };
 type ErrorCode = 'RUNTIME_ERR' | 'TIMED_OUT' | 'NO_DATA' | 'IMPORT_ERR';
 
 const errorMessages: Record<ErrorCode, string> = {
@@ -10,7 +17,7 @@ const errorMessages: Record<ErrorCode, string> = {
 export class CommandError extends Error {
   readonly code: ErrorCode;
 
-  constructor(code: ErrorCode, details?: any) {
+  constructor(code: ErrorCode, details?: JSONSerializable) {
     super();
 
     this.code = code;

@@ -9,9 +9,9 @@
       "tailwind": "recommended"
     }
   },
-	"css": {
-		"parser": {
-			"tailwindDirectives": true
-		}
-	}
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
+  }
 }

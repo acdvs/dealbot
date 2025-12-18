@@ -1,18 +1,17 @@
 'use client';
 
-import { Controller, FormProvider } from 'react-hook-form';
 import { Field } from '@base-ui-components/react/field';
 import { Form } from '@base-ui-components/react/form';
+import { countries } from '@dealbot/db/values';
 import { RiCheckLine } from '@remixicon/react';
-
-import IgnoredSellers from './ignored-sellers';
-import useFormState, { schema, Schema } from '../_hooks/use-form-state';
+import { Controller, FormProvider } from 'react-hook-form';
 import { saveGuildSettings } from '@/actions/guild';
 import LoadingDots from '@/components/loading-dots';
 import LoadingState from '@/components/state/loading';
 import Button from '@/components/ui/button';
 import Select from '@/components/ui/select';
-import { countries } from '@dealbot/db/values';
+import useFormState, { type Schema, schema } from '../_hooks/use-form-state';
+import IgnoredSellers from './ignored-sellers';
 
 const countryOptions = countries
   .sort((a, b) => (a.name < b.name ? -1 : 1))

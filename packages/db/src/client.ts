@@ -1,7 +1,6 @@
-import { SupabaseClient } from '@supabase/supabase-js';
-
-import type { Database as TDatabase } from './types';
 import type { APIError } from '@dealbot/api/error';
+import { SupabaseClient } from '@supabase/supabase-js';
+import type { Database as TDatabase } from './types';
 
 type DatabaseMember = keyof InstanceType<typeof Database>;
 export type DatabaseMethod<Fn extends DatabaseMember> = Awaited<

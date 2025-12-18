@@ -1,17 +1,16 @@
+import { countries, DEFAULT_COUNTRY_CODE } from '@dealbot/db/values';
 import {
-  ApplicationCommandOptionChoiceData,
-  AutocompleteInteraction,
-  ChatInputCommandInteraction,
+  type ApplicationCommandOptionChoiceData,
+  type AutocompleteInteraction,
+  type ChatInputCommandInteraction,
   MessageFlags,
   SlashCommandBuilder,
 } from 'discord.js';
-
 import { Bot } from '../../bot';
 import { Command } from '../../command';
 import { ChoicesEmbed } from '../../embeds/choices-embed';
 import { DealsEmbed } from '../../embeds/deals-embed';
 import { Embed } from '../../lib/embed';
-import { DEFAULT_COUNTRY_CODE, countries } from '@dealbot/db/values';
 
 const AC_ID_PREFIX = 'AUTOCOMPLETE';
 
@@ -34,13 +33,13 @@ function getListingsCommand({
           .setDescription('Game name. Misspellings may return nothing.')
           .setAutocomplete(true)
           .setMinLength(2)
-          .setRequired(true)
+          .setRequired(true),
       )
       .addStringOption((option) =>
         option
           .setName('country')
           .setDescription("Overrides the server's country setting.")
-          .setAutocomplete(true)
+          .setAutocomplete(true),
       ) as SlashCommandBuilder,
 
     async run(ix: ChatInputCommandInteraction) {
@@ -75,8 +74,8 @@ function getListingsCommand({
       } else {
         ix.editReply(
           Embed.basic(
-            `No results were found for "${gameInput}". Did you spell it correctly?`
-          )
+            `No results were found for "${gameInput}". Did you spell it correctly?`,
+          ),
         );
       }
     },

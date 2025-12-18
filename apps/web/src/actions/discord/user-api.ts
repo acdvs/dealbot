@@ -1,14 +1,13 @@
 'use server';
 
-import {
+import type {
   RESTGetAPICurrentUserGuildsResult,
   RESTGetAPICurrentUserResult,
   RESTGetAPIGuildResult,
 } from 'discord.js';
-
-import { api } from './user-client';
 import { db } from '@/lib/database';
 import { userIsGuildAdmin } from '@/lib/utils';
+import { api } from './user-client';
 
 export async function getUser() {
   const res = await api.get<RESTGetAPICurrentUserResult>('/users/@me');
@@ -17,9 +16,8 @@ export async function getUser() {
 
 export async function getGuilds() {
   try {
-    const res = await api.get<RESTGetAPICurrentUserGuildsResult>(
-      '/users/@me/guilds'
-    );
+    const res =
+      await api.get<RESTGetAPICurrentUserGuildsResult>('/users/@me/guilds');
 
     const adminGuilds = res.data.filter((x) => userIsGuildAdmin(x.permissions));
     const guildIds = adminGuilds.map((x) => x.id);

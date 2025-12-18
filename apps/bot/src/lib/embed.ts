@@ -1,4 +1,4 @@
-import { APIEmbed, EmbedBuilder } from 'discord.js';
+import { type APIEmbed, EmbedBuilder } from 'discord.js';
 
 export class Embed extends EmbedBuilder {
   static readonly COLOR = 0xfbab0e;

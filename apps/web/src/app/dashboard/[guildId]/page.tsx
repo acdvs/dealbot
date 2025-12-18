@@ -1,6 +1,4 @@
-import { redirect, RedirectType } from 'next/navigation';
-
-import SettingsForm from './_components/guild-settings-form';
+import { RedirectType, redirect } from 'next/navigation';
 import { getGuilds } from '@/actions/discord/user-api';
 import {
   Breadcrumb,
@@ -10,6 +8,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
+import SettingsForm from './_components/guild-settings-form';
 
 export default async function GuildPage({
   params,

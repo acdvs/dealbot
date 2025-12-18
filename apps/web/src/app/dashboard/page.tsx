@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import GuildSelector from './_components/guild-selector';
 
 export const metadata: Metadata = {

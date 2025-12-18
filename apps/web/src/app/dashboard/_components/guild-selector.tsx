@@ -1,14 +1,13 @@
 'use client';
 
-import Link from 'next/link';
-import Image from 'next/image';
 import { useQuery } from '@tanstack/react-query';
-
-import Grid from './grid';
+import Image from 'next/image';
+import Link from 'next/link';
 import { getGuilds } from '@/actions/discord/user-api';
-import Skeleton from '@/components/ui/skeleton';
 import ErrorState from '@/components/state/error';
+import Skeleton from '@/components/ui/skeleton';
 import { cx } from '@/lib/utils';
+import Grid from './grid';
 
 function GuildSelector() {
   const { data, isPending, isError } = useQuery({
@@ -22,6 +21,7 @@ function GuildSelector() {
         {Array(6)
           .fill(0)
           .map((_, i) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: Items not unique
             <Guild key={i}>
               <Skeleton className="size-[45px] rounded-2xl" />
               <Skeleton className="w-24 h-3 rounded-full" />

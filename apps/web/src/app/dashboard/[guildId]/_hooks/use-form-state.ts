@@ -1,13 +1,12 @@
 'use client';
 
+import { countries, DEFAULT_COUNTRY_CODE } from '@dealbot/db/values';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-
 import { getGuildSettings } from '@/actions/guild';
 import { getSellers } from '@/actions/itad-api';
-import { countries, DEFAULT_COUNTRY_CODE } from '@dealbot/db/values';
 
 const countryCodes = countries.map((x) => x.code);
 
@@ -23,7 +22,7 @@ type GuildSettings = Awaited<ReturnType<typeof getGuildSettings>>;
 function useFormState(guildId: string) {
   const [sellers, setSellers] = useState<string[] | null>(null);
   const [guildSettings, setGuildSettings] = useState<GuildSettings | null>(
-    null
+    null,
   );
   const [successVisible, setSuccessVisible] = useState(false);
 

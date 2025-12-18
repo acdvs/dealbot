@@ -1,9 +1,9 @@
 'use client';
 
-import Link from 'next/link';
-import Image from 'next/image';
 import { Menu } from '@base-ui-components/react/menu';
 import { useQuery } from '@tanstack/react-query';
+import Image from 'next/image';
+import Link from 'next/link';
 
 import { getUser } from '@/actions/discord/user-api';
 import Skeleton from './ui/skeleton';

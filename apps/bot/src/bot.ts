@@ -1,25 +1,24 @@
+import { APIClient } from '@dealbot/api/client';
+import { Database } from '@dealbot/db/client';
 import {
   Client,
   Events,
   GatewayIntentBits,
-  Guild,
-  Interaction,
+  type Guild,
+  type Interaction,
 } from 'discord.js';
-
 import { CommandManager } from './command-manager';
 import { log } from './lib/utils';
-import { APIClient } from '@dealbot/api/client';
-import { Database } from '@dealbot/db/client';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
 export class Bot extends Client {
   private readonly commandManager = new CommandManager();
 
-  static readonly api = new APIClient(process.env.ITAD_API_KEY!);
+  static readonly api = new APIClient(process.env.ITAD_API_KEY as string);
   static readonly db = new Database(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_KEY!
+    process.env.SUPABASE_URL as string,
+    process.env.SUPABASE_SERVICE_KEY as string,
   );
 
   constructor() {
@@ -32,9 +31,9 @@ export class Bot extends Client {
     this.on(Events.GuildDelete, this.onGuildDelete);
     this.on(Events.InteractionCreate, this.onInteractionCreate);
 
-    ['SIGINT', 'SIGTERM', 'SIGQUIT'].forEach((signal) =>
-      process.on(signal, () => process.exit())
-    );
+    ['SIGINT', 'SIGTERM', 'SIGQUIT'].forEach((signal) => {
+      process.on(signal, () => process.exit());
+    });
     process.on('exit', () => this.destroy());
   }
 

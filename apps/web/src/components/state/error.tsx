@@ -1,5 +1,5 @@
-import { cx } from '@/lib/utils';
 import { RiErrorWarningLine } from '@remixicon/react';
+import { cx } from '@/lib/utils';
 
 function ErrorState({
   className,
@@ -12,11 +12,11 @@ function ErrorState({
     <div
       className={cx(
         'flex justify-center items-center gap-2 text-destructive',
-        className
+        className,
       )}
     >
       <RiErrorWarningLine />
-      {label && <p>{label}</p>}
+      {label && label}
     </div>
   );
 }

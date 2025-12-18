@@ -13,7 +13,7 @@ async function Header({
     <header
       className={cx(
         'flex justify-between items-center gap-5 pt-5 mb-5 sm:mb-10',
-        className
+        className,
       )}
     >
       <div className="flex gap-2">

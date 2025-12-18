@@ -51,6 +51,7 @@ export default function IgnoredSellers({ items }: { items: string[] }) {
               )}
             />
             <button
+              type="button"
               onClick={() => remove(idx)}
               className="p-1 text-zinc-500 group-hover:text-foreground cursor-pointer"
             >

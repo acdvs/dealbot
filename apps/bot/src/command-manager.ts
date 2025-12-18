@@ -1,25 +1,24 @@
+import { APIError } from '@dealbot/api/error';
+import { API } from '@discordjs/core';
 import {
-  AutocompleteInteraction,
-  ChatInputCommandInteraction,
+  type AutocompleteInteraction,
+  type ChatInputCommandInteraction,
   Collection,
   REST,
-  Snowflake,
+  type Snowflake,
 } from 'discord.js';
-import { API } from '@discordjs/core';
-
 import { Bot } from './bot';
+import type { CommandDefinition } from './command';
 import { CommandError } from './command-error';
-import { CommandDefinition } from './command';
 import commands from './commands';
 import { Embed } from './lib/embed';
 import { log } from './lib/utils';
-import { APIError } from '@dealbot/api/error';
 
 const API_VERSION = '10';
 const COMMAND_TIMEOUT_SEC = 5;
 
 const rest = new REST({ version: API_VERSION }).setToken(
-  process.env.DISCORD_BOT_TOKEN!
+  process.env.DISCORD_BOT_TOKEN as string,
 );
 const api = new API(rest);
 
@@ -44,7 +43,7 @@ export class CommandManager {
       await api.applicationCommands.bulkOverwriteGuildCommands(
         appId,
         guildId,
-        payload
+        payload,
       );
     } catch (err) {
       log.error(err);
@@ -66,7 +65,7 @@ export class CommandManager {
 
   async run(ix: ChatInputCommandInteraction) {
     const command = this.commands.get(ix.commandName);
-    let timeout;
+    let timeout: NodeJS.Timeout | null = null;
 
     if (!command) return;
 
@@ -79,7 +78,9 @@ export class CommandManager {
     } catch (err) {
       this.handleError(ix, err);
     } finally {
-      clearTimeout(timeout);
+      if (timeout) {
+        clearTimeout(timeout);
+      }
     }
   }
 
@@ -102,7 +103,7 @@ export class CommandManager {
 
     if (error instanceof APIError) {
       embed.setDescription(
-        'Unable to get info from IsThereAnyDeal. Please try again later.'
+        'Unable to get info from IsThereAnyDeal. Please try again later.',
       );
       ix.editReply(embed.options());
 
@@ -118,7 +119,7 @@ export class CommandManager {
       log.warn(
         '[COMMAND] Command timed out after %d seconds:',
         COMMAND_TIMEOUT_SEC,
-        error.cause
+        error.cause,
       );
       return;
     }

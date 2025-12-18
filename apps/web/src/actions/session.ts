@@ -4,8 +4,8 @@ import axios from 'axios';
 import { cookies } from 'next/headers';
 import { v4 as uuidv4 } from 'uuid';
 
-const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID!;
-const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET!;
+const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID as string;
+const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET as string;
 
 type Session = {
   token_type: 'Bearer';
@@ -47,7 +47,7 @@ export async function deleteSession() {
         'Content-Type': 'application/x-www-form-urlencoded',
         'User-Agent': 'Dealbot (https://github.com/acdvs/dealbot)',
       },
-    }
+    },
   );
 
   const cookieStore = await cookies();

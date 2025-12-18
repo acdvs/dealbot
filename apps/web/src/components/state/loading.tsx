@@ -1,5 +1,5 @@
-import { cx } from '@/lib/utils';
 import { RiLoader4Line } from '@remixicon/react';
+import { cx } from '@/lib/utils';
 
 function LoadingState({
   className,
@@ -12,7 +12,7 @@ function LoadingState({
     <div
       className={cx(
         'flex flex-col justify-center items-center gap-3',
-        className
+        className,
       )}
     >
       <RiLoader4Line className="size-10 animate-spin" />

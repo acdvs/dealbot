@@ -1,13 +1,13 @@
+import type { RestEndpointMethodTypes } from '@octokit/rest';
 import axios from 'axios';
 import {
   ButtonStyle,
-  ChatInputCommandInteraction,
+  type ChatInputCommandInteraction,
   ContainerBuilder,
   MessageFlags,
   SeparatorBuilder,
   SlashCommandBuilder,
 } from 'discord.js';
-import type { RestEndpointMethodTypes } from '@octokit/rest';
 
 import { Command } from '../command';
 import { Embed } from '../lib/embed';
@@ -40,8 +40,8 @@ const command = new Command({
               .setEmoji({
                 name: 'DiscordLogo',
                 id: '1403667556610342962',
-              })
-          )
+              }),
+          ),
       )
       .addSeparatorComponents(new SeparatorBuilder())
       .addTextDisplayComponents((text) =>
@@ -52,13 +52,13 @@ const command = new Command({
             '### Found a bug?',
             '- Join the support server via the button above and use the #bugs channel.',
             `- Or [create an issue](${GITHUB_ISSUE_LINK}) on GitHub and include as much detail as possible.`,
-          ].join('\n')
-        )
+          ].join('\n'),
+        ),
       )
       .addSectionComponents((section) =>
         section
           .addTextDisplayComponents((text) =>
-            text.setContent('### Latest update')
+            text.setContent('### Latest update'),
           )
           .setButtonAccessory((btn) =>
             btn
@@ -68,8 +68,8 @@ const command = new Command({
               .setEmoji({
                 name: 'GithubLogo',
                 id: '1403669223581945927',
-              })
-          )
+              }),
+          ),
       )
       .addTextDisplayComponents((text) => text.setContent(latestRelease));
 
@@ -86,7 +86,7 @@ type LatestRelease =
 async function getLatestRelease() {
   try {
     const { data } = await axios.get<LatestRelease>(
-      'https://api.github.com/repos/acdvs/dealbot/releases/latest'
+      'https://api.github.com/repos/acdvs/dealbot/releases/latest',
     );
     const { tag_name, published_at, body } = data;
 
@@ -96,7 +96,7 @@ async function getLatestRelease() {
         month: 'short',
         year: 'numeric',
         day: '2-digit',
-      }
+      },
     );
 
     const bodyFormatted = (body as string)

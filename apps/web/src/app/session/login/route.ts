@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 import { checkSessionId } from '@/actions/session';
 import { BASE_URL } from '@/lib/environment';
 
-const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID!;
+const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID as string;
 
 export async function GET() {
   const sid = await checkSessionId();
@@ -15,6 +15,6 @@ export async function GET() {
         redirect_uri: `${BASE_URL}/api/oauth/token`,
         scope: 'identify guilds',
         state: sid,
-      }).toString()
+      }).toString(),
   );
 }

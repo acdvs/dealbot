@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import { RiGithubFill } from '@remixicon/react';
+import Link from 'next/link';
 
 import { cx } from '@/lib/utils';
 
@@ -8,7 +8,7 @@ function Footer({ className }: { className?: string }) {
     <div
       className={cx(
         'pt-3 mt-15 mb-10 flex justify-between border-t-1 border-foreground-accent text-foreground-accent',
-        className
+        className,
       )}
     >
       <p>Not affiliated with IsThereAnyDeal</p>
