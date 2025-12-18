@@ -4,9 +4,8 @@
   "private": true,
   "scripts": {
     "build": "tsc",
-    "check-types": "tsc --noemit",
-    "format": "biome format",
-    "lint": "biome lint"
+    "check": "biome check",
+    "check:types": "tsc --noemit"
   },
   "exports": {
     "./*": {
