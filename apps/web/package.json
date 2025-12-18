@@ -6,7 +6,8 @@
     "build": "next build",
     "check-types": "tsc --noemit",
     "dev": "next dev",
-    "lint": "eslint .",
+    "format": "biome format",
+    "lint": "biome lint",
     "start": "next start"
   },
   "dependencies": {
@@ -33,11 +34,9 @@
     "zod": "^4.1.5"
   },
   "devDependencies": {
-    "@dealbot/eslint-config": "workspace:*",
     "@tailwindcss/postcss": "^4.1.11",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
-    "eslint": "^9",
     "postcss": "^8",
     "tailwindcss": "^4.1.11",
     "typescript": "^5.9.2"

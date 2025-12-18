@@ -5,7 +5,8 @@
   "scripts": {
     "build": "tsc",
     "check-types": "tsc --noemit",
-    "lint": "eslint ."
+    "format": "biome format",
+    "lint": "biome lint"
   },
   "exports": {
     "./*": {
@@ -18,9 +19,7 @@
     "@supabase/supabase-js": "^2.50.5"
   },
   "devDependencies": {
-    "@dealbot/eslint-config": "workspace:*",
     "@dealbot/typescript-config": "workspace:*",
-    "eslint": "^9.32.0",
     "typescript": "^5.9.2"
   }
 }

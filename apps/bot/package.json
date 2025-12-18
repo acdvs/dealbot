@@ -6,7 +6,8 @@
     "build": "tsc -p tsconfig.build.json",
     "check-types": "tsc -p tsconfig.build.json --noemit",
     "dev": "ts-node -P tsconfig.dev.json src/index.ts",
-    "lint": "eslint .",
+    "format": "biome format",
+    "lint": "biome lint",
     "start": "node dist/index.js"
   },
   "dependencies": {
@@ -18,13 +19,10 @@
     "discord.js": "^14.3.0"
   },
   "devDependencies": {
-    "@dealbot/eslint-config": "workspace:*",
     "@dealbot/typescript-config": "workspace:*",
     "@types/node": "^24.0.12",
     "colors": "^1.4.0",
     "dotenv": "^17.2.1",
-    "eslint": "^9.32.0",
-    "prettier": "^2.6.2",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.2"

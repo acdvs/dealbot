@@ -5,7 +5,8 @@
   "scripts": {
     "build": "tsc",
     "check-types": "tsc --noemit",
-    "lint": "eslint .",
+    "format": "biome format",
+    "lint": "biome lint",
     "update-types": "openapi-typescript https://raw.githubusercontent.com/IsThereAnyDeal/API/master/dist/openapi.json -o ./src/types.ts"
   },
   "exports": {
@@ -18,9 +19,7 @@
     "openapi-fetch": "^0.14.0"
   },
   "devDependencies": {
-    "@dealbot/eslint-config": "workspace:*",
     "@dealbot/typescript-config": "workspace:*",
-    "eslint": "^9.32.0",
     "openapi-typescript": "^7.8.0",
     "typescript": "^5.9.2"
   }
