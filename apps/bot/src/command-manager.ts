@@ -35,8 +35,8 @@ export class CommandManager {
     }
   }
 
-  async add(appId: string, guildId: Snowflake) {
-    log.msg('Adding guild production commands');
+  async updateGuildCommands(appId: string, guildId: Snowflake) {
+    log.msg('Updating guild commands');
 
     try {
       const payload = this.commands.map((x) => x.options.toJSON());
@@ -51,7 +51,7 @@ export class CommandManager {
     }
   }
 
-  async update(appId: string) {
+  async updateGlobalCommands(appId: string) {
     log.msg('Updating global commands');
 
     try {

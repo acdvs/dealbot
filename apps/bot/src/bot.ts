@@ -50,14 +50,17 @@ export class Bot extends Client {
     log.msg(`Starting ${client.user.username.toUpperCase()}`);
 
     await this.checkGuildCount();
-    await this.commandManager.update(client.application.id);
+    await this.commandManager.updateGlobalCommands(client.application.id);
 
     log.msg(`Successfully started ${client.user.username.toUpperCase()}`);
   }
 
   private onGuildCreate(guild: Guild) {
     Bot.db.addGuild(guild.id);
-    this.commandManager.add(guild.client.application.id, guild.id);
+    this.commandManager.updateGuildCommands(
+      guild.client.application.id,
+      guild.id,
+    );
   }
 
   private onGuildDelete(guild: Guild) {
