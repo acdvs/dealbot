@@ -11,7 +11,7 @@ import { Bot } from './bot';
 import type { CommandDefinition } from './command';
 import { CommandError } from './command-error';
 import commands from './commands';
-import { Embed } from './lib/embed';
+import { Embed } from './embeds';
 import { log } from './lib/utils';
 
 const API_VERSION = '10';

@@ -2,10 +2,9 @@ import {
   type ChatInputCommandInteraction,
   SlashCommandBuilder,
 } from 'discord.js';
-
 import { Bot } from '../bot';
 import { Command } from '../command';
-import { Embed } from '../lib/embed';
+import { Embed } from '../embeds';
 import { toReadableNumber } from '../lib/utils';
 
 type StatOption = 'waitlisted' | 'collected' | 'popular';

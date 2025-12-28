@@ -2,13 +2,13 @@ import type { APIMethodReturn } from '@dealbot/api/client';
 import { DEFAULT_COUNTRY_CODE } from '@dealbot/db/values';
 import type { ChatInputCommandInteraction } from 'discord.js';
 import { Bot } from '../bot';
-import { Embed } from '../lib/embed';
 import {
   getSteamReviewText,
   toCurrency,
   toReadableNumber,
   truncateStringList,
 } from '../lib/utils';
+import { Embed } from './embed';
 
 const FIELD_CHAR_LIMIT = 1024;
 const ROW_JOIN_CHARS = '\n';

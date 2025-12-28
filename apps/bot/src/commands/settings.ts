@@ -10,7 +10,7 @@ import {
 } from 'discord.js';
 import { Bot } from '../bot';
 import { Command } from '../command';
-import { Embed } from '../lib/embed';
+import { Embed } from '../embeds';
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL as string;
 

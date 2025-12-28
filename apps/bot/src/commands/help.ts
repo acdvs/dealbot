@@ -8,9 +8,8 @@ import {
   SeparatorBuilder,
   SlashCommandBuilder,
 } from 'discord.js';
-
 import { Command } from '../command';
-import { Embed } from '../lib/embed';
+import { Embed } from '../embeds';
 
 const SERVER_INVITE_LINK = 'https://discord.gg/UBy2yVU7ac';
 const PATREON_DONATE_LINK = 'https://patreon.com/acdvs';

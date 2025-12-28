@@ -8,9 +8,9 @@ import {
   MessageFlags,
   StringSelectMenuBuilder,
 } from 'discord.js';
-import { Embed } from '../lib/embed';
 import { getSearchUrl } from '../lib/utils';
 import { DealsEmbed } from './deals-embed';
+import { Embed } from './embed';
 
 type SimilarGames = APIMethodReturn<'search'>;
 

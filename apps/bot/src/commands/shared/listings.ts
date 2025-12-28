@@ -8,9 +8,7 @@ import {
 } from 'discord.js';
 import { Bot } from '../../bot';
 import { Command } from '../../command';
-import { ChoicesEmbed } from '../../embeds/choices-embed';
-import { DealsEmbed } from '../../embeds/deals-embed';
-import { Embed } from '../../lib/embed';
+import { ChoicesEmbed, DealsEmbed, Embed } from '../../embeds';
 
 const AC_ID_PREFIX = 'AUTOCOMPLETE';
 
