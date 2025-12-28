@@ -15,7 +15,7 @@ import { Embed } from './embeds';
 import { log } from './lib/utils';
 
 const API_VERSION = '10';
-const COMMAND_TIMEOUT_SEC = 5;
+const COMMAND_TIMEOUT_SEC = 3;
 
 const rest = new REST({ version: API_VERSION }).setToken(
   process.env.DISCORD_BOT_TOKEN as string,
