@@ -8,8 +8,7 @@ import {
   type Snowflake,
 } from 'discord.js';
 import { Bot } from './bot';
-import type { CommandDefinition } from './command';
-import { CommandError } from './command-error';
+import type { Command } from './command';
 import commands from './commands';
 import { Embed } from './embeds';
 import { log } from './lib/utils';
@@ -23,14 +22,13 @@ const rest = new REST({ version: API_VERSION }).setToken(
 const api = new API(rest);
 
 export class CommandManager {
-  private readonly commands: Collection<string, CommandDefinition> =
-    new Collection();
+  private readonly commands: Collection<string, Command> = new Collection();
 
   constructor() {
     log.msg('Loading commands');
 
     for (const command of commands) {
-      this.commands.set(command.options.name, command as CommandDefinition);
+      this.commands.set(command.options.name, command as Command);
       log.msg(` | ${command.options.name}`);
     }
   }
