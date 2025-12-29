@@ -2,7 +2,7 @@ import { APIError } from '@dealbot/api/error';
 import { API } from '@discordjs/core';
 import {
   type AutocompleteInteraction,
-  type ChatInputCommandInteraction,
+  ChatInputCommandInteraction,
   Collection,
   REST,
   type Snowflake,
@@ -11,6 +11,7 @@ import { Bot } from './bot';
 import type { Command } from './command';
 import commands from './commands';
 import { Embed } from './embeds';
+import { RunError } from './errors';
 import { log } from './lib/utils';
 
 const API_VERSION = '10';
@@ -63,12 +64,18 @@ export class CommandManager {
 
     try {
       timeout = setTimeout(() => {
-        throw new CommandError('TIMED_OUT', command.options.name);
+        throw new RunError('TIMEOUT', [...ix.options.data]);
       }, COMMAND_TIMEOUT_SEC * 1000);
 
       await command.run(ix);
     } catch (err) {
-      this.handleError(ix, err);
+      if (err instanceof RunError) {
+        this.handleRunError(ix, err);
+      } else if (err instanceof APIError) {
+        this.handleAPIError(ix, err);
+      } else {
+        log.error('[UNKNOWN]', JSON.stringify(err, null, 2));
+      }
     } finally {
       if (timeout) {
         clearTimeout(timeout);
@@ -84,41 +91,39 @@ export class CommandManager {
     try {
       await command.autocomplete(ix);
     } catch (err) {
-      log.error('[AUTOCOMPLETE]', err);
+      if (err instanceof APIError) {
+        this.handleAPIError(ix, err);
+      } else {
+        log.error('[AUTOCOMPLETE]', JSON.stringify(err, null, 2));
+      }
     }
   }
 
-  handleError(ix: ChatInputCommandInteraction, error: unknown) {
+  private handleRunError(ix: ChatInputCommandInteraction, error: RunError) {
     const embed = new Embed({
       title: 'Error',
+      description: 'Something went wrong. Please try again later.',
     });
+    ix.reply(embed.options());
 
-    if (error instanceof APIError) {
-      embed.setDescription(
-        'Unable to get info from IsThereAnyDeal. Please try again later.',
-      );
-      ix.editReply(embed.options());
+    log.error('[RUNTIME]', JSON.stringify(error, null, 2));
+  }
 
-      Bot.db.insertAPIError(error);
-      log.error('[API]', JSON.stringify(error, null, 2));
-      return;
+  private handleAPIError(
+    ix: ChatInputCommandInteraction | AutocompleteInteraction,
+    error: APIError,
+  ) {
+    if (ix instanceof ChatInputCommandInteraction) {
+      const embed = new Embed({
+        title: 'Error',
+        description:
+          'Unable to get info from IsThereAnyDeal. Please try again later.',
+      });
+      ix.reply(embed.options());
     }
 
-    if (error instanceof CommandError) {
-      embed.setDescription(error.message);
-      ix.editReply(embed.options());
+    Bot.db.insertAPIError(error);
 
-      log.warn(
-        '[COMMAND] Command timed out after %d seconds:',
-        COMMAND_TIMEOUT_SEC,
-        error.cause,
-      );
-      return;
-    }
-
-    embed.setDescription('Something went wrong. Please try again later.');
-    ix.editReply(embed.options());
-
-    log.error('[UNKNOWN]', JSON.stringify(error, null, 2));
+    log.error('[API]', JSON.stringify(error, null, 2));
   }
 }
