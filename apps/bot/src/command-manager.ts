@@ -45,20 +45,14 @@ export class CommandManager {
       );
     } catch (err) {
       log.error(err);
-      process.exit(1);
     }
   }
 
   async updateGlobalCommands(appId: string) {
     log.msg('Updating global commands');
 
-    try {
-      const payload = this.commands.map((x) => x.options.toJSON());
-      await api.applicationCommands.bulkOverwriteGlobalCommands(appId, payload);
-    } catch (err) {
-      log.error(err);
-      process.exit(1);
-    }
+    const payload = this.commands.map((x) => x.options.toJSON());
+    await api.applicationCommands.bulkOverwriteGlobalCommands(appId, payload);
   }
 
   async run(ix: ChatInputCommandInteraction) {

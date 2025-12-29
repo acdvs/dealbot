@@ -38,12 +38,8 @@ export class Bot extends Client {
   }
 
   async start(token: string) {
-    try {
-      log.msg('Logging in');
-      await this.login(token);
-    } catch {
-      log.error('Unable to login');
-    }
+    log.msg('Logging in');
+    await this.login(token);
   }
 
   private async onReady(client: Client<true>) {
