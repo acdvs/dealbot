@@ -10,9 +10,12 @@
     "noEmitOnError": true,
     "noImplicitAny": true,
     "noUncheckedIndexedAccess": true,
+    "outDir": "${configDir}/dist",
     "resolveJsonModule": true,
+    "rootDir": "${configDir}/src",
     "skipLibCheck": true,
     "strict": true,
     "target": "es2022"
-  }
+  },
+  "include": ["${configDir}/src/**.ts"]
 }

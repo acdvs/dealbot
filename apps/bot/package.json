@@ -3,11 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc && tsc-alias",
     "check": "biome check",
-    "check:types": "tsc -p tsconfig.build.json --noemit",
-    "dev": "ts-node -P tsconfig.dev.json src/index.ts",
-    "lint": "biome lint",
+    "check:types": "tsc --noemit",
+    "dev": "tsx src/index.ts",
     "start": "node dist/index.js"
   },
   "dependencies": {
@@ -23,8 +22,8 @@
     "@dealbot/typescript-config": "workspace:*",
     "@types/node": "^24.0.12",
     "colors": "^1.4.0",
-    "ts-node": "^10.9.2",
-    "tsconfig-paths": "^4.2.0",
+    "tsc-alias": "^1.8.16",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.2"
   }
 }
