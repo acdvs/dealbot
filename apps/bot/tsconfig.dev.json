@@ -1,3 +1,0 @@
-{
-  "extends": "@dealbot/typescript-config/ts-node.json"
-}
