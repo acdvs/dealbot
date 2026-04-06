@@ -4,7 +4,7 @@ import type {
   RESTGetAPICurrentUserGuildsResult,
   RESTGetAPICurrentUserResult,
   RESTGetAPIGuildResult,
-} from 'discord.js';
+} from 'discord-api-types/v10';
 import { db } from '@/lib/database';
 import { userIsGuildAdmin } from '@/lib/utils';
 import { api } from './user-client';
