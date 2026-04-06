@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { getGuildSettings } from '@/actions/guild';
-import { getSellers } from '@/actions/itad-api';
 
 const countryCodes = countries.map((x) => x.code);
 
@@ -17,16 +16,11 @@ export const schema = z.object({
 });
 
 export type Schema = z.infer<typeof schema>;
-type GuildSettings = Awaited<ReturnType<typeof getGuildSettings>>;
 
 function useFormState(guildId: string) {
-  const [sellers, setSellers] = useState<string[] | null>(null);
-  const [guildSettings, setGuildSettings] = useState<GuildSettings | null>(
-    null,
-  );
   const [successVisible, setSuccessVisible] = useState(false);
 
-  const methods = useForm<Schema>({
+  const form = useForm<Schema>({
     resolver: zodResolver(schema),
     defaultValues: {
       guildId,
@@ -34,23 +28,15 @@ function useFormState(guildId: string) {
       ignoredSellers: [],
     },
   });
-  const { formState, setValue } = methods;
+  const { formState } = form;
   const { submitCount } = formState;
 
   useEffect(() => {
-    if (!sellers && !guildSettings) {
-      (async function getFormData() {
-        const _sellers = await getSellers();
-        const _guildSettings = await getGuildSettings(guildId);
-
-        setSellers(_sellers?.map((x) => x.title) || []);
-        setGuildSettings(_guildSettings);
-
-        setValue('countryCode', _guildSettings?.countryCode);
-        setValue('ignoredSellers', _guildSettings?.ignoredSellers);
-      })();
-    }
-  }, [guildId, guildSettings, sellers, setValue]);
+    getGuildSettings(guildId).then((x) => {
+      form.setValue('countryCode', x.countryCode);
+      form.setValue('ignoredSellers', x.ignoredSellers);
+    });
+  }, [guildId, form.setValue]);
 
   useEffect(() => {
     if (submitCount > 0) {
@@ -61,10 +47,8 @@ function useFormState(guildId: string) {
   }, [submitCount]);
 
   return {
-    sellers,
-    defaultValues: guildSettings,
     formState,
-    methods,
+    form,
     successVisible,
   };
 }
