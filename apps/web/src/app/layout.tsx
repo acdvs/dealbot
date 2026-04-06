@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${rubik.className} max-w-[800px] mx-auto px-edge-gap text-base bg-background text-foreground isolate antialiased`}
+        className={`${rubik.className} max-w-200 mx-auto px-edge-gap text-base bg-background text-foreground isolate antialiased`}
       >
         <Providers>{children}</Providers>
       </body>
