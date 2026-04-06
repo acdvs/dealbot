@@ -19,7 +19,9 @@ export async function getGuilds() {
     const res =
       await api.get<RESTGetAPICurrentUserGuildsResult>('/users/@me/guilds');
 
-    const adminGuilds = res.data.filter((x) => userIsGuildAdmin(x.permissions));
+    const adminGuilds = res.data.filter(
+      (x) => x.owner || userIsGuildAdmin(x.permissions),
+    );
     const guildIds = adminGuilds.map((x) => x.id);
 
     const joinedGuilds = await db.checkGuilds(guildIds);
