@@ -1,7 +1,7 @@
 'use client';
 
-import { Field } from '@base-ui-components/react/field';
-import { Form } from '@base-ui-components/react/form';
+import { Field } from '@base-ui/react/field';
+import { Form } from '@base-ui/react/form';
 import { countries } from '@dealbot/db/values';
 import { RiCheckLine } from '@remixicon/react';
 import { Controller, FormProvider } from 'react-hook-form';
