@@ -6,5 +6,5 @@ export function cx(...inputs: ClassValue[]) {
 }
 
 export function userIsGuildAdmin(permissions: string) {
-  return Number(permissions) & (1 << 3);
+  return Boolean(BigInt(permissions) & BigInt(1 << 3));
 }
