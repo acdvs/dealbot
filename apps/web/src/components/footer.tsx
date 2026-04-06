@@ -7,7 +7,7 @@ function Footer({ className }: { className?: string }) {
   return (
     <div
       className={cx(
-        'pt-3 mt-15 mb-10 flex justify-between border-t-1 border-foreground-accent text-foreground-accent',
+        'pt-3 mt-15 mb-10 flex justify-between border-t border-foreground-accent text-foreground-accent',
         className,
       )}
     >

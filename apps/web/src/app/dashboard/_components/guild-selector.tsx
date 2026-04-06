@@ -18,15 +18,13 @@ function GuildSelector() {
   if (isPending) {
     return (
       <Grid>
-        {Array(6)
-          .fill(0)
-          .map((_, i) => (
-            // biome-ignore lint/suspicious/noArrayIndexKey: Items not unique
-            <Guild key={i}>
-              <Skeleton className="size-[45px] rounded-2xl" />
-              <Skeleton className="w-24 h-3 rounded-full" />
-            </Guild>
-          ))}
+        {Array(6).map((_, i) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: Items not unique
+          <Guild key={i}>
+            <Skeleton className="size-11.25 rounded-2xl" />
+            <Skeleton className="w-24 h-3 rounded-full" />
+          </Guild>
+        ))}
       </Grid>
     );
   }
@@ -47,7 +45,7 @@ function GuildSelector() {
           key={guild.id}
           href={guild.joined ? `/dashboard/${guild.id}` : '/invite'}
         >
-          <Guild className="group justify-between rounded-xl border-1 border-transparent hover:border-foreground/30 active:border-foreground/30 transition-colors">
+          <Guild className="group justify-between rounded-xl border border-transparent hover:border-foreground/30 active:border-foreground/30 transition-colors">
             <div className="flex items-center gap-3 overflow-hidden">
               <GuildIcon {...guild} />
               <p className="text-center truncate" title={guild.name}>
@@ -86,7 +84,7 @@ function GuildIcon({
 }) {
   if (!icon) {
     return (
-      <div className="size-[45px] flex justify-center items-center text-2xl">
+      <div className="size-11.25 flex justify-center items-center text-2xl">
         {name[0].toUpperCase()}
       </div>
     );
@@ -98,7 +96,7 @@ function GuildIcon({
       height={45}
       width={45}
       alt="guild icon"
-      className="size-[45px] rounded-xl"
+      className="size-11.25 rounded-xl"
     />
   );
 }

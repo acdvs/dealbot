@@ -19,7 +19,7 @@ export default async function Index() {
             <Button>Add To Server</Button>
           </Link>
         </div>
-        <p className="text-center border-b-1 border-foreground-accent pb-5">
+        <p className="text-center border-b border-foreground-accent pb-5">
           A Discord bot for looking up PC game deals via IsThereAnyDeal.
         </p>
         <p className="sm:w-1/2 text-center">

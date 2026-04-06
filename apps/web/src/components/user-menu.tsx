@@ -15,7 +15,7 @@ function UserMenu() {
   });
 
   if (isLoading) {
-    return <Skeleton className="size-[50px] rounded-full" />;
+    return <Skeleton className="size-12.5 rounded-full" />;
   }
 
   if (!user) {
@@ -39,7 +39,7 @@ function UserMenu() {
       <Menu.Portal>
         <Menu.Backdrop />
         <Menu.Positioner align="end">
-          <Menu.Popup className="mt-3 py-1 px-1 w-36 bg-background-accent rounded-lg origin-top transition-[transform,scale,opacity] data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[starting-style]:scale-90 data-[starting-style]:opacity-0">
+          <Menu.Popup className="mt-3 py-1 px-1 w-36 bg-background-accent rounded-lg origin-top transition-[transform,scale,opacity] data-ending-style:scale-90 data-ending-style:opacity-0 data-starting-style:scale-90 data-starting-style:opacity-0">
             <p className="px-3 py-1 text-zinc-400 sm:hidden">{user.username}</p>
             <Menu.Item className="hover:bg-zinc-700 rounded">
               <Link href="/dashboard" className="block px-3 py-1">
