@@ -1,7 +1,8 @@
 'use client';
 
-import { countries, DEFAULT_COUNTRY_CODE } from '@dealbot/db/values';
+import { countries } from '@dealbot/db/values';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -20,23 +21,17 @@ export type Schema = z.infer<typeof schema>;
 function useFormState(guildId: string) {
   const [successVisible, setSuccessVisible] = useState(false);
 
+  const { data: settings } = useQuery({
+    queryKey: ['guild-settings', guildId],
+    queryFn: async () => getGuildSettings(guildId),
+  });
+
   const form = useForm<Schema>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      guildId,
-      countryCode: DEFAULT_COUNTRY_CODE,
-      ignoredSellers: [],
-    },
+    defaultValues: settings,
   });
   const { formState } = form;
   const { submitCount } = formState;
-
-  useEffect(() => {
-    getGuildSettings(guildId).then((x) => {
-      form.setValue('countryCode', x.countryCode);
-      form.setValue('ignoredSellers', x.ignoredSellers);
-    });
-  }, [guildId, form.setValue]);
 
   useEffect(() => {
     if (submitCount > 0) {
