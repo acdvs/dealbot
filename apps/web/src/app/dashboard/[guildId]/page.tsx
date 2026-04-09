@@ -8,6 +8,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
+import { getQueryClient } from '@/lib/query-client';
 import SettingsForm from './_components/guild-settings-form';
 
 export default async function GuildPage({
@@ -15,10 +16,14 @@ export default async function GuildPage({
 }: {
   params: Promise<{ guildId: string }>;
 }) {
-  const { guildId } = await params;
+  const queryClient = getQueryClient();
+  const guilds = await queryClient.fetchQuery({
+    queryKey: ['guilds'],
+    queryFn: getGuilds,
+  });
 
-  const guilds = await getGuilds();
-  const guild = guilds.find((x) => x.id === guildId);
+  const { guildId } = await params;
+  const guild = guilds?.find((x) => x.id === guildId);
 
   if (!guild || !guild.joined) {
     redirect('/', RedirectType.replace);
