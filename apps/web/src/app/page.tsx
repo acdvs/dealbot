@@ -7,7 +7,7 @@ export default async function Index() {
   return (
     <div className="h-screen flex flex-col">
       <Header>
-        <Link href="/session/login" rel="nofollow">
+        <Link href="/login" rel="nofollow">
           <Button className="xs:gap-1">
             Login<span className="max-sm:hidden">With Discord</span>
           </Button>
