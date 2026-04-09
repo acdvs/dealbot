@@ -20,7 +20,7 @@ function IgnoredSellers() {
 
   return (
     <Field.Root>
-      <div className="flex justify-between">
+      <div className="flex max-sm:flex-col justify-between">
         <div className="mb-2">
           <Field.Label className="leading-none">Ignored sellers</Field.Label>
           <Field.Description className="text-foreground-accent leading-none mb-2">
@@ -56,7 +56,7 @@ function IgnoredSellersSelect({
       ]}
       value={null}
       onValueChange={(x) => append(x)}
-      className="mb-2 text-zinc-500 hover:text-foreground transition-colors"
+      className="mb-2 text-zinc-500 hover:text-foreground max-sm:w-full transition-colors"
     />
   );
 }
@@ -69,17 +69,17 @@ function IgnoredSellersSelected({
   remove: UseFieldArrayRemove;
 }) {
   return (
-    <div className="flex gap-2 flex-wrap justify-end">
+    <div className="flex gap-2 flex-wrap sm:justify-end sm:max-w-9/10 sm:place-self-end">
       {fields.map((field, idx) => (
         <div
           key={field.id}
-          className="group flex items-center gap-2 bg-background-accent pl-4 pr-2 hover:bg-zinc-700 rounded-full cursor-default"
+          className="group flex items-center gap-2 bg-background-accent pl-3 pr-2 hover:bg-zinc-700 rounded-full cursor-default"
         >
           <Controller
             name={`ignoredSellers.${idx}`}
             render={({ field }) => (
               <div>
-                <span className="pt-0.5 text-sm">{field.value}</span>
+                <span className="text-xs">{field.value}</span>
                 <input {...field} readOnly hidden />
               </div>
             )}
@@ -87,7 +87,7 @@ function IgnoredSellersSelected({
           <button
             type="button"
             onClick={() => remove(idx)}
-            className="p-1 text-zinc-500 group-hover:text-foreground cursor-pointer"
+            className="p-0 text-zinc-500 group-hover:text-foreground cursor-pointer"
           >
             x
           </button>

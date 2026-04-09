@@ -39,7 +39,7 @@ function GuildSettingsForm({ guildId }: { guildId: string }) {
     <FormProvider {...form}>
       <Form onSubmit={handleSubmit(submit)} className="flex flex-col gap-6">
         <input {...register('guildId')} required hidden readOnly />
-        <Field.Root className="flex justify-between">
+        <Field.Root className="flex max-sm:flex-col justify-between">
           <div>
             <Field.Label className="leading-none">Country</Field.Label>
             <Field.Description className="text-foreground-accent leading-none mb-2">
