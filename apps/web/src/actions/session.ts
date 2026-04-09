@@ -2,6 +2,7 @@
 
 import axios from 'axios';
 import { cookies } from 'next/headers';
+import { RedirectType, redirect } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
 
 const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID as string;
@@ -14,6 +15,11 @@ type Session = {
   scope: string;
   expires_in: number;
 };
+
+export async function logout() {
+  await deleteSession();
+  redirect('/', RedirectType.replace);
+}
 
 export async function getSession() {
   const cookieStore = await cookies();
