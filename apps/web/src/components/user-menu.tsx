@@ -4,8 +4,8 @@ import { Menu } from '@base-ui/react/menu';
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
-
 import { getUser } from '@/actions/discord/user-api';
+import { logout } from '@/actions/session';
 import Skeleton from './ui/skeleton';
 
 function UserMenu() {
@@ -48,9 +48,13 @@ function UserMenu() {
             </Menu.Item>
             <Menu.Separator className="w-full h-px my-1 bg-foreground-accent" />
             <Menu.Item className="hover:bg-zinc-700 rounded">
-              <Link href="/session/logout" className="block px-3 py-1">
+              <button
+                type="button"
+                className="block px-3 py-1 cursor-pointer"
+                onClick={logout}
+              >
                 Logout
-              </Link>
+              </button>
             </Menu.Item>
           </Menu.Popup>
         </Menu.Positioner>
