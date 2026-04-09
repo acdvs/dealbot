@@ -1,12 +1,16 @@
 'use server';
 
-import axios, { type AxiosError, type AxiosRequestConfig } from 'axios';
+import axios, {
+  type AxiosError,
+  type AxiosRequestConfig,
+  type AxiosResponse,
+} from 'axios';
 import { cookies } from 'next/headers';
 import { RedirectType, redirect } from 'next/navigation';
-
-import { getSession } from '../session';
+import { getSession, logout } from '../session';
 
 type CustomRequestConfig = {
+  _retries: number;
   _noRetry: boolean;
 } & AxiosRequestConfig;
 
@@ -16,6 +20,9 @@ type CustomError = {
 
 const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID as string;
 const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET as string;
+
+const MAX_RETRIES = 3;
+const RETRY_DELAY_THRESHOLD_SEC = 3;
 
 export const api = axios.create({
   baseURL: 'https://discord.com/api/v10',
@@ -28,28 +35,46 @@ export const api = axios.create({
 api.interceptors.request.use(async (config) => {
   const session = await getSession();
 
-  if (!session) redirect('/', RedirectType.replace);
+  if (!session) {
+    redirect('/', RedirectType.replace);
+  }
 
   config.headers.set('Authorization', `Bearer ${session.access_token}`);
   return config;
 });
 
-api.interceptors.response.use(undefined, async (error: CustomError) => {
+api.interceptors.response.use(null, async (error: CustomError) => {
   const statusCode = error.response?.status;
-  const noRetry = error.config?._noRetry;
+  error.config._retries = error.config._retries ?? MAX_RETRIES;
 
-  if (statusCode === 401 && !noRetry) {
+  if (statusCode === 401) {
     return await handleUnauthorized(error);
   } else if (statusCode === 429) {
     return await handleTooManyRequests(error);
   }
 
-  return Promise.reject(error);
+  throw error;
 });
+
+function retry(
+  config: CustomRequestConfig,
+  delay?: number,
+): Promise<AxiosResponse<unknown>> {
+  if (config._retries === 0) {
+    throw 'Out of retries';
+  }
+
+  config._retries--;
+
+  if (delay && delay > 0) {
+    return new Promise((res) => setTimeout(() => res(api(config)), delay));
+  }
+
+  return api(config);
+}
 
 async function handleUnauthorized(error: CustomError) {
   const session = await getSession();
-  error.config._noRetry = true;
 
   if (!session) {
     redirect('/', RedirectType.replace);
@@ -79,20 +104,19 @@ async function handleUnauthorized(error: CustomError) {
       secure: true,
     });
 
-    return api(error.config);
+    return retry(error.config);
   } catch {
-    redirect('/session/logout', RedirectType.replace);
+    logout();
   }
 }
 
-async function handleTooManyRequests(error: CustomError) {
-  const retryAfter = error.response?.headers['Retry-After'];
+function handleTooManyRequests(error: CustomError) {
+  const retryAfterSec = Number(error.response?.headers['retry-after']);
 
-  if (retryAfter) {
-    return await new Promise((res) =>
-      setTimeout(() => res(api(error.config)), retryAfter),
-    );
+  if (retryAfterSec && retryAfterSec < RETRY_DELAY_THRESHOLD_SEC) {
+    const retryAfterMs = retryAfterSec * 1000;
+    return retry(error.config, retryAfterMs);
   }
 
-  return;
+  throw 'Retry threshold too high';
 }
