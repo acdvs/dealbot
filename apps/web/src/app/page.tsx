@@ -14,7 +14,7 @@ export default async function Index() {
       </Header>
       <main className="max-sm:h-full flex flex-col justify-center items-center gap-5 sm:my-25">
         <div className="flex flex-wrap justify-center gap-3">
-          <Link href="/invite" rel="nofollow">
+          <Link href="/invite" prefetch={false} rel="nofollow">
             <Button>Add To Server</Button>
           </Link>
         </div>
