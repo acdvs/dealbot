@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Rubik } from 'next/font/google';
-
 import './globals.css';
+import Footer from '@/components/footer';
 import Providers from '@/components/providers';
 import { BASE_URL } from '@/lib/environment';
 
@@ -31,6 +31,7 @@ export default function RootLayout({
         className={`${rubik.className} max-w-200 mx-auto px-edge-gap text-base bg-background text-foreground isolate antialiased`}
       >
         <Providers>{children}</Providers>
+        <Footer />
       </body>
     </html>
   );
