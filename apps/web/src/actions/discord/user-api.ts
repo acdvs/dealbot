@@ -15,26 +15,20 @@ export async function getUser() {
 }
 
 export async function getGuilds() {
-  try {
-    const res =
-      await api.get<RESTGetAPICurrentUserGuildsResult>('/users/@me/guilds');
+  const res =
+    await api.get<RESTGetAPICurrentUserGuildsResult>('/users/@me/guilds');
 
-    const adminGuilds = res.data.filter(
-      (x) => x.owner || userIsGuildAdmin(x.permissions),
-    );
-    const guildIds = adminGuilds.map((x) => x.id);
+  const adminGuilds = res.data.filter(
+    (x) => x.owner || userIsGuildAdmin(x.permissions),
+  );
+  const guildIds = adminGuilds.map((x) => x.id);
 
-    const joinedGuilds = await db.checkGuilds(guildIds);
+  const joinedGuilds = await db.checkGuilds(guildIds);
 
-    return adminGuilds.map((x) => ({
-      ...x,
-      joined: joinedGuilds?.includes(x.id),
-    }));
-  } catch (error) {
-    console.error(error);
-  }
-
-  return [];
+  return adminGuilds.map((x) => ({
+    ...x,
+    joined: joinedGuilds?.includes(x.id),
+  }));
 }
 
 export async function getGuild(id: string) {
