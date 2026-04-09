@@ -1,9 +1,9 @@
 'use server';
 
+import crypto from 'node:crypto';
 import axios from 'axios';
 import { cookies } from 'next/headers';
 import { RedirectType, redirect } from 'next/navigation';
-import { v4 as uuidv4 } from 'uuid';
 
 const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID as string;
 const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET as string;
@@ -65,7 +65,7 @@ export async function checkSessionId() {
   let sid = cookieStore.get('sid')?.value;
 
   if (!sid) {
-    sid = uuidv4();
+    sid = crypto.randomUUID();
     cookieStore.set('sid', sid, {
       httpOnly: true,
       maxAge: 60 * 60 * 24 * 1,
